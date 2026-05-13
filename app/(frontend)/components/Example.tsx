@@ -1,3 +1,4 @@
+import { IconChevronRight, IconX } from "@tabler/icons-react";
 import { Input, Popover, SearchIcon, SegmentedControl } from "./ui";
 
 const marketOptions = [
@@ -229,9 +230,11 @@ export default function Example() {
                 type="button"
               >
                 <span>마이페이지</span>
-                <span className="text-[34px] leading-none text-zinc-950">
-                  ›
-                </span>
+                <IconChevronRight
+                  aria-hidden="true"
+                  className="size-8 text-zinc-950"
+                  stroke={2}
+                />
               </button>
             </Popover>
             <Popover className="flex h-[68px] w-[380px] items-center justify-center">
@@ -262,9 +265,10 @@ export default function Example() {
               {recentSearches.map((search) => (
                 <span
                   key={search}
-                  className="rounded bg-zinc-200 px-1.5 py-0.5 text-xs font-semibold text-zinc-500"
+                  className="inline-flex items-center gap-1 rounded bg-zinc-200 px-1.5 py-0.5 text-xs font-semibold text-zinc-500"
                 >
-                  {search} ×
+                  {search}
+                  <IconX aria-hidden="true" className="size-3" stroke={2} />
                 </span>
               ))}
             </div>

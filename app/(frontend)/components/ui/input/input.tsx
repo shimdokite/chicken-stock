@@ -1,4 +1,5 @@
 import { CSSProperties, InputHTMLAttributes, ReactNode, Ref } from "react";
+import { IconSearch } from "@tabler/icons-react";
 
 type InputVariant = "underline" | "pill" | "box";
 type InputSize = "sm" | "md";
@@ -39,23 +40,12 @@ const sizeClassName: Record<InputSize, string> = {
 };
 
 export const SearchIcon = ({ className = "" }: { className?: string }) => (
-  // TODO: 추후 tabler 라이브러리로 변경 예정
-  <svg
+  <IconSearch
     aria-hidden="true"
     className={className}
-    fill="none"
-    height="18"
-    viewBox="0 0 24 24"
-    width="18"
-  >
-    <path
-      d="m20 20-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    />
-  </svg>
+    size={18}
+    stroke={2}
+  />
 );
 
 export default function Input({
