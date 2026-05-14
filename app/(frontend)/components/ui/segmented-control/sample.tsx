@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import SegmentedControl from ".";
 
 const marketOptions = [
@@ -55,6 +58,9 @@ const graphPeriodOptions = [
 ];
 
 export default function SegmentedControlSample() {
+  const [orderType, setOrderType] = useState("buy");
+  const [graphPeriod, setGraphPeriod] = useState("day");
+
   return (
     <main className="min-h-screen bg-white px-10 py-9 font-sans text-zinc-950">
       <section className="grid gap-20 py-8">
@@ -63,22 +69,32 @@ export default function SegmentedControlSample() {
             Segmented Control
           </h2>
 
+          <h3 className="mb-6 text-4xl font-semibold tracking-normal">메인</h3>
+
           <div className="mb-20 flex flex-wrap items-center gap-6">
-            <SegmentedControl
-              aria-label="시장 선택"
-              defaultValue="all"
-              options={marketOptions}
-            />
-            <SegmentedControl
-              aria-label="차트 기준"
-              defaultValue="amount"
-              options={chartOptions}
-            />
-            <SegmentedControl
-              aria-label="기간 선택"
-              defaultValue="live"
-              options={periodOptions}
-            />
+            <SegmentedControl aria-label="시장 선택" defaultValue="all">
+              {marketOptions.map((option) => (
+                <SegmentedControl.Item key={option.value} value={option.value}>
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
+
+            <SegmentedControl aria-label="차트 기준" defaultValue="amount">
+              {chartOptions.map((option) => (
+                <SegmentedControl.Item key={option.value} value={option.value}>
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
+
+            <SegmentedControl aria-label="기간 선택" defaultValue="live">
+              {periodOptions.map((option) => (
+                <SegmentedControl.Item key={option.value} value={option.value}>
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
           </div>
 
           <h3 className="mb-6 text-4xl font-semibold tracking-normal">
@@ -89,31 +105,51 @@ export default function SegmentedControlSample() {
             <SegmentedControl
               aria-label="통화 선택"
               defaultValue="krw"
-              options={[
-                { label: "달러", value: "usd" },
-                { label: "원", value: "krw" },
-              ]}
               style="text"
-            />
+            >
+              <SegmentedControl.Item value="usd">달러</SegmentedControl.Item>
+              <SegmentedControl.Item value="krw">원</SegmentedControl.Item>
+            </SegmentedControl>
+
             <SegmentedControl
               aria-label="주문 유형"
-              defaultValue="buy"
-              options={orderOptions}
-            />
-            <SegmentedControl
-              aria-label="가격 유형"
-              defaultValue="limit"
-              options={priceTypeOptions}
-            />
+              onValueChange={setOrderType}
+              value={orderType}
+            >
+              {orderOptions.map((option) => (
+                <SegmentedControl.Item
+                  className={option.className}
+                  key={option.value}
+                  selected={option.selected}
+                  value={option.value}
+                >
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
+
+            <SegmentedControl aria-label="가격 유형" defaultValue="limit">
+              {priceTypeOptions.map((option) => (
+                <SegmentedControl.Item key={option.value} value={option.value}>
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
           </div>
 
           <div className="mt-8 ml-28">
             <SegmentedControl
               aria-label="그래프 기간"
-              defaultValue="day"
-              options={graphPeriodOptions}
+              onValueChange={setGraphPeriod}
               style="invertedPanel"
-            />
+              value={graphPeriod}
+            >
+              {graphPeriodOptions.map((option) => (
+                <SegmentedControl.Item key={option.value} value={option.value}>
+                  {option.label}
+                </SegmentedControl.Item>
+              ))}
+            </SegmentedControl>
           </div>
         </div>
       </section>
