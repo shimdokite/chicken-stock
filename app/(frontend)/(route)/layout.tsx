@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import QueryProvider from "./components/providers/query-provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import QueryProvider from "../components/providers/query-provider";
 
 const atoz = localFont({
   src: [
