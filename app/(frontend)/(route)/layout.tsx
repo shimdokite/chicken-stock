@@ -7,47 +7,47 @@ import QueryProvider from "../components/providers/query-provider";
 const atoz = localFont({
   src: [
     {
-      path: "./fonts/atoz-1-thin.ttf",
+      path: "../fonts/atoz-1-thin.ttf",
       weight: "100",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-2-extra-light.ttf",
+      path: "../fonts/atoz-2-extra-light.ttf",
       weight: "200",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-3-light.ttf",
+      path: "../fonts/atoz-3-light.ttf",
       weight: "300",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-4-regular.ttf",
+      path: "../fonts/atoz-4-regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-5-medium.ttf",
+      path: "../fonts/atoz-5-medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-6-semi-bold.ttf",
+      path: "../fonts/atoz-6-semi-bold.ttf",
       weight: "600",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-7-bold.ttf",
+      path: "../fonts/atoz-7-bold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-8-extra-bold.ttf",
+      path: "../fonts/atoz-8-extra-bold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "./fonts/atoz-9-black.ttf",
+      path: "../fonts/atoz-9-black.ttf",
       weight: "900",
       style: "normal",
     },
