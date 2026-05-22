@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
     const articleId = parsePositiveInteger(searchParams.get("id"));
+    const level = parsePositiveInteger(searchParams.get("level"));
     const educationSummaryId = parsePositiveInteger(
       searchParams.get("education_summary_id") ??
         searchParams.get("educationSummaryId"),
@@ -26,6 +27,11 @@ export async function GET(request: NextRequest) {
 
     if (
       searchParams.has("id") ||
+      searchParams.has("level") ||
+      searchParams.has("education_summary_id") ||
+      searchParams.has("educationSummaryId")
+    ) {
+      if (!articleId || (!educationSummaryId && !level)) {
       searchParams.has("education_summary_id") ||
       searchParams.has("educationSummaryId")
     ) {
@@ -39,6 +45,18 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      const articleLevel = level ?? 0;
+
+      const article = await prisma.article.findFirst({
+        where: {
+          id: articleId,
+          ...(educationSummaryId
+            ? { educationSummaryId }
+            : {
+                educationSummary: {
+                  stage: articleLevel,
+                },
+              }),
       const article = await prisma.article.findFirst({
         where: {
           id: articleId,
@@ -49,6 +67,13 @@ export async function GET(request: NextRequest) {
           educationSummaryId: true,
           title: true,
           content: true,
+          imageUrl: true,
+          educationSummary: {
+            select: {
+              stage: true,
+              title: true,
+            },
+          },
         },
       });
 
@@ -71,6 +96,7 @@ export async function GET(request: NextRequest) {
     const educationSummaries = await prisma.educationSummary.findMany({
       orderBy: { stage: "asc" },
       select: {
+        id: true,
         title: true,
         stage: true,
         summary: true,
