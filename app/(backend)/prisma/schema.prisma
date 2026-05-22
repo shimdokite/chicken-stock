@@ -14,12 +14,35 @@ enum EducationSummaryLabel {
   ADVANCED
 }
 
+enum Quiz_type {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+}
+
+enum User_type {
+  NORMAL
+  AGENT
+}
+
+enum Investment_type {
+  CONSERVATIVE
+  BALANCED
+  AGGRESSIVE
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String?
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              BigInt           @id @default(autoincrement())
+  type            User_type        @default(NORMAL)
+  name            String           @default("") @db.VarChar(255)
+  email           String?          @db.VarChar(255)
+  investmentType  Investment_type? @map("investment_type")
+  profileImageUrl String?          @map("profile_image_url") @db.VarChar(2048)
+  currentLevel    Int?             @map("current_level")
+  currentStep     Int?             @map("current_step")
+  totalSteps      Int?             @map("total_steps")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
 
   @@index([email])
 }
@@ -28,6 +51,7 @@ model Article {
   id                 Int              @id @default(autoincrement())
   educationSummaryId Int              @map("education_summary_id")
   educationSummary   EducationSummary @relation(fields: [educationSummaryId], references: [id])
+  quizzes            Quiz[]
   title              String
   content            String
   imageUrl           String           @map("image_url")
@@ -36,6 +60,41 @@ model Article {
   updatedAt          DateTime         @updatedAt @map("updated_at")
 
   @@index([educationSummaryId])
+}
+
+model Quiz {
+  id               Int              @id @default(autoincrement())
+  educationLevelId Int              @map("education_level_id")
+  educationLevel   EducationSummary @relation(fields: [educationLevelId], references: [stage])
+  articleId        Int              @map("article_id")
+  article          Article          @relation(fields: [articleId], references: [id])
+  quizType         Quiz_type        @map("quiz_type")
+  question         String           @db.VarChar(255)
+  description      String           @db.Text
+  answer           String           @db.Text
+  explanation      String           @db.Text
+  optionText       String[]         @map("option_text") @db.VarChar(255)
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  submissions      UserQuizSubmission[]
+
+  @@index([educationLevelId])
+  @@index([articleId])
+}
+
+model UserQuizSubmission {
+  userId         BigInt   @map("user_id")
+  quizId         Int      @map("quiz_id")
+  quiz           Quiz     @relation(fields: [quizId], references: [id])
+  selectedAnswer String   @map("selected_answer") @db.Text
+  isSkip         Boolean  @map("is_skip")
+  isCorrect      Boolean  @map("is_correct")
+  answeredAt     DateTime? @map("answered_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@id([userId, quizId])
+  @@map("User_quiz_submission")
 }
 
 model EducationSummary {
@@ -48,6 +107,25 @@ model EducationSummary {
   createdAt DateTime              @default(now()) @map("created_at")
   updatedAt DateTime              @updatedAt @map("updated_at")
   articles  Article[]
+  quizzes   Quiz[]
+  progress  UserEducationLevelProgress[]
 
   @@map("Education_summary")
+}
+
+model UserEducationLevelProgress {
+  userId           BigInt           @map("user_id")
+  educationLevelId Int              @map("education_level_id")
+  educationLevel   EducationSummary @relation(fields: [educationLevelId], references: [stage])
+  isLocked         Boolean          @map("is_locked")
+  progressRate     Int              @map("progress_rate")
+  currentStep      Int              @map("current_step")
+  totalSteps       Int              @map("total_steps")
+  startedAt        DateTime         @map("started_at")
+  completedAt      DateTime         @map("completed_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  @@id([userId, educationLevelId])
+  @@map("User_education_level_progress")
 }

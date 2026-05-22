@@ -51,7 +51,10 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 export const ModelName = {
   User: 'User',
   Article: 'Article',
-  EducationSummary: 'EducationSummary'
+  Quiz: 'Quiz',
+  UserQuizSubmission: 'UserQuizSubmission',
+  EducationSummary: 'EducationSummary',
+  UserEducationLevelProgress: 'UserEducationLevelProgress'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -72,8 +75,14 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  email: 'email',
+  type: 'type',
   name: 'name',
+  email: 'email',
+  investmentType: 'investmentType',
+  profileImageUrl: 'profileImageUrl',
+  currentLevel: 'currentLevel',
+  currentStep: 'currentStep',
+  totalSteps: 'totalSteps',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -95,6 +104,37 @@ export const ArticleScalarFieldEnum = {
 export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
 
 
+export const QuizScalarFieldEnum = {
+  id: 'id',
+  educationLevelId: 'educationLevelId',
+  articleId: 'articleId',
+  quizType: 'quizType',
+  question: 'question',
+  description: 'description',
+  answer: 'answer',
+  explanation: 'explanation',
+  optionText: 'optionText',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
+
+
+export const UserQuizSubmissionScalarFieldEnum = {
+  userId: 'userId',
+  quizId: 'quizId',
+  selectedAnswer: 'selectedAnswer',
+  isSkip: 'isSkip',
+  isCorrect: 'isCorrect',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserQuizSubmissionScalarFieldEnum = (typeof UserQuizSubmissionScalarFieldEnum)[keyof typeof UserQuizSubmissionScalarFieldEnum]
+
+
 export const EducationSummaryScalarFieldEnum = {
   id: 'id',
   stage: 'stage',
@@ -107,6 +147,22 @@ export const EducationSummaryScalarFieldEnum = {
 } as const
 
 export type EducationSummaryScalarFieldEnum = (typeof EducationSummaryScalarFieldEnum)[keyof typeof EducationSummaryScalarFieldEnum]
+
+
+export const UserEducationLevelProgressScalarFieldEnum = {
+  userId: 'userId',
+  educationLevelId: 'educationLevelId',
+  isLocked: 'isLocked',
+  progressRate: 'progressRate',
+  currentStep: 'currentStep',
+  totalSteps: 'totalSteps',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserEducationLevelProgressScalarFieldEnum = (typeof UserEducationLevelProgressScalarFieldEnum)[keyof typeof UserEducationLevelProgressScalarFieldEnum]
 
 
 export const SortOrder = {

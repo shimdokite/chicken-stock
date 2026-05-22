@@ -28,7 +28,22 @@ export type User = Prisma.UserModel
  */
 export type Article = Prisma.ArticleModel
 /**
+ * Model Quiz
+ * 
+ */
+export type Quiz = Prisma.QuizModel
+/**
+ * Model UserQuizSubmission
+ * 
+ */
+export type UserQuizSubmission = Prisma.UserQuizSubmissionModel
+/**
  * Model EducationSummary
  * 
  */
 export type EducationSummary = Prisma.EducationSummaryModel
+/**
+ * Model UserEducationLevelProgress
+ * 
+ */
+export type UserEducationLevelProgress = Prisma.UserEducationLevelProgressModel

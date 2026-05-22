@@ -241,6 +241,8 @@ export type EducationSummaryWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"EducationSummary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EducationSummary"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
+  quizzes?: Prisma.QuizListRelationFilter
+  progress?: Prisma.UserEducationLevelProgressListRelationFilter
 }
 
 export type EducationSummaryOrderByWithRelationInput = {
@@ -253,6 +255,8 @@ export type EducationSummaryOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   articles?: Prisma.ArticleOrderByRelationAggregateInput
+  quizzes?: Prisma.QuizOrderByRelationAggregateInput
+  progress?: Prisma.UserEducationLevelProgressOrderByRelationAggregateInput
 }
 
 export type EducationSummaryWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +272,8 @@ export type EducationSummaryWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"EducationSummary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EducationSummary"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
+  quizzes?: Prisma.QuizListRelationFilter
+  progress?: Prisma.UserEducationLevelProgressListRelationFilter
 }, "id" | "stage">
 
 export type EducationSummaryOrderByWithAggregationInput = {
@@ -309,6 +315,8 @@ export type EducationSummaryCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   articles?: Prisma.ArticleCreateNestedManyWithoutEducationSummaryInput
+  quizzes?: Prisma.QuizCreateNestedManyWithoutEducationLevelInput
+  progress?: Prisma.UserEducationLevelProgressCreateNestedManyWithoutEducationLevelInput
 }
 
 export type EducationSummaryUncheckedCreateInput = {
@@ -321,6 +329,8 @@ export type EducationSummaryUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutEducationSummaryInput
+  quizzes?: Prisma.QuizUncheckedCreateNestedManyWithoutEducationLevelInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedCreateNestedManyWithoutEducationLevelInput
 }
 
 export type EducationSummaryUpdateInput = {
@@ -332,6 +342,8 @@ export type EducationSummaryUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUpdateManyWithoutEducationSummaryNestedInput
+  quizzes?: Prisma.QuizUpdateManyWithoutEducationLevelNestedInput
+  progress?: Prisma.UserEducationLevelProgressUpdateManyWithoutEducationLevelNestedInput
 }
 
 export type EducationSummaryUncheckedUpdateInput = {
@@ -344,6 +356,8 @@ export type EducationSummaryUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUncheckedUpdateManyWithoutEducationSummaryNestedInput
+  quizzes?: Prisma.QuizUncheckedUpdateManyWithoutEducationLevelNestedInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedUpdateManyWithoutEducationLevelNestedInput
 }
 
 export type EducationSummaryCreateManyInput = {
@@ -381,14 +395,6 @@ export type EducationSummaryUncheckedUpdateManyInput = {
 export type EducationSummaryScalarRelationFilter = {
   is?: Prisma.EducationSummaryWhereInput
   isNot?: Prisma.EducationSummaryWhereInput
-}
-
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
 }
 
 export type EducationSummaryCountOrderByAggregateInput = {
@@ -446,6 +452,20 @@ export type EducationSummaryUpdateOneRequiredWithoutArticlesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EducationSummaryUpdateToOneWithWhereWithoutArticlesInput, Prisma.EducationSummaryUpdateWithoutArticlesInput>, Prisma.EducationSummaryUncheckedUpdateWithoutArticlesInput>
 }
 
+export type EducationSummaryCreateNestedOneWithoutQuizzesInput = {
+  create?: Prisma.XOR<Prisma.EducationSummaryCreateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedCreateWithoutQuizzesInput>
+  connectOrCreate?: Prisma.EducationSummaryCreateOrConnectWithoutQuizzesInput
+  connect?: Prisma.EducationSummaryWhereUniqueInput
+}
+
+export type EducationSummaryUpdateOneRequiredWithoutQuizzesNestedInput = {
+  create?: Prisma.XOR<Prisma.EducationSummaryCreateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedCreateWithoutQuizzesInput>
+  connectOrCreate?: Prisma.EducationSummaryCreateOrConnectWithoutQuizzesInput
+  upsert?: Prisma.EducationSummaryUpsertWithoutQuizzesInput
+  connect?: Prisma.EducationSummaryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EducationSummaryUpdateToOneWithWhereWithoutQuizzesInput, Prisma.EducationSummaryUpdateWithoutQuizzesInput>, Prisma.EducationSummaryUncheckedUpdateWithoutQuizzesInput>
+}
+
 export type EducationSummaryCreatesummaryInput = {
   set: string[]
 }
@@ -459,6 +479,20 @@ export type EducationSummaryUpdatesummaryInput = {
   push?: string | string[]
 }
 
+export type EducationSummaryCreateNestedOneWithoutProgressInput = {
+  create?: Prisma.XOR<Prisma.EducationSummaryCreateWithoutProgressInput, Prisma.EducationSummaryUncheckedCreateWithoutProgressInput>
+  connectOrCreate?: Prisma.EducationSummaryCreateOrConnectWithoutProgressInput
+  connect?: Prisma.EducationSummaryWhereUniqueInput
+}
+
+export type EducationSummaryUpdateOneRequiredWithoutProgressNestedInput = {
+  create?: Prisma.XOR<Prisma.EducationSummaryCreateWithoutProgressInput, Prisma.EducationSummaryUncheckedCreateWithoutProgressInput>
+  connectOrCreate?: Prisma.EducationSummaryCreateOrConnectWithoutProgressInput
+  upsert?: Prisma.EducationSummaryUpsertWithoutProgressInput
+  connect?: Prisma.EducationSummaryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EducationSummaryUpdateToOneWithWhereWithoutProgressInput, Prisma.EducationSummaryUpdateWithoutProgressInput>, Prisma.EducationSummaryUncheckedUpdateWithoutProgressInput>
+}
+
 export type EducationSummaryCreateWithoutArticlesInput = {
   stage: number
   label: $Enums.EducationSummaryLabel
@@ -467,6 +501,8 @@ export type EducationSummaryCreateWithoutArticlesInput = {
   summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  quizzes?: Prisma.QuizCreateNestedManyWithoutEducationLevelInput
+  progress?: Prisma.UserEducationLevelProgressCreateNestedManyWithoutEducationLevelInput
 }
 
 export type EducationSummaryUncheckedCreateWithoutArticlesInput = {
@@ -478,6 +514,8 @@ export type EducationSummaryUncheckedCreateWithoutArticlesInput = {
   summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  quizzes?: Prisma.QuizUncheckedCreateNestedManyWithoutEducationLevelInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedCreateNestedManyWithoutEducationLevelInput
 }
 
 export type EducationSummaryCreateOrConnectWithoutArticlesInput = {
@@ -504,6 +542,8 @@ export type EducationSummaryUpdateWithoutArticlesInput = {
   summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizzes?: Prisma.QuizUpdateManyWithoutEducationLevelNestedInput
+  progress?: Prisma.UserEducationLevelProgressUpdateManyWithoutEducationLevelNestedInput
 }
 
 export type EducationSummaryUncheckedUpdateWithoutArticlesInput = {
@@ -515,6 +555,140 @@ export type EducationSummaryUncheckedUpdateWithoutArticlesInput = {
   summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizzes?: Prisma.QuizUncheckedUpdateManyWithoutEducationLevelNestedInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedUpdateManyWithoutEducationLevelNestedInput
+}
+
+export type EducationSummaryCreateWithoutQuizzesInput = {
+  stage: number
+  label: $Enums.EducationSummaryLabel
+  title?: string
+  imageUrl: string
+  summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  articles?: Prisma.ArticleCreateNestedManyWithoutEducationSummaryInput
+  progress?: Prisma.UserEducationLevelProgressCreateNestedManyWithoutEducationLevelInput
+}
+
+export type EducationSummaryUncheckedCreateWithoutQuizzesInput = {
+  id?: number
+  stage: number
+  label: $Enums.EducationSummaryLabel
+  title?: string
+  imageUrl: string
+  summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutEducationSummaryInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedCreateNestedManyWithoutEducationLevelInput
+}
+
+export type EducationSummaryCreateOrConnectWithoutQuizzesInput = {
+  where: Prisma.EducationSummaryWhereUniqueInput
+  create: Prisma.XOR<Prisma.EducationSummaryCreateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedCreateWithoutQuizzesInput>
+}
+
+export type EducationSummaryUpsertWithoutQuizzesInput = {
+  update: Prisma.XOR<Prisma.EducationSummaryUpdateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedUpdateWithoutQuizzesInput>
+  create: Prisma.XOR<Prisma.EducationSummaryCreateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedCreateWithoutQuizzesInput>
+  where?: Prisma.EducationSummaryWhereInput
+}
+
+export type EducationSummaryUpdateToOneWithWhereWithoutQuizzesInput = {
+  where?: Prisma.EducationSummaryWhereInput
+  data: Prisma.XOR<Prisma.EducationSummaryUpdateWithoutQuizzesInput, Prisma.EducationSummaryUncheckedUpdateWithoutQuizzesInput>
+}
+
+export type EducationSummaryUpdateWithoutQuizzesInput = {
+  stage?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.EnumEducationSummaryLabelFieldUpdateOperationsInput | $Enums.EducationSummaryLabel
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUpdateManyWithoutEducationSummaryNestedInput
+  progress?: Prisma.UserEducationLevelProgressUpdateManyWithoutEducationLevelNestedInput
+}
+
+export type EducationSummaryUncheckedUpdateWithoutQuizzesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  stage?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.EnumEducationSummaryLabelFieldUpdateOperationsInput | $Enums.EducationSummaryLabel
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUncheckedUpdateManyWithoutEducationSummaryNestedInput
+  progress?: Prisma.UserEducationLevelProgressUncheckedUpdateManyWithoutEducationLevelNestedInput
+}
+
+export type EducationSummaryCreateWithoutProgressInput = {
+  stage: number
+  label: $Enums.EducationSummaryLabel
+  title?: string
+  imageUrl: string
+  summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  articles?: Prisma.ArticleCreateNestedManyWithoutEducationSummaryInput
+  quizzes?: Prisma.QuizCreateNestedManyWithoutEducationLevelInput
+}
+
+export type EducationSummaryUncheckedCreateWithoutProgressInput = {
+  id?: number
+  stage: number
+  label: $Enums.EducationSummaryLabel
+  title?: string
+  imageUrl: string
+  summary?: Prisma.EducationSummaryCreatesummaryInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutEducationSummaryInput
+  quizzes?: Prisma.QuizUncheckedCreateNestedManyWithoutEducationLevelInput
+}
+
+export type EducationSummaryCreateOrConnectWithoutProgressInput = {
+  where: Prisma.EducationSummaryWhereUniqueInput
+  create: Prisma.XOR<Prisma.EducationSummaryCreateWithoutProgressInput, Prisma.EducationSummaryUncheckedCreateWithoutProgressInput>
+}
+
+export type EducationSummaryUpsertWithoutProgressInput = {
+  update: Prisma.XOR<Prisma.EducationSummaryUpdateWithoutProgressInput, Prisma.EducationSummaryUncheckedUpdateWithoutProgressInput>
+  create: Prisma.XOR<Prisma.EducationSummaryCreateWithoutProgressInput, Prisma.EducationSummaryUncheckedCreateWithoutProgressInput>
+  where?: Prisma.EducationSummaryWhereInput
+}
+
+export type EducationSummaryUpdateToOneWithWhereWithoutProgressInput = {
+  where?: Prisma.EducationSummaryWhereInput
+  data: Prisma.XOR<Prisma.EducationSummaryUpdateWithoutProgressInput, Prisma.EducationSummaryUncheckedUpdateWithoutProgressInput>
+}
+
+export type EducationSummaryUpdateWithoutProgressInput = {
+  stage?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.EnumEducationSummaryLabelFieldUpdateOperationsInput | $Enums.EducationSummaryLabel
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUpdateManyWithoutEducationSummaryNestedInput
+  quizzes?: Prisma.QuizUpdateManyWithoutEducationLevelNestedInput
+}
+
+export type EducationSummaryUncheckedUpdateWithoutProgressInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  stage?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.EnumEducationSummaryLabelFieldUpdateOperationsInput | $Enums.EducationSummaryLabel
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.EducationSummaryUpdatesummaryInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUncheckedUpdateManyWithoutEducationSummaryNestedInput
+  quizzes?: Prisma.QuizUncheckedUpdateManyWithoutEducationLevelNestedInput
 }
 
 
@@ -524,10 +698,14 @@ export type EducationSummaryUncheckedUpdateWithoutArticlesInput = {
 
 export type EducationSummaryCountOutputType = {
   articles: number
+  quizzes: number
+  progress: number
 }
 
 export type EducationSummaryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | EducationSummaryCountOutputTypeCountArticlesArgs
+  quizzes?: boolean | EducationSummaryCountOutputTypeCountQuizzesArgs
+  progress?: boolean | EducationSummaryCountOutputTypeCountProgressArgs
 }
 
 /**
@@ -547,6 +725,20 @@ export type EducationSummaryCountOutputTypeCountArticlesArgs<ExtArgs extends run
   where?: Prisma.ArticleWhereInput
 }
 
+/**
+ * EducationSummaryCountOutputType without action
+ */
+export type EducationSummaryCountOutputTypeCountQuizzesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuizWhereInput
+}
+
+/**
+ * EducationSummaryCountOutputType without action
+ */
+export type EducationSummaryCountOutputTypeCountProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserEducationLevelProgressWhereInput
+}
+
 
 export type EducationSummarySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -558,6 +750,8 @@ export type EducationSummarySelect<ExtArgs extends runtime.Types.Extensions.Inte
   createdAt?: boolean
   updatedAt?: boolean
   articles?: boolean | Prisma.EducationSummary$articlesArgs<ExtArgs>
+  quizzes?: boolean | Prisma.EducationSummary$quizzesArgs<ExtArgs>
+  progress?: boolean | Prisma.EducationSummary$progressArgs<ExtArgs>
   _count?: boolean | Prisma.EducationSummaryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["educationSummary"]>
 
@@ -597,6 +791,8 @@ export type EducationSummarySelectScalar = {
 export type EducationSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stage" | "label" | "title" | "imageUrl" | "summary" | "createdAt" | "updatedAt", ExtArgs["result"]["educationSummary"]>
 export type EducationSummaryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | Prisma.EducationSummary$articlesArgs<ExtArgs>
+  quizzes?: boolean | Prisma.EducationSummary$quizzesArgs<ExtArgs>
+  progress?: boolean | Prisma.EducationSummary$progressArgs<ExtArgs>
   _count?: boolean | Prisma.EducationSummaryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EducationSummaryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -606,6 +802,8 @@ export type $EducationSummaryPayload<ExtArgs extends runtime.Types.Extensions.In
   name: "EducationSummary"
   objects: {
     articles: Prisma.$ArticlePayload<ExtArgs>[]
+    quizzes: Prisma.$QuizPayload<ExtArgs>[]
+    progress: Prisma.$UserEducationLevelProgressPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1011,6 +1209,8 @@ readonly fields: EducationSummaryFieldRefs;
 export interface Prisma__EducationSummaryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   articles<T extends Prisma.EducationSummary$articlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EducationSummary$articlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  quizzes<T extends Prisma.EducationSummary$quizzesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EducationSummary$quizzesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  progress<T extends Prisma.EducationSummary$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EducationSummary$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserEducationLevelProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1457,6 +1657,54 @@ export type EducationSummary$articlesArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.ArticleScalarFieldEnum | Prisma.ArticleScalarFieldEnum[]
+}
+
+/**
+ * EducationSummary.quizzes
+ */
+export type EducationSummary$quizzesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Quiz
+   */
+  select?: Prisma.QuizSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Quiz
+   */
+  omit?: Prisma.QuizOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizInclude<ExtArgs> | null
+  where?: Prisma.QuizWhereInput
+  orderBy?: Prisma.QuizOrderByWithRelationInput | Prisma.QuizOrderByWithRelationInput[]
+  cursor?: Prisma.QuizWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuizScalarFieldEnum | Prisma.QuizScalarFieldEnum[]
+}
+
+/**
+ * EducationSummary.progress
+ */
+export type EducationSummary$progressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserEducationLevelProgress
+   */
+  select?: Prisma.UserEducationLevelProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserEducationLevelProgress
+   */
+  omit?: Prisma.UserEducationLevelProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserEducationLevelProgressInclude<ExtArgs> | null
+  where?: Prisma.UserEducationLevelProgressWhereInput
+  orderBy?: Prisma.UserEducationLevelProgressOrderByWithRelationInput | Prisma.UserEducationLevelProgressOrderByWithRelationInput[]
+  cursor?: Prisma.UserEducationLevelProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserEducationLevelProgressScalarFieldEnum | Prisma.UserEducationLevelProgressScalarFieldEnum[]
 }
 
 /**

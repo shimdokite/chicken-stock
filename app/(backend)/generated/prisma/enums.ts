@@ -16,3 +16,29 @@ export const EducationSummaryLabel = {
 } as const
 
 export type EducationSummaryLabel = (typeof EducationSummaryLabel)[keyof typeof EducationSummaryLabel]
+
+
+export const Quiz_type = {
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  TRUE_FALSE: 'TRUE_FALSE',
+  SHORT_ANSWER: 'SHORT_ANSWER'
+} as const
+
+export type Quiz_type = (typeof Quiz_type)[keyof typeof Quiz_type]
+
+
+export const User_type = {
+  NORMAL: 'NORMAL',
+  AGENT: 'AGENT'
+} as const
+
+export type User_type = (typeof User_type)[keyof typeof User_type]
+
+
+export const Investment_type = {
+  CONSERVATIVE: 'CONSERVATIVE',
+  BALANCED: 'BALANCED',
+  AGGRESSIVE: 'AGGRESSIVE'
+} as const
+
+export type Investment_type = (typeof Investment_type)[keyof typeof Investment_type]

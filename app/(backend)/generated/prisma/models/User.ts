@@ -28,32 +28,56 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
+  currentLevel: number | null
+  currentStep: number | null
+  totalSteps: number | null
 }
 
 export type UserSumAggregateOutputType = {
-  id: number | null
+  id: bigint | null
+  currentLevel: number | null
+  currentStep: number | null
+  totalSteps: number | null
 }
 
 export type UserMinAggregateOutputType = {
-  id: number | null
-  email: string | null
+  id: bigint | null
+  type: $Enums.User_type | null
   name: string | null
+  email: string | null
+  investmentType: $Enums.Investment_type | null
+  profileImageUrl: string | null
+  currentLevel: number | null
+  currentStep: number | null
+  totalSteps: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
-  id: number | null
-  email: string | null
+  id: bigint | null
+  type: $Enums.User_type | null
   name: string | null
+  email: string | null
+  investmentType: $Enums.Investment_type | null
+  profileImageUrl: string | null
+  currentLevel: number | null
+  currentStep: number | null
+  totalSteps: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
   id: number
-  email: number
+  type: number
   name: number
+  email: number
+  investmentType: number
+  profileImageUrl: number
+  currentLevel: number
+  currentStep: number
+  totalSteps: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -62,32 +86,56 @@ export type UserCountAggregateOutputType = {
 
 export type UserAvgAggregateInputType = {
   id?: true
+  currentLevel?: true
+  currentStep?: true
+  totalSteps?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
+  currentLevel?: true
+  currentStep?: true
+  totalSteps?: true
 }
 
 export type UserMinAggregateInputType = {
   id?: true
-  email?: true
+  type?: true
   name?: true
+  email?: true
+  investmentType?: true
+  profileImageUrl?: true
+  currentLevel?: true
+  currentStep?: true
+  totalSteps?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
   id?: true
-  email?: true
+  type?: true
   name?: true
+  email?: true
+  investmentType?: true
+  profileImageUrl?: true
+  currentLevel?: true
+  currentStep?: true
+  totalSteps?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
   id?: true
-  email?: true
+  type?: true
   name?: true
+  email?: true
+  investmentType?: true
+  profileImageUrl?: true
+  currentLevel?: true
+  currentStep?: true
+  totalSteps?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -180,9 +228,15 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type UserGroupByOutputType = {
-  id: number
+  id: bigint
+  type: $Enums.User_type
+  name: string
   email: string | null
-  name: string | null
+  investmentType: $Enums.Investment_type | null
+  profileImageUrl: string | null
+  currentLevel: number | null
+  currentStep: number | null
+  totalSteps: number | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -211,36 +265,60 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.IntFilter<"User"> | number
+  id?: Prisma.BigIntFilter<"User"> | bigint | number
+  type?: Prisma.EnumUser_typeFilter<"User"> | $Enums.User_type
+  name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  investmentType?: Prisma.EnumInvestment_typeNullableFilter<"User"> | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  currentLevel?: Prisma.IntNullableFilter<"User"> | number | null
+  currentStep?: Prisma.IntNullableFilter<"User"> | number | null
+  totalSteps?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  investmentType?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentStep?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalSteps?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: bigint | number
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  type?: Prisma.EnumUser_typeFilter<"User"> | $Enums.User_type
+  name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  investmentType?: Prisma.EnumInvestment_typeNullableFilter<"User"> | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  currentLevel?: Prisma.IntNullableFilter<"User"> | number | null
+  currentStep?: Prisma.IntNullableFilter<"User"> | number | null
+  totalSteps?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }, "id">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  investmentType?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentStep?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalSteps?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -254,157 +332,282 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"User"> | number
+  id?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number
+  type?: Prisma.EnumUser_typeWithAggregatesFilter<"User"> | $Enums.User_type
+  name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  investmentType?: Prisma.EnumInvestment_typeNullableWithAggregatesFilter<"User"> | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  currentLevel?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  currentStep?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  totalSteps?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
+  id?: bigint | number
+  type?: $Enums.User_type
+  name?: string
   email?: string | null
-  name?: string | null
+  investmentType?: $Enums.Investment_type | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserUncheckedCreateInput = {
-  id?: number
+  id?: bigint | number
+  type?: $Enums.User_type
+  name?: string
   email?: string | null
-  name?: string | null
+  investmentType?: $Enums.Investment_type | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserUpdateInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUser_typeFieldUpdateOperationsInput | $Enums.User_type
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestment_typeFieldUpdateOperationsInput | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUser_typeFieldUpdateOperationsInput | $Enums.User_type
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestment_typeFieldUpdateOperationsInput | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCreateManyInput = {
-  id?: number
+  id?: bigint | number
+  type?: $Enums.User_type
+  name?: string
   email?: string | null
-  name?: string | null
+  investmentType?: $Enums.Investment_type | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUser_typeFieldUpdateOperationsInput | $Enums.User_type
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestment_typeFieldUpdateOperationsInput | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUser_typeFieldUpdateOperationsInput | $Enums.User_type
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestment_typeFieldUpdateOperationsInput | $Enums.Investment_type | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
+  profileImageUrl?: Prisma.SortOrder
+  currentLevel?: Prisma.SortOrder
+  currentStep?: Prisma.SortOrder
+  totalSteps?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  currentLevel?: Prisma.SortOrder
+  currentStep?: Prisma.SortOrder
+  totalSteps?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
+  profileImageUrl?: Prisma.SortOrder
+  currentLevel?: Prisma.SortOrder
+  currentStep?: Prisma.SortOrder
+  totalSteps?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
+  profileImageUrl?: Prisma.SortOrder
+  currentLevel?: Prisma.SortOrder
+  currentStep?: Prisma.SortOrder
+  totalSteps?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  currentLevel?: Prisma.SortOrder
+  currentStep?: Prisma.SortOrder
+  totalSteps?: Prisma.SortOrder
+}
+
+export type BigIntFieldUpdateOperationsInput = {
+  set?: bigint | number
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
+export type EnumUser_typeFieldUpdateOperationsInput = {
+  set?: $Enums.User_type
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type NullableEnumInvestment_typeFieldUpdateOperationsInput = {
+  set?: $Enums.Investment_type | null
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
+  type?: boolean
   name?: boolean
+  email?: boolean
+  investmentType?: boolean
+  profileImageUrl?: boolean
+  currentLevel?: boolean
+  currentStep?: boolean
+  totalSteps?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
+  type?: boolean
   name?: boolean
+  email?: boolean
+  investmentType?: boolean
+  profileImageUrl?: boolean
+  currentLevel?: boolean
+  currentStep?: boolean
+  totalSteps?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
+  type?: boolean
   name?: boolean
+  email?: boolean
+  investmentType?: boolean
+  profileImageUrl?: boolean
+  currentLevel?: boolean
+  currentStep?: boolean
+  totalSteps?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
-  email?: boolean
+  type?: boolean
   name?: boolean
+  email?: boolean
+  investmentType?: boolean
+  profileImageUrl?: boolean
+  currentLevel?: boolean
+  currentStep?: boolean
+  totalSteps?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "email" | "investmentType" | "profileImageUrl" | "currentLevel" | "currentStep" | "totalSteps" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: bigint
+    type: $Enums.User_type
+    name: string
     email: string | null
-    name: string | null
+    investmentType: $Enums.Investment_type | null
+    profileImageUrl: string | null
+    currentLevel: number | null
+    currentStep: number | null
+    totalSteps: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -830,9 +1033,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the User model
  */
 export interface UserFieldRefs {
-  readonly id: Prisma.FieldRef<"User", 'Int'>
-  readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly id: Prisma.FieldRef<"User", 'BigInt'>
+  readonly type: Prisma.FieldRef<"User", 'User_type'>
   readonly name: Prisma.FieldRef<"User", 'String'>
+  readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly investmentType: Prisma.FieldRef<"User", 'Investment_type'>
+  readonly profileImageUrl: Prisma.FieldRef<"User", 'String'>
+  readonly currentLevel: Prisma.FieldRef<"User", 'Int'>
+  readonly currentStep: Prisma.FieldRef<"User", 'Int'>
+  readonly totalSteps: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
