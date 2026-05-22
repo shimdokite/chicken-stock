@@ -8,12 +8,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum EducationSummaryLabel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String?
-  name       String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String?
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
+}
+
+model Article {
+  id                 Int              @id @default(autoincrement())
+  educationSummaryId Int              @map("education_summary_id")
+  educationSummary   EducationSummary @relation(fields: [educationSummaryId], references: [id])
+  title              String
+  content            String
+  imageUrl           String           @map("image_url")
+  sortOrder          Int              @default(0) @map("sort_order")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+
+  @@index([educationSummaryId])
+}
+
+model EducationSummary {
+  id        Int                   @id @default(autoincrement())
+  stage     Int                   @unique
+  label     EducationSummaryLabel
+  title     String                @default("")
+  imageUrl  String                @map("image_url")
+  summary   String[]
+  createdAt DateTime              @default(now()) @map("created_at")
+  updatedAt DateTime              @updatedAt @map("updated_at")
+  articles  Article[]
+
+  @@map("Education_summary")
 }

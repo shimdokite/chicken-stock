@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const EducationSummaryLabel = {
+  BEGINNER: 'BEGINNER',
+  INTERMEDIATE: 'INTERMEDIATE',
+  ADVANCED: 'ADVANCED'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type EducationSummaryLabel = (typeof EducationSummaryLabel)[keyof typeof EducationSummaryLabel]
