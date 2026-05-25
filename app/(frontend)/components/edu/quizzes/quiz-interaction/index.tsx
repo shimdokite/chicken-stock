@@ -13,6 +13,7 @@ type QuizInteractionProps = {
 type SubmissionResult = {
   answer: string;
   explanation: string;
+  isCorrect?: boolean;
 };
 
 function isPositiveIntegerText(value?: string) {
@@ -96,7 +97,10 @@ export default function QuizInteraction({
           setHasCorrectSubmission(result.isCorrect);
           setSubmissionResult({
             answer: result.answer,
-            explanation: result.explanation,
+            explanation: result.isCorrect
+              ? result.explanation
+              : "아쉬워요! 다시 한 번 생각해 볼까요?",
+            isCorrect: result.isCorrect,
           });
           setIsResultModalOpen(true);
         },
@@ -159,7 +163,10 @@ export default function QuizInteraction({
             {submissionResult && (
               <div className="flex h-full flex-col gap-4">
                 <h2 className="text-3xl leading-tight font-bold text-black">
-                  정답 : {submissionResult.answer}
+                  {submissionResult.isCorrect &&
+                    `정답 : ${submissionResult.answer}`}
+
+                  {!submissionResult.isCorrect && "오답"}
                 </h2>
 
                 <div className="min-h-0 flex-1 rounded-lg border-2 border-sky-500 px-2 py-2">

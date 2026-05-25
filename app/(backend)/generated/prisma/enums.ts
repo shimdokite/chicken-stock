@@ -44,3 +44,116 @@ export const UserType = {
 } as const
 
 export type UserType = (typeof UserType)[keyof typeof UserType]
+
+
+export const TradeOrderType = {
+  BUY: 'BUY',
+  SELL: 'SELL'
+} as const
+
+export type TradeOrderType = (typeof TradeOrderType)[keyof typeof TradeOrderType]
+
+
+export const TradeOrderStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type TradeOrderStatus = (typeof TradeOrderStatus)[keyof typeof TradeOrderStatus]
+
+
+export const OrderBookSide = {
+  ASK: 'ASK',
+  BID: 'BID'
+} as const
+
+export type OrderBookSide = (typeof OrderBookSide)[keyof typeof OrderBookSide]
+
+
+export const CurrencyCode = {
+  KRW: 'KRW',
+  USD: 'USD'
+} as const
+
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode]
+
+
+export const DividendStatus = {
+  EXPECTED: 'EXPECTED',
+  PENDING: 'PENDING',
+  RECEIVED: 'RECEIVED'
+} as const
+
+export type DividendStatus = (typeof DividendStatus)[keyof typeof DividendStatus]
+
+
+export const TransactionType = {
+  BUY: 'BUY',
+  SELL: 'SELL',
+  EXCHANGE: 'EXCHANGE',
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  DIVIDEND: 'DIVIDEND'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const AgentType = {
+  AGGRESSIVE: 'AGGRESSIVE',
+  CONSERVATIVE: 'CONSERVATIVE',
+  MOMENTUM: 'MOMENTUM',
+  VALUE: 'VALUE',
+  FX_FOCUSED: 'FX_FOCUSED'
+} as const
+
+export type AgentType = (typeof AgentType)[keyof typeof AgentType]
+
+
+export const TradeFrequency = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+} as const
+
+export type TradeFrequency = (typeof TradeFrequency)[keyof typeof TradeFrequency]
+
+
+export const StockSector = {
+  TECH: 'TECH',
+  BIO: 'BIO',
+  FINANCE: 'FINANCE',
+  CONSUMER: 'CONSUMER'
+} as const
+
+export type StockSector = (typeof StockSector)[keyof typeof StockSector]
+
+
+export const StockRiskLevel = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+} as const
+
+export type StockRiskLevel = (typeof StockRiskLevel)[keyof typeof StockRiskLevel]
+
+
+export const StockTheme = {
+  AI: 'AI',
+  SEMICONDUCTOR: 'SEMICONDUCTOR',
+  BIO: 'BIO',
+  CONTENT: 'CONTENT',
+  BANK: 'BANK'
+} as const
+
+export type StockTheme = (typeof StockTheme)[keyof typeof StockTheme]
+
+
+export const StockMarketStatus = {
+  LISTED: 'LISTED',
+  IPO: 'IPO',
+  PRE_LISTING: 'PRE_LISTING'
+} as const
+
+export type StockMarketStatus = (typeof StockMarketStatus)[keyof typeof StockMarketStatus]

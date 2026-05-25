@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
 import { IconInfoCircle } from "@tabler/icons-react";
+import ArticleProgressIcon from "../article-progress-icon";
 import Modal from "../../ui/modal";
 
 export type EducationListItem = {
@@ -12,6 +13,9 @@ export type EducationListItem = {
   level?: string;
   title: string;
   description?: string;
+  progressRate?: number;
+  isCompleted?: boolean;
+  userId?: string;
 };
 
 export type EducationCardData = {
@@ -89,7 +93,7 @@ export default function EducationCard({
             <p className="text-3xl leading-none font-medium tracking-normal">
               Level {level}
             </p>
-            
+
             <h2 className="mt-1 truncate text-xl leading-6 font-medium tracking-normal">
               {title}
             </h2>
@@ -155,27 +159,39 @@ export default function EducationCard({
                         key={getListItemKey(item, index)}
                         className="px-4 py-3"
                       >
-                        <div className="flex items-center">
+                        <div className="flex w-full items-center">
                           <span className="flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                             {index + 1}.
                           </span>
 
-                          <div className="min-w-0">
+                          <div className="flex min-w-0 items-center gap-1.5">
                             {!item.id && (
-                              <p className="text-xl">{item.title}</p>
+                              <p className="min-w-0 flex-1 truncate text-xl">
+                                {item.title}
+                              </p>
                             )}
 
                             {item.id && (
                               <Link
                                 href={{
                                   pathname: `/edu/articles/${item.id}`,
-                                  query: { level: item.level ?? level },
+                                  query: {
+                                    level: item.level ?? level,
+                                    ...(item.userId
+                                      ? { userId: item.userId }
+                                      : {}),
+                                  },
                                 }}
-                                className="block text-xl transition-colors hover:text-[#72327d] focus-visible:ring-2 focus-visible:ring-[#72327d] focus-visible:ring-offset-2 focus-visible:outline-none"
+                                className="block min-w-0 flex-1 truncate text-xl transition-colors hover:text-[#72327d] focus-visible:ring-2 focus-visible:ring-[#72327d] focus-visible:ring-offset-2 focus-visible:outline-none"
                               >
                                 {item.title}
                               </Link>
                             )}
+
+                            <ArticleProgressIcon
+                              progressRate={item.progressRate}
+                              isCompleted={item.isCompleted}
+                            />
                           </div>
                         </div>
                       </li>

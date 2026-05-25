@@ -277,6 +277,9 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  articleCompletions?: Prisma.UserArticleCompletionListRelationFilter
+  agent?: Prisma.XOR<Prisma.AgentNullableScalarRelationFilter, Prisma.AgentWhereInput> | null
+  portfolios?: Prisma.PortfolioListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -292,6 +295,9 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
+  articleCompletions?: Prisma.UserArticleCompletionOrderByRelationAggregateInput
+  agent?: Prisma.AgentOrderByWithRelationInput
+  portfolios?: Prisma.PortfolioOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -310,6 +316,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  articleCompletions?: Prisma.UserArticleCompletionListRelationFilter
+  agent?: Prisma.XOR<Prisma.AgentNullableScalarRelationFilter, Prisma.AgentWhereInput> | null
+  portfolios?: Prisma.PortfolioListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -351,7 +360,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: bigint | number
   type?: $Enums.UserType
-  name: string
+  name?: string
   email?: string | null
   investmentType?: $Enums.InvestmentType | null
   profileImageUrl?: string | null
@@ -361,12 +370,15 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: bigint | number
   type?: $Enums.UserType
-  name: string
+  name?: string
   email?: string | null
   investmentType?: $Enums.InvestmentType | null
   profileImageUrl?: string | null
@@ -376,6 +388,9 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentUncheckedCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -391,6 +406,9 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -406,12 +424,15 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUncheckedUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: bigint | number
   type?: $Enums.UserType
-  name: string
+  name?: string
   email?: string | null
   investmentType?: $Enums.InvestmentType | null
   profileImageUrl?: string | null
@@ -561,10 +582,52 @@ export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
 }
 
+export type UserCreateNestedOneWithoutArticleCompletionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArticleCompletionsInput, Prisma.UserUncheckedCreateWithoutArticleCompletionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArticleCompletionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutArticleCompletionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArticleCompletionsInput, Prisma.UserUncheckedCreateWithoutArticleCompletionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArticleCompletionsInput
+  upsert?: Prisma.UserUpsertWithoutArticleCompletionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutArticleCompletionsInput, Prisma.UserUpdateWithoutArticleCompletionsInput>, Prisma.UserUncheckedUpdateWithoutArticleCompletionsInput>
+}
+
+export type UserCreateNestedOneWithoutAgentInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentInput, Prisma.UserUncheckedCreateWithoutAgentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAgentNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentInput, Prisma.UserUncheckedCreateWithoutAgentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentInput
+  upsert?: Prisma.UserUpsertWithoutAgentInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAgentInput, Prisma.UserUpdateWithoutAgentInput>, Prisma.UserUncheckedUpdateWithoutAgentInput>
+}
+
+export type UserCreateNestedOneWithoutPortfoliosInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPortfoliosInput, Prisma.UserUncheckedCreateWithoutPortfoliosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPortfoliosInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPortfoliosNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPortfoliosInput, Prisma.UserUncheckedCreateWithoutPortfoliosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPortfoliosInput
+  upsert?: Prisma.UserUpsertWithoutPortfoliosInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPortfoliosInput, Prisma.UserUpdateWithoutPortfoliosInput>, Prisma.UserUncheckedUpdateWithoutPortfoliosInput>
+}
+
 export type UserCreateWithoutRefreshTokensInput = {
   id?: bigint | number
   type?: $Enums.UserType
-  name: string
+  name?: string
   email?: string | null
   investmentType?: $Enums.InvestmentType | null
   profileImageUrl?: string | null
@@ -573,12 +636,15 @@ export type UserCreateWithoutRefreshTokensInput = {
   totalSteps?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  articleCompletions?: Prisma.UserArticleCompletionCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
   id?: bigint | number
   type?: $Enums.UserType
-  name: string
+  name?: string
   email?: string | null
   investmentType?: $Enums.InvestmentType | null
   profileImageUrl?: string | null
@@ -587,6 +653,9 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   totalSteps?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentUncheckedCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -617,6 +686,9 @@ export type UserUpdateWithoutRefreshTokensInput = {
   totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articleCompletions?: Prisma.UserArticleCompletionUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -631,6 +703,261 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUncheckedUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutArticleCompletionsInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutArticleCompletionsInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentUncheckedCreateNestedOneWithoutUserInput
+  portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutArticleCompletionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutArticleCompletionsInput, Prisma.UserUncheckedCreateWithoutArticleCompletionsInput>
+}
+
+export type UserUpsertWithoutArticleCompletionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutArticleCompletionsInput, Prisma.UserUncheckedUpdateWithoutArticleCompletionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutArticleCompletionsInput, Prisma.UserUncheckedCreateWithoutArticleCompletionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutArticleCompletionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutArticleCompletionsInput, Prisma.UserUncheckedUpdateWithoutArticleCompletionsInput>
+}
+
+export type UserUpdateWithoutArticleCompletionsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutArticleCompletionsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUncheckedUpdateOneWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAgentInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionCreateNestedManyWithoutUserInput
+  portfolios?: Prisma.PortfolioCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAgentInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedCreateNestedManyWithoutUserInput
+  portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAgentInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentInput, Prisma.UserUncheckedCreateWithoutAgentInput>
+}
+
+export type UserUpsertWithoutAgentInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAgentInput, Prisma.UserUncheckedUpdateWithoutAgentInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentInput, Prisma.UserUncheckedCreateWithoutAgentInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAgentInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAgentInput, Prisma.UserUncheckedUpdateWithoutAgentInput>
+}
+
+export type UserUpdateWithoutAgentInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUpdateManyWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAgentInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedUpdateManyWithoutUserNestedInput
+  portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPortfoliosInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPortfoliosInput = {
+  id?: bigint | number
+  type?: $Enums.UserType
+  name?: string
+  email?: string | null
+  investmentType?: $Enums.InvestmentType | null
+  profileImageUrl?: string | null
+  currentLevel?: number | null
+  currentStep?: number | null
+  totalSteps?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedCreateNestedManyWithoutUserInput
+  agent?: Prisma.AgentUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPortfoliosInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPortfoliosInput, Prisma.UserUncheckedCreateWithoutPortfoliosInput>
+}
+
+export type UserUpsertWithoutPortfoliosInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPortfoliosInput, Prisma.UserUncheckedUpdateWithoutPortfoliosInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPortfoliosInput, Prisma.UserUncheckedCreateWithoutPortfoliosInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPortfoliosInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPortfoliosInput, Prisma.UserUncheckedUpdateWithoutPortfoliosInput>
+}
+
+export type UserUpdateWithoutPortfoliosInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPortfoliosInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  investmentType?: Prisma.NullableEnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType | null
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSteps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  articleCompletions?: Prisma.UserArticleCompletionUncheckedUpdateManyWithoutUserNestedInput
+  agent?: Prisma.AgentUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -640,10 +967,14 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
 
 export type UserCountOutputType = {
   refreshTokens: number
+  articleCompletions: number
+  portfolios: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
+  articleCompletions?: boolean | UserCountOutputTypeCountArticleCompletionsArgs
+  portfolios?: boolean | UserCountOutputTypeCountPortfoliosArgs
 }
 
 /**
@@ -663,6 +994,20 @@ export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Ty
   where?: Prisma.RefreshTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountArticleCompletionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserArticleCompletionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPortfoliosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PortfolioWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -677,6 +1022,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  articleCompletions?: boolean | Prisma.User$articleCompletionsArgs<ExtArgs>
+  agent?: boolean | Prisma.User$agentArgs<ExtArgs>
+  portfolios?: boolean | Prisma.User$portfoliosArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -725,6 +1073,9 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "email" | "investmentType" | "profileImageUrl" | "currentLevel" | "currentStep" | "totalSteps" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  articleCompletions?: boolean | Prisma.User$articleCompletionsArgs<ExtArgs>
+  agent?: boolean | Prisma.User$agentArgs<ExtArgs>
+  portfolios?: boolean | Prisma.User$portfoliosArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -734,6 +1085,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+    articleCompletions: Prisma.$UserArticleCompletionPayload<ExtArgs>[]
+    agent: Prisma.$AgentPayload<ExtArgs> | null
+    portfolios: Prisma.$PortfolioPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -1142,6 +1496,9 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  articleCompletions<T extends Prisma.User$articleCompletionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$articleCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserArticleCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agent<T extends Prisma.User$agentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$agentArgs<ExtArgs>>): Prisma.Prisma__AgentClient<runtime.Types.Result.GetResult<Prisma.$AgentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  portfolios<T extends Prisma.User$portfoliosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$portfoliosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1591,6 +1948,73 @@ export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
+ * User.articleCompletions
+ */
+export type User$articleCompletionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserArticleCompletion
+   */
+  select?: Prisma.UserArticleCompletionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserArticleCompletion
+   */
+  omit?: Prisma.UserArticleCompletionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserArticleCompletionInclude<ExtArgs> | null
+  where?: Prisma.UserArticleCompletionWhereInput
+  orderBy?: Prisma.UserArticleCompletionOrderByWithRelationInput | Prisma.UserArticleCompletionOrderByWithRelationInput[]
+  cursor?: Prisma.UserArticleCompletionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserArticleCompletionScalarFieldEnum | Prisma.UserArticleCompletionScalarFieldEnum[]
+}
+
+/**
+ * User.agent
+ */
+export type User$agentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Agent
+   */
+  select?: Prisma.AgentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Agent
+   */
+  omit?: Prisma.AgentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentInclude<ExtArgs> | null
+  where?: Prisma.AgentWhereInput
+}
+
+/**
+ * User.portfolios
+ */
+export type User$portfoliosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Portfolio
+   */
+  select?: Prisma.PortfolioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Portfolio
+   */
+  omit?: Prisma.PortfolioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PortfolioInclude<ExtArgs> | null
+  where?: Prisma.PortfolioWhereInput
+  orderBy?: Prisma.PortfolioOrderByWithRelationInput | Prisma.PortfolioOrderByWithRelationInput[]
+  cursor?: Prisma.PortfolioWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PortfolioScalarFieldEnum | Prisma.PortfolioScalarFieldEnum[]
 }
 
 /**

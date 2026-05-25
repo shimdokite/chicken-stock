@@ -6,6 +6,7 @@ import { getArticleQuizProgress } from "@/app/(frontend)/apis/edu/quizzes/querie
 import { getRequestOrigin } from "../../../../lib/server/request";
 import { parseArticleContent } from "../../../../utils/edu/article-content";
 import { isPositiveIntegerString } from "../../../../utils/number";
+import ArticleProgressTracker from "../../../../components/edu/article-progress-tracker";
 import ArticleMessage from "../../../../components/edu/article-message";
 
 type ArticlePageProps = {
@@ -20,6 +21,7 @@ type ArticlePageProps = {
 };
 
 const READING_CHARACTERS_PER_MINUTE = 400;
+const ARTICLE_PROGRESS_TARGET_ID = "article-progress-content";
 
 function getVisibleContentBlocks(
   contentBlocks: ReturnType<typeof parseArticleContent>,
@@ -138,17 +140,27 @@ export default async function ArticlePage({
   const quizLinkQuery: { level: string; userId?: string } = {
     level: articleLevel,
   };
+  const articleListLinkQuery: { openLevel: string; userId?: string } = {
+    openLevel: String(article.educationSummary.stage),
+  };
 
   if (currentUserIdParam) {
     quizLinkQuery.userId = currentUserIdParam;
+    articleListLinkQuery.userId = currentUserIdParam;
   }
 
   return (
     <main className="relative min-h-[calc(100dvh-74px)] bg-white px-5 pt-36 pb-20 text-zinc-950">
+      <ArticleProgressTracker
+        articleId={articlesId}
+        targetId={ARTICLE_PROGRESS_TARGET_ID}
+        userId={currentUserIdParam}
+      />
+
       <Link
         href={{
           pathname: "/edu",
-          query: { openLevel: String(article.educationSummary.stage) },
+          query: articleListLinkQuery,
         }}
         aria-label="학습 목록으로 돌아가기"
         className="absolute top-20 left-6 flex size-16 items-center justify-center text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:outline-none md:top-24 md:left-20"
@@ -179,7 +191,10 @@ export default async function ArticlePage({
         )}
 
         {visibleContentBlocks.length > 0 && (
-          <div className="mx-auto mt-14 max-w-4xl space-y-8 text-zinc-950">
+          <div
+            id={ARTICLE_PROGRESS_TARGET_ID}
+            className="mx-auto mt-14 max-w-4xl space-y-8 text-zinc-950"
+          >
             {visibleContentBlocks.map((block, index) => {
               if (block.type === "heading") {
                 const headingClassName = getHeadingClassName(block.level);

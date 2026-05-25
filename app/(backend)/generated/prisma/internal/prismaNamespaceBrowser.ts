@@ -55,7 +55,22 @@ export const ModelName = {
   Quiz: 'Quiz',
   UserQuizSubmission: 'UserQuizSubmission',
   EducationSummary: 'EducationSummary',
-  UserEducationLevelProgress: 'UserEducationLevelProgress'
+  UserEducationLevelProgress: 'UserEducationLevelProgress',
+  UserArticleCompletion: 'UserArticleCompletion',
+  Agent: 'Agent',
+  AgentStockSector: 'AgentStockSector',
+  Portfolio: 'Portfolio',
+  PortfolioTransaction: 'PortfolioTransaction',
+  PortfolioItem: 'PortfolioItem',
+  DividendEvent: 'DividendEvent',
+  PortfolioDividend: 'PortfolioDividend',
+  Stock: 'Stock',
+  TradeOrder: 'TradeOrder',
+  StockCandle: 'StockCandle',
+  OrderBookSnapshot: 'OrderBookSnapshot',
+  OrderBookLevel: 'OrderBookLevel',
+  MarketIndex: 'MarketIndex',
+  MarketIndexCandle: 'MarketIndexCandle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -179,6 +194,274 @@ export const UserEducationLevelProgressScalarFieldEnum = {
 } as const
 
 export type UserEducationLevelProgressScalarFieldEnum = (typeof UserEducationLevelProgressScalarFieldEnum)[keyof typeof UserEducationLevelProgressScalarFieldEnum]
+
+
+export const UserArticleCompletionScalarFieldEnum = {
+  userId: 'userId',
+  articleId: 'articleId',
+  progressRate: 'progressRate',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserArticleCompletionScalarFieldEnum = (typeof UserArticleCompletionScalarFieldEnum)[keyof typeof UserArticleCompletionScalarFieldEnum]
+
+
+export const AgentScalarFieldEnum = {
+  userId: 'userId',
+  agentType: 'agentType',
+  riskTolerance: 'riskTolerance',
+  maxPositionRatio: 'maxPositionRatio',
+  cashReserveRatio: 'cashReserveRatio',
+  tradeFrequency: 'tradeFrequency',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
+
+
+export const AgentStockSectorScalarFieldEnum = {
+  userId: 'userId',
+  sector: 'sector'
+} as const
+
+export type AgentStockSectorScalarFieldEnum = (typeof AgentStockSectorScalarFieldEnum)[keyof typeof AgentStockSectorScalarFieldEnum]
+
+
+export const PortfolioScalarFieldEnum = {
+  id: 'id',
+  accountNumber: 'accountNumber',
+  userId: 'userId',
+  totalBalance: 'totalBalance',
+  krwBalance: 'krwBalance',
+  usdBalance: 'usdBalance',
+  totalAvailableOrderAmount: 'totalAvailableOrderAmount',
+  totalInvestmentAmount: 'totalInvestmentAmount',
+  domesticStockAmount: 'domesticStockAmount',
+  foreignStockAmount: 'foreignStockAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PortfolioScalarFieldEnum = (typeof PortfolioScalarFieldEnum)[keyof typeof PortfolioScalarFieldEnum]
+
+
+export const PortfolioTransactionScalarFieldEnum = {
+  id: 'id',
+  portfolioId: 'portfolioId',
+  stockId: 'stockId',
+  tradeOrderId: 'tradeOrderId',
+  executedAt: 'executedAt',
+  companyName: 'companyName',
+  transactionType: 'transactionType',
+  totalAmount: 'totalAmount',
+  totalQuantity: 'totalQuantity',
+  withdrawalAt: 'withdrawalAt',
+  fee: 'fee',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PortfolioTransactionScalarFieldEnum = (typeof PortfolioTransactionScalarFieldEnum)[keyof typeof PortfolioTransactionScalarFieldEnum]
+
+
+export const PortfolioItemScalarFieldEnum = {
+  portfolioId: 'portfolioId',
+  stockId: 'stockId',
+  assetType: 'assetType',
+  companyName: 'companyName',
+  companyLogoUrl: 'companyLogoUrl',
+  quantity: 'quantity',
+  averagePrice: 'averagePrice',
+  currentPrice: 'currentPrice',
+  totalInvested: 'totalInvested',
+  currentAmount: 'currentAmount',
+  evaluationAmount: 'evaluationAmount',
+  profit: 'profit',
+  profitRate: 'profitRate',
+  fee: 'fee',
+  saleTax: 'saleTax',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PortfolioItemScalarFieldEnum = (typeof PortfolioItemScalarFieldEnum)[keyof typeof PortfolioItemScalarFieldEnum]
+
+
+export const DividendEventScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  paymentDate: 'paymentDate',
+  recordDate: 'recordDate',
+  dividendExDate: 'dividendExDate',
+  amountPerShare: 'amountPerShare',
+  currencyCode: 'currencyCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DividendEventScalarFieldEnum = (typeof DividendEventScalarFieldEnum)[keyof typeof DividendEventScalarFieldEnum]
+
+
+export const PortfolioDividendScalarFieldEnum = {
+  id: 'id',
+  portfolioId: 'portfolioId',
+  dividendEventId: 'dividendEventId',
+  portfolioTransactionId: 'portfolioTransactionId',
+  quantity: 'quantity',
+  dividendAmount: 'dividendAmount',
+  dividendStatus: 'dividendStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PortfolioDividendScalarFieldEnum = (typeof PortfolioDividendScalarFieldEnum)[keyof typeof PortfolioDividendScalarFieldEnum]
+
+
+export const StockScalarFieldEnum = {
+  id: 'id',
+  ticker: 'ticker',
+  name: 'name',
+  imageUrl: 'imageUrl',
+  sector: 'sector',
+  riskLevel: 'riskLevel',
+  theme: 'theme',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  currentPrice: 'currentPrice',
+  previousClose: 'previousClose',
+  changeAmount: 'changeAmount',
+  changeRate: 'changeRate',
+  dayHigh: 'dayHigh',
+  dayLow: 'dayLow',
+  high52w: 'high52w',
+  low52w: 'low52w',
+  volume: 'volume',
+  tradingValue: 'tradingValue',
+  marketCap: 'marketCap',
+  per: 'per',
+  eps: 'eps',
+  marketStatus: 'marketStatus',
+  debtRatio: 'debtRatio',
+  currentRatio: 'currentRatio',
+  interestCoverageRatio: 'interestCoverageRatio',
+  announcementDate: 'announcementDate',
+  estimatedOperatingProfit: 'estimatedOperatingProfit',
+  estimatedRevenue: 'estimatedRevenue',
+  dividendCount: 'dividendCount',
+  dividendPerShare: 'dividendPerShare',
+  dividendYield: 'dividendYield',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockScalarFieldEnum = (typeof StockScalarFieldEnum)[keyof typeof StockScalarFieldEnum]
+
+
+export const TradeOrderScalarFieldEnum = {
+  orderId: 'orderId',
+  portfolioId: 'portfolioId',
+  stockId: 'stockId',
+  ticker: 'ticker',
+  type: 'type',
+  quantity: 'quantity',
+  pricePerShare: 'pricePerShare',
+  status: 'status',
+  orderedAt: 'orderedAt',
+  filledQuantity: 'filledQuantity',
+  remainingQuantity: 'remainingQuantity',
+  executedPrice: 'executedPrice',
+  executedAt: 'executedAt',
+  canceledAt: 'canceledAt',
+  rejectReason: 'rejectReason',
+  currencyCode: 'currencyCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TradeOrderScalarFieldEnum = (typeof TradeOrderScalarFieldEnum)[keyof typeof TradeOrderScalarFieldEnum]
+
+
+export const StockCandleScalarFieldEnum = {
+  ticker: 'ticker',
+  intervalCode: 'intervalCode',
+  timestamp: 'timestamp',
+  openPrice: 'openPrice',
+  highPrice: 'highPrice',
+  lowPrice: 'lowPrice',
+  closePrice: 'closePrice',
+  volume: 'volume'
+} as const
+
+export type StockCandleScalarFieldEnum = (typeof StockCandleScalarFieldEnum)[keyof typeof StockCandleScalarFieldEnum]
+
+
+export const OrderBookSnapshotScalarFieldEnum = {
+  ticker: 'ticker',
+  timestamp: 'timestamp',
+  totalAskSize: 'totalAskSize',
+  totalBidSize: 'totalBidSize',
+  volume: 'volume',
+  buyVolume: 'buyVolume',
+  sellVolume: 'sellVolume',
+  executionStrength: 'executionStrength',
+  lastTradeVolume: 'lastTradeVolume',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderBookSnapshotScalarFieldEnum = (typeof OrderBookSnapshotScalarFieldEnum)[keyof typeof OrderBookSnapshotScalarFieldEnum]
+
+
+export const OrderBookLevelScalarFieldEnum = {
+  ticker: 'ticker',
+  snapshotTimestamp: 'snapshotTimestamp',
+  side: 'side',
+  levelRank: 'levelRank',
+  price: 'price',
+  quantity: 'quantity'
+} as const
+
+export type OrderBookLevelScalarFieldEnum = (typeof OrderBookLevelScalarFieldEnum)[keyof typeof OrderBookLevelScalarFieldEnum]
+
+
+export const MarketIndexScalarFieldEnum = {
+  id: 'id',
+  ticker: 'ticker',
+  name: 'name',
+  indexType: 'indexType',
+  currentValue: 'currentValue',
+  previousClose: 'previousClose',
+  changeAmount: 'changeAmount',
+  changeRate: 'changeRate',
+  isRealtime: 'isRealtime',
+  provider: 'provider',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  buyPrice: 'buyPrice',
+  sellPrice: 'sellPrice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketIndexScalarFieldEnum = (typeof MarketIndexScalarFieldEnum)[keyof typeof MarketIndexScalarFieldEnum]
+
+
+export const MarketIndexCandleScalarFieldEnum = {
+  ticker: 'ticker',
+  intervalCode: 'intervalCode',
+  timestamp: 'timestamp',
+  openValue: 'openValue',
+  highValue: 'highValue',
+  lowValue: 'lowValue',
+  closeValue: 'closeValue',
+  volume: 'volume'
+} as const
+
+export type MarketIndexCandleScalarFieldEnum = (typeof MarketIndexCandleScalarFieldEnum)[keyof typeof MarketIndexCandleScalarFieldEnum]
 
 
 export const SortOrder = {

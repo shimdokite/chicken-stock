@@ -2,6 +2,8 @@ export type EducationSummaryArticle = {
   id: number;
   title: string;
   sortOrder: number;
+  progressRate: number;
+  isCompleted: boolean;
 };
 
 export type EducationSummary = {
@@ -45,8 +47,14 @@ type EducationArticleResponse =
       error: string;
     };
 
-export async function fetchEducationSummaries() {
-  const response = await fetch("/api/edu");
+export async function fetchEducationSummaries(userId?: string | null) {
+  const url = new URL("/api/edu", window.location.origin);
+
+  if (userId) {
+    url.searchParams.set("userId", userId);
+  }
+
+  const response = await fetch(url);
   const result = (await response.json()) as EducationSummariesResponse;
 
   if (!response.ok || !result.ok) {
@@ -76,4 +84,3 @@ export async function fetchEducationArticle(
 
   return result.data;
 }
-

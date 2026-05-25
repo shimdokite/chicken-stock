@@ -310,7 +310,30 @@ export async function POST(request: NextRequest) {
 
     const selectedAnswer = hasUserAnswer ? userAnswerValue : "";
     const isCorrect = hasUserAnswer && selectedAnswer === quiz.answer;
-    const answeredAt = isCorrect ? new Date() : null;
+    const existingSubmission = await prisma.userQuizSubmission.findUnique({
+      where: {
+        userId_quizId: {
+          userId,
+          quizId,
+        },
+      },
+      select: {
+        selectedAnswer: true,
+        isCorrect: true,
+        isSkip: true,
+        answeredAt: true,
+      },
+    });
+    const alreadyCorrect = existingSubmission?.isCorrect === true;
+    const nextSelectedAnswer = alreadyCorrect
+      ? existingSubmission.selectedAnswer
+      : selectedAnswer;
+    const nextIsSkip = alreadyCorrect
+      ? existingSubmission.isSkip
+      : (isSkip ?? false);
+    const nextIsCorrect = alreadyCorrect || isCorrect;
+    const nextAnsweredAt =
+      existingSubmission?.answeredAt ?? (isCorrect ? new Date() : null);
 
     const submission = await prisma.userQuizSubmission.upsert({
       where: {
@@ -325,13 +348,13 @@ export async function POST(request: NextRequest) {
         selectedAnswer,
         isSkip: isSkip ?? false,
         isCorrect,
-        answeredAt,
+        answeredAt: isCorrect ? new Date() : null,
       },
       update: {
-        selectedAnswer,
-        isSkip: isSkip ?? false,
-        isCorrect,
-        answeredAt,
+        selectedAnswer: nextSelectedAnswer,
+        isSkip: nextIsSkip,
+        isCorrect: nextIsCorrect,
+        answeredAt: nextAnsweredAt,
       },
       select: {
         isCorrect: true,

@@ -21,26 +21,29 @@ enum Quiz_type {
 }
 
 enum InvestmentType {
-  AGGRESSIVE   // 공격투자형
-  ACTIVE       // 적극투자형
-  BALANCED     // 위험중립형
+  AGGRESSIVE // 공격투자형
+  ACTIVE // 적극투자형
+  BALANCED // 위험중립형
   CONSERVATIVE // 안정추구형
-  STABLE       // 안정형
+  STABLE // 안정형
 }
 
 model User {
-  id              BigInt          @id @default(autoincrement())
-  type            UserType        @default(NORMAL)
-  name            String
-  email           String?         @unique
-  investmentType  InvestmentType? @map("investment_type")
-  profileImageUrl String?         @map("profile_image_url")
-  currentLevel    Int?            @default(1) @map("current_level")
-  currentStep     Int?            @default(1) @map("current_step")
-  totalSteps      Int?            @default(0) @map("total_steps")
-  createdAt       DateTime        @default(now()) @map("created_at")
-  updatedAt       DateTime        @updatedAt @map("updated_at")
-  refreshTokens   RefreshToken[]
+  id                 BigInt                  @id @default(autoincrement())
+  type               UserType                @default(NORMAL)
+  name               String                  @default("") @db.VarChar(255)
+  email              String?                 @unique @db.VarChar(255)
+  investmentType     InvestmentType?         @map("investment_type")
+  profileImageUrl    String?                 @map("profile_image_url") @db.VarChar(2048)
+  currentLevel       Int?                    @map("current_level")
+  currentStep        Int?                    @map("current_step")
+  totalSteps         Int?                    @map("total_steps")
+  createdAt          DateTime                @default(now()) @map("created_at")
+  updatedAt          DateTime                @updatedAt @map("updated_at")
+  refreshTokens      RefreshToken[]
+  articleCompletions UserArticleCompletion[]
+  agent              Agent?
+  portfolios         Portfolio[]
 
   @@index([email])
   @@map("User")
@@ -66,37 +69,40 @@ model RefreshToken {
 enum UserType {
   NORMAL
   AGENT
+
+  @@map("User_type")
 }
 
 model Article {
-  id                 Int              @id @default(autoincrement())
-  educationSummaryId Int              @map("education_summary_id")
-  educationSummary   EducationSummary @relation(fields: [educationSummaryId], references: [id])
+  id                 Int                     @id @default(autoincrement())
+  educationSummaryId Int                     @map("education_summary_id")
+  educationSummary   EducationSummary        @relation(fields: [educationSummaryId], references: [id])
   quizzes            Quiz[]
   title              String
   content            String
-  imageUrl           String           @map("image_url")
-  sortOrder          Int              @default(0) @map("sort_order")
-  createdAt          DateTime         @default(now()) @map("created_at")
-  updatedAt          DateTime         @updatedAt @map("updated_at")
+  imageUrl           String                  @map("image_url")
+  sortOrder          Int                     @default(0) @map("sort_order")
+  createdAt          DateTime                @default(now()) @map("created_at")
+  updatedAt          DateTime                @updatedAt @map("updated_at")
+  completions        UserArticleCompletion[]
 
   @@index([educationSummaryId])
 }
 
 model Quiz {
-  id               Int              @id @default(autoincrement())
-  educationLevelId Int              @map("education_level_id")
-  educationLevel   EducationSummary @relation(fields: [educationLevelId], references: [stage])
-  articleId        Int              @map("article_id")
-  article          Article          @relation(fields: [articleId], references: [id])
-  quizType         Quiz_type        @map("quiz_type")
-  question         String           @db.VarChar(255)
-  description      String           @db.Text
-  answer           String           @db.Text
-  explanation      String           @db.Text
-  optionText       String[]         @map("option_text") @db.VarChar(255)
-  createdAt        DateTime         @default(now()) @map("created_at")
-  updatedAt        DateTime         @updatedAt @map("updated_at")
+  id               Int                  @id @default(autoincrement())
+  educationLevelId Int                  @map("education_level_id")
+  educationLevel   EducationSummary     @relation(fields: [educationLevelId], references: [stage])
+  articleId        Int                  @map("article_id")
+  article          Article              @relation(fields: [articleId], references: [id])
+  quizType         Quiz_type            @map("quiz_type")
+  question         String               @db.VarChar(255)
+  description      String
+  answer           String
+  explanation      String
+  optionText       String[]             @map("option_text") @db.VarChar(255)
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
   submissions      UserQuizSubmission[]
 
   @@index([educationLevelId])
@@ -104,29 +110,29 @@ model Quiz {
 }
 
 model UserQuizSubmission {
-  userId         BigInt   @map("user_id")
-  quizId         Int      @map("quiz_id")
-  quiz           Quiz     @relation(fields: [quizId], references: [id])
-  selectedAnswer String   @map("selected_answer") @db.Text
-  isSkip         Boolean  @map("is_skip")
-  isCorrect      Boolean  @map("is_correct")
+  userId         BigInt    @map("user_id")
+  quizId         Int       @map("quiz_id")
+  quiz           Quiz      @relation(fields: [quizId], references: [id])
+  selectedAnswer String    @map("selected_answer")
+  isSkip         Boolean   @map("is_skip")
+  isCorrect      Boolean   @map("is_correct")
   answeredAt     DateTime? @map("answered_at")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   @@id([userId, quizId])
   @@map("User_quiz_submission")
 }
 
 model EducationSummary {
-  id        Int                   @id @default(autoincrement())
-  stage     Int                   @unique
+  id        Int                          @id @default(autoincrement())
+  stage     Int                          @unique
   label     EducationSummaryLabel
-  title     String                @default("")
-  imageUrl  String                @map("image_url")
+  title     String                       @default("")
+  imageUrl  String                       @map("image_url")
   summary   String[]
-  createdAt DateTime              @default(now()) @map("created_at")
-  updatedAt DateTime              @updatedAt @map("updated_at")
+  createdAt DateTime                     @default(now()) @map("created_at")
+  updatedAt DateTime                     @updatedAt @map("updated_at")
   articles  Article[]
   quizzes   Quiz[]
   progress  UserEducationLevelProgress[]
@@ -149,4 +155,401 @@ model UserEducationLevelProgress {
 
   @@id([userId, educationLevelId])
   @@map("User_education_level_progress")
+}
+
+model UserArticleCompletion {
+  userId       BigInt    @map("user_id")
+  articleId    Int       @map("article_id")
+  user         User      @relation(fields: [userId], references: [id])
+  article      Article   @relation(fields: [articleId], references: [id])
+  progressRate Int       @default(0) @map("progress_rate")
+  isCompleted  Boolean   @default(false) @map("is_completed")
+  completedAt  DateTime? @map("completed_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@id([userId, articleId])
+  @@map("User_article_completion")
+}
+
+enum TradeOrderType {
+  BUY  @map("매수")
+  SELL @map("매도")
+
+  @@map("Trade_order_type")
+}
+
+enum TradeOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+
+  @@map("Trade_order_status")
+}
+
+enum OrderBookSide {
+  ASK @map("매도")
+  BID @map("매수")
+
+  @@map("Order_book_side")
+}
+
+enum CurrencyCode {
+  KRW
+  USD
+
+  @@map("Currency_code")
+}
+
+enum DividendStatus {
+  EXPECTED @map("expected")
+  PENDING  @map("pending")
+  RECEIVED @map("received")
+
+  @@map("Dividend_status")
+}
+
+enum TransactionType {
+  BUY        @map("buy")
+  SELL       @map("sell")
+  EXCHANGE   @map("exchange")
+  DEPOSIT    @map("deposit")
+  WITHDRAWAL @map("withdrawal")
+  DIVIDEND   @map("dividend")
+
+  @@map("Transaction_type")
+}
+
+enum AgentType {
+  AGGRESSIVE
+  CONSERVATIVE
+  MOMENTUM
+  VALUE
+  FX_FOCUSED
+
+  @@map("Agent_type")
+}
+
+enum TradeFrequency {
+  LOW
+  MEDIUM
+  HIGH
+
+  @@map("Trade_frequency")
+}
+
+enum StockSector {
+  TECH
+  BIO
+  FINANCE
+  CONSUMER
+
+  @@map("Stock_sector")
+}
+
+enum StockRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+
+  @@map("Stock_risk_level")
+}
+
+enum StockTheme {
+  AI
+  SEMICONDUCTOR
+  BIO
+  CONTENT
+  BANK
+
+  @@map("Stock_theme")
+}
+
+enum StockMarketStatus {
+  LISTED
+  IPO
+  PRE_LISTING
+
+  @@map("Stock_market_status")
+}
+
+model Agent {
+  userId           BigInt             @id @map("user_id")
+  agentType        AgentType          @map("agent_type")
+  riskTolerance    Decimal            @map("risk_tolerance")
+  maxPositionRatio Decimal            @map("max_position_ratio")
+  cashReserveRatio Decimal            @map("cash_reserve_ratio")
+  tradeFrequency   TradeFrequency     @map("trade_frequency")
+  isActive         Boolean            @map("is_active")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  user             User               @relation(fields: [userId], references: [id])
+  sectors          AgentStockSector[]
+
+  @@map("Agent")
+}
+
+model AgentStockSector {
+  userId BigInt      @map("user_id")
+  sector StockSector
+  agent  Agent       @relation(fields: [userId], references: [userId])
+
+  @@id([userId, sector])
+  @@map("Agent_stock_sector")
+}
+
+model Portfolio {
+  id                        BigInt                 @id
+  accountNumber             String                 @map("account_number") @db.VarChar(255)
+  userId                    BigInt                 @map("user_id")
+  totalBalance              Decimal                @map("total_balance")
+  krwBalance                Decimal                @map("krw_balance")
+  usdBalance                Decimal                @map("usd_balance")
+  totalAvailableOrderAmount Decimal                @map("total_available_order_amount")
+  totalInvestmentAmount     Decimal                @map("total_investment_amount")
+  domesticStockAmount       Decimal                @map("domestic_stock_amount")
+  foreignStockAmount        Decimal                @map("foreign_stock_amount")
+  createdAt                 DateTime               @default(now()) @map("created_at")
+  updatedAt                 DateTime               @updatedAt @map("updated_at")
+  user                      User                   @relation(fields: [userId], references: [id])
+  items                     PortfolioItem[]
+  tradeOrders               TradeOrder[]
+  transactions              PortfolioTransaction[]
+  dividends                 PortfolioDividend[]
+
+  @@map("Portfolio")
+}
+
+model PortfolioTransaction {
+  id              String              @id @db.VarChar(255)
+  portfolioId     BigInt              @map("portfolio_id")
+  stockId         Int                 @map("stock_id")
+  tradeOrderId    BigInt              @map("trade_order_id")
+  executedAt      DateTime            @map("executed_at") @db.Date
+  companyName     String              @map("company_name") @db.VarChar(255)
+  transactionType TransactionType     @map("transaction_type")
+  totalAmount     Decimal             @map("total_amount")
+  totalQuantity   Int                 @map("total_quantity")
+  withdrawalAt    DateTime            @map("withdrawal_at") @db.Date
+  fee             Decimal
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  portfolio       Portfolio           @relation(fields: [portfolioId], references: [id])
+  stock           Stock               @relation(fields: [stockId], references: [id])
+  tradeOrder      TradeOrder          @relation(fields: [tradeOrderId], references: [orderId])
+  dividends       PortfolioDividend[]
+
+  @@map("Portfolio_transaction")
+}
+
+model PortfolioItem {
+  portfolioId      BigInt    @map("portfolio_id")
+  stockId          Int       @map("stock_id")
+  assetType        String    @map("asset_type") @db.VarChar(255)
+  companyName      String    @map("company_name") @db.VarChar(255)
+  companyLogoUrl   String    @map("company_logo_url") @db.VarChar(255)
+  quantity         Int
+  averagePrice     Decimal   @map("average_price")
+  currentPrice     Decimal   @map("current_price")
+  totalInvested    Decimal   @map("total_invested")
+  currentAmount    Decimal   @map("current_amount")
+  evaluationAmount Decimal   @map("evaluation_amount")
+  profit           Decimal
+  profitRate       Decimal   @map("profit_rate")
+  fee              Decimal
+  saleTax          Decimal   @map("sale_tax")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  portfolio        Portfolio @relation(fields: [portfolioId], references: [id])
+  stock            Stock     @relation(fields: [stockId], references: [id])
+
+  @@id([portfolioId, stockId])
+  @@map("Portfolio_item")
+}
+
+model DividendEvent {
+  id              String              @id @db.VarChar(255)
+  stockId         Int                 @map("stock_id")
+  paymentDate     DateTime            @map("payment_date") @db.Date
+  recordDate      DateTime            @map("record_date") @db.Date
+  dividendExDate  DateTime            @map("dividend_ex_date") @db.Date
+  amountPerShare  Decimal             @map("amount_per_share")
+  currencyCode    CurrencyCode        @map("currency_code")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  stock           Stock               @relation(fields: [stockId], references: [id])
+  portfolioEvents PortfolioDividend[]
+
+  @@map("Dividend_event")
+}
+
+model PortfolioDividend {
+  id                     String               @id @db.VarChar(255)
+  portfolioId            BigInt               @map("portfolio_id")
+  dividendEventId        String               @map("dividend_event_id") @db.VarChar(255)
+  portfolioTransactionId String               @map("portfolio_transaction_id") @db.VarChar(255)
+  quantity               Int
+  dividendAmount         Decimal              @map("dividend_amount")
+  dividendStatus         DividendStatus       @map("dividend_status")
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              DateTime             @updatedAt @map("updated_at")
+  portfolio              Portfolio            @relation(fields: [portfolioId], references: [id])
+  dividendEvent          DividendEvent        @relation(fields: [dividendEventId], references: [id])
+  portfolioTransaction   PortfolioTransaction @relation(fields: [portfolioTransactionId], references: [id])
+
+  @@map("Portfolio_dividend")
+}
+
+model Stock {
+  id                       Int                    @id
+  ticker                   String                 @unique @db.VarChar(255)
+  name                     String                 @db.VarChar(255)
+  imageUrl                 String                 @map("image_url") @db.VarChar(255)
+  sector                   StockSector
+  riskLevel                StockRiskLevel         @map("risk_level")
+  theme                    StockTheme
+  countryCode              String                 @map("country_code") @db.VarChar(255)
+  currencyCode             CurrencyCode           @map("currency_code")
+  currentPrice             Decimal                @map("current_price")
+  previousClose            Decimal                @map("previous_close")
+  changeAmount             Decimal                @map("change_amount")
+  changeRate               Decimal                @map("change_rate")
+  dayHigh                  Decimal                @map("day_high")
+  dayLow                   Decimal                @map("day_low")
+  high52w                  Decimal                @map("high_52w")
+  low52w                   Decimal                @map("low_52w")
+  volume                   Decimal
+  tradingValue             Decimal                @map("trading_value")
+  marketCap                Decimal                @map("market_cap")
+  per                      Decimal
+  eps                      Decimal
+  marketStatus             StockMarketStatus      @map("market_status")
+  debtRatio                Decimal                @map("debt_ratio")
+  currentRatio             Decimal                @map("current_ratio")
+  interestCoverageRatio    Decimal                @map("interest_coverage_ratio")
+  announcementDate         DateTime               @map("announcement_date") @db.Date
+  estimatedOperatingProfit String                 @map("estimated_operating_profit") @db.VarChar(255)
+  estimatedRevenue         Decimal                @map("estimated_revenue")
+  dividendCount            Int                    @map("dividend_count")
+  dividendPerShare         Decimal                @map("dividend_per_share")
+  dividendYield            Decimal                @map("dividend_yield")
+  createdAt                DateTime               @default(now()) @map("created_at")
+  updatedAt                DateTime               @updatedAt @map("updated_at")
+  portfolioItems           PortfolioItem[]
+  tradeOrders              TradeOrder[]
+  transactions             PortfolioTransaction[]
+  dividendEvents           DividendEvent[]
+  candles                  StockCandle[]
+  orderBookSnapshots       OrderBookSnapshot[]
+
+  @@map("Stock")
+}
+
+model TradeOrder {
+  orderId           BigInt                 @id @map("order_id")
+  portfolioId       BigInt                 @map("portfolio_id")
+  stockId           Int                    @map("stock_id")
+  ticker            String                 @db.VarChar(255)
+  type              TradeOrderType
+  quantity          Int
+  pricePerShare     Decimal                @map("price_per_share")
+  status            TradeOrderStatus
+  orderedAt         DateTime               @map("ordered_at")
+  filledQuantity    Int                    @map("filled_quantity")
+  remainingQuantity Int                    @map("remaining_quantity")
+  executedPrice     Decimal?               @map("executed_price")
+  executedAt        DateTime?              @map("executed_at")
+  canceledAt        DateTime?              @map("canceled_at")
+  rejectReason      String?                @map("reject_reason") @db.VarChar(255)
+  currencyCode      CurrencyCode           @map("currency_code")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+  portfolio         Portfolio              @relation(fields: [portfolioId], references: [id])
+  stock             Stock                  @relation(fields: [stockId], references: [id])
+  transactions      PortfolioTransaction[]
+
+  @@map("Trade_order")
+}
+
+model StockCandle {
+  ticker       String  @db.VarChar(255)
+  intervalCode String  @map("interval_code") @db.VarChar(255)
+  timestamp    BigInt
+  openPrice    Decimal @map("open_price")
+  highPrice    Decimal @map("high_price")
+  lowPrice     Decimal @map("low_price")
+  closePrice   Decimal @map("close_price")
+  volume       Decimal
+  stock        Stock   @relation(fields: [ticker], references: [ticker])
+
+  @@id([ticker, intervalCode, timestamp])
+  @@map("Stock_candle")
+}
+
+model OrderBookSnapshot {
+  ticker            String           @db.VarChar(255)
+  timestamp         BigInt
+  totalAskSize      Decimal          @map("total_ask_size")
+  totalBidSize      Decimal          @map("total_bid_size")
+  volume            Decimal
+  buyVolume         Decimal          @map("buy_volume")
+  sellVolume        Decimal          @map("sell_volume")
+  executionStrength Decimal          @map("execution_strength")
+  lastTradeVolume   Decimal          @map("last_trade_volume")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  stock             Stock            @relation(fields: [ticker], references: [ticker])
+  levels            OrderBookLevel[]
+
+  @@id([ticker, timestamp])
+  @@map("Order_book_snapshot")
+}
+
+model OrderBookLevel {
+  ticker            String            @db.VarChar(255)
+  snapshotTimestamp BigInt            @map("snapshot_timestamp")
+  side              OrderBookSide
+  levelRank         Int               @map("level_rank")
+  price             Decimal
+  quantity          Decimal
+  snapshot          OrderBookSnapshot @relation(fields: [ticker, snapshotTimestamp], references: [ticker, timestamp])
+
+  @@id([ticker, snapshotTimestamp, side, levelRank])
+  @@map("Order_book_level")
+}
+
+model MarketIndex {
+  id            Int                 @id
+  ticker        String              @unique @db.VarChar(255)
+  name          String              @db.VarChar(255)
+  indexType     String              @map("index_type") @db.VarChar(255)
+  currentValue  Decimal             @map("current_value")
+  previousClose Decimal             @map("previous_close")
+  changeAmount  Decimal             @map("change_amount")
+  changeRate    Decimal             @map("change_rate")
+  isRealtime    Boolean             @map("is_realtime")
+  provider      String              @db.VarChar(255)
+  countryCode   String              @map("country_code") @db.VarChar(255)
+  currencyCode  CurrencyCode        @map("currency_code")
+  buyPrice      Decimal             @map("buy_price")
+  sellPrice     Decimal             @map("sell_price")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+  candles       MarketIndexCandle[]
+
+  @@map("Market_index")
+}
+
+model MarketIndexCandle {
+  ticker       String      @db.VarChar(255)
+  intervalCode String      @map("interval_code") @db.VarChar(255)
+  timestamp    BigInt
+  openValue    Decimal     @map("open_value")
+  highValue    Decimal     @map("high_value")
+  lowValue     Decimal     @map("low_value")
+  closeValue   Decimal     @map("close_value")
+  volume       Decimal?
+  marketIndex  MarketIndex @relation(fields: [ticker], references: [ticker])
+
+  @@id([ticker, intervalCode, timestamp])
+  @@map("Market_index_candle")
 }

@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchEducationArticle, fetchEducationSummaries } from "./api";
 
 export const educationQueryKeys = {
-  summaries: ["educationSummaries"] as const,
+  summaries: (userId?: string | null) =>
+    ["educationSummaries", userId ?? null] as const,
 };
 
-export function useEducationSummariesQuery() {
+export function useEducationSummariesQuery(userId?: string | null) {
   return useQuery({
-    queryKey: educationQueryKeys.summaries,
-    queryFn: fetchEducationSummaries,
+    queryKey: educationQueryKeys.summaries(userId),
+    queryFn: () => fetchEducationSummaries(userId),
   });
 }
 

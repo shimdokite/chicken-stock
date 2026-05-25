@@ -79,3 +79,78 @@ export type EducationSummary = Prisma.EducationSummaryModel
  * 
  */
 export type UserEducationLevelProgress = Prisma.UserEducationLevelProgressModel
+/**
+ * Model UserArticleCompletion
+ * 
+ */
+export type UserArticleCompletion = Prisma.UserArticleCompletionModel
+/**
+ * Model Agent
+ * 
+ */
+export type Agent = Prisma.AgentModel
+/**
+ * Model AgentStockSector
+ * 
+ */
+export type AgentStockSector = Prisma.AgentStockSectorModel
+/**
+ * Model Portfolio
+ * 
+ */
+export type Portfolio = Prisma.PortfolioModel
+/**
+ * Model PortfolioTransaction
+ * 
+ */
+export type PortfolioTransaction = Prisma.PortfolioTransactionModel
+/**
+ * Model PortfolioItem
+ * 
+ */
+export type PortfolioItem = Prisma.PortfolioItemModel
+/**
+ * Model DividendEvent
+ * 
+ */
+export type DividendEvent = Prisma.DividendEventModel
+/**
+ * Model PortfolioDividend
+ * 
+ */
+export type PortfolioDividend = Prisma.PortfolioDividendModel
+/**
+ * Model Stock
+ * 
+ */
+export type Stock = Prisma.StockModel
+/**
+ * Model TradeOrder
+ * 
+ */
+export type TradeOrder = Prisma.TradeOrderModel
+/**
+ * Model StockCandle
+ * 
+ */
+export type StockCandle = Prisma.StockCandleModel
+/**
+ * Model OrderBookSnapshot
+ * 
+ */
+export type OrderBookSnapshot = Prisma.OrderBookSnapshotModel
+/**
+ * Model OrderBookLevel
+ * 
+ */
+export type OrderBookLevel = Prisma.OrderBookLevelModel
+/**
+ * Model MarketIndex
+ * 
+ */
+export type MarketIndex = Prisma.MarketIndexModel
+/**
+ * Model MarketIndexCandle
+ * 
+ */
+export type MarketIndexCandle = Prisma.MarketIndexCandleModel
