@@ -1,3 +1,5 @@
+import { requests } from "../request";
+
 export type EducationSummaryArticle = {
   id: number;
   title: string;
@@ -48,22 +50,15 @@ type EducationArticleResponse =
     };
 
 export async function fetchEducationSummaries(userId?: string | null) {
-  const url = new URL("/api/edu", window.location.origin);
+  const { data } = await requests.get<EducationSummariesResponse>("/api/edu", {
+    params: userId ? { userId } : undefined,
+  });
 
-  if (userId) {
-    url.searchParams.set("userId", userId);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  const response = await fetch(url);
-  const result = (await response.json()) as EducationSummariesResponse;
-
-  if (!response.ok || !result.ok) {
-    throw new Error(
-      result.ok ? "EDUCATION_CONTENT_FETCH_FAILED" : result.error,
-    );
-  }
-
-  return result.data;
+  return data.data;
 }
 
 export async function fetchEducationArticle(
@@ -75,12 +70,11 @@ export async function fetchEducationArticle(
   url.searchParams.set("id", articleId);
   url.searchParams.set("level", level);
 
-  const response = await fetch(url, { cache: "no-store" });
-  const result = (await response.json()) as EducationArticleResponse;
+  const { data } = await requests.get<EducationArticleResponse>(url.toString());
 
-  if (!response.ok || !result.ok) {
-    throw new Error(result.ok ? "ARTICLE_FETCH_FAILED" : result.error);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  return result.data;
+  return data.data;
 }

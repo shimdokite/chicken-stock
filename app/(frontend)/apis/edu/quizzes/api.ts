@@ -1,3 +1,4 @@
+import { requests } from "../../request";
 import type { QuizContentData } from "../../../components/edu/quizzes/quiz-content";
 
 export type QuizResponse =
@@ -17,12 +18,12 @@ export type QuizResponse =
 
 export type SubmitQuizAnswerResponse =
   | {
-    ok: true;
-    data: {
-      answer: string;
-      isCorrect: boolean;
-      explanation: string;
-    };
+      ok: true;
+      data: {
+        answer: string;
+        isCorrect: boolean;
+        explanation: string;
+      };
     }
   | {
       ok: false;
@@ -49,14 +50,17 @@ type SubmitQuizAnswerParams = {
 };
 
 export async function fetchQuizzesByArticleId(articleId: number) {
-  const response = await fetch(`/api/quizzes?articleId=${articleId}`);
-  const result = (await response.json()) as QuizResponse;
+  const { data } = await requests.get<QuizResponse>("/api/quizzes", {
+    params: {
+      articleId,
+    },
+  });
 
-  if (!response.ok || !result.ok) {
-    throw new Error(result.ok ? "QUIZ_FETCH_FAILED" : result.error);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  return result.data.quizzes;
+  return data.data.quizzes;
 }
 
 export async function fetchArticleQuizProgress(
@@ -68,14 +72,15 @@ export async function fetchArticleQuizProgress(
   url.searchParams.set("articleId", articleId);
   url.searchParams.set("userId", userId);
 
-  const response = await fetch(url, { cache: "no-store" });
-  const result = (await response.json()) as ArticleQuizProgressResponse;
+  const { data } = await requests.get<ArticleQuizProgressResponse>(
+    url.toString(),
+  );
 
-  if (!response.ok || !result.ok) {
-    throw new Error(result.ok ? "QUIZ_PROGRESS_FETCH_FAILED" : result.error);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  return result.data;
+  return data.data;
 }
 
 export async function submitQuizAnswer({
@@ -83,22 +88,18 @@ export async function submitQuizAnswer({
   userAnswer,
   userId,
 }: SubmitQuizAnswerParams) {
-  const response = await fetch("/api/quizzes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const { data } = await requests.post<SubmitQuizAnswerResponse>(
+    "/api/quizzes",
+    {
       quizId,
       userAnswer,
       userId,
-    }),
-  });
-  const result = (await response.json()) as SubmitQuizAnswerResponse;
+    },
+  );
 
-  if (!response.ok || !result.ok) {
-    throw new Error(result.ok ? "QUIZ_SUBMISSION_FAILED" : result.error);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  return result.data;
+  return data.data;
 }

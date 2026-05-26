@@ -1,3 +1,4 @@
+import { requests } from "../request";
 import type { StockData } from "../../components/main/stock_list/types";
 
 type StocksResponse =
@@ -11,16 +12,16 @@ type StocksResponse =
     };
 
 export async function fetchStocks(market: string, ranking: string) {
-  const url = new URL("/api/stocks", window.location.origin);
-  url.searchParams.set("market", market);
-  url.searchParams.set("ranking", ranking);
+  const { data } = await requests.get<StocksResponse>("/api/stocks", {
+    params: {
+      market,
+      ranking,
+    },
+  });
 
-  const response = await fetch(url, { cache: "no-store" });
-  const result = (await response.json()) as StocksResponse;
-
-  if (!response.ok || !result.ok) {
-    throw new Error(result.ok ? "STOCKS_FETCH_FAILED" : result.error);
+  if (!data.ok) {
+    throw new Error(data.error);
   }
 
-  return result.data;
+  return data.data;
 }
