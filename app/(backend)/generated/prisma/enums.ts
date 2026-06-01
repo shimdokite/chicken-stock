@@ -142,9 +142,16 @@ export type StockRiskLevel = (typeof StockRiskLevel)[keyof typeof StockRiskLevel
 export const StockTheme = {
   AI: 'AI',
   SEMICONDUCTOR: 'SEMICONDUCTOR',
-  BIO: 'BIO',
-  CONTENT: 'CONTENT',
-  BANK: 'BANK'
+  CLOUD: 'CLOUD',
+  PHARMACEUTICAL: 'PHARMACEUTICAL',
+  MEDICAL_DEVICE: 'MEDICAL_DEVICE',
+  HEALTHCARE_SERVICE: 'HEALTHCARE_SERVICE',
+  BANKING: 'BANKING',
+  SECURITIES: 'SECURITIES',
+  PAYMENT: 'PAYMENT',
+  E_COMMERCE: 'E_COMMERCE',
+  FOOD_BEVERAGE: 'FOOD_BEVERAGE',
+  CONTENT: 'CONTENT'
 } as const
 
 export type StockTheme = (typeof StockTheme)[keyof typeof StockTheme]

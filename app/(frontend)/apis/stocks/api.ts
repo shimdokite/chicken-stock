@@ -27,6 +27,7 @@ export async function fetchStocks(
     params: {
       market,
       ranking,
+      market_status: "LISTED",
       page,
       limit: STOCKS_PAGE_SIZE,
     },

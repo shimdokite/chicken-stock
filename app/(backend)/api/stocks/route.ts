@@ -113,13 +113,15 @@ export async function GET(request: NextRequest) {
     }
 
     const stocks = await prisma.stock.findMany({
-      where:
-        market === "all"
-          ? undefined
+      where: {
+        marketStatus: "LISTED",
+        ...(market === "all"
+          ? {}
           : {
               countryCode:
                 market === "domestic" ? "KR" : { not: "KR" },
-            },
+            }),
+      },
       orderBy: rankingOrderBy[ranking],
       skip,
       take: pageSize + 1,

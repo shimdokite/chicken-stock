@@ -28,6 +28,121 @@ enum InvestmentType {
   STABLE // 안정형
 }
 
+enum UserType {
+  NORMAL // 일반 사용자
+  AGENT // 에이전트 사용자
+
+  @@map("User_type")
+}
+
+enum TradeOrderType {
+  BUY  @map("매수") // 매수
+  SELL @map("매도") // 매도
+
+  @@map("Trade_order_type")
+}
+
+enum TradeOrderStatus {
+  PENDING // 대기
+  COMPLETED // 완료
+  CANCELED // 취소
+
+  @@map("Trade_order_status")
+}
+
+enum OrderBookSide {
+  ASK @map("매도") // 매도 호가
+  BID @map("매수") // 매수 호가
+
+  @@map("Order_book_side")
+}
+
+enum CurrencyCode {
+  KRW // 원화
+  USD // 미국 달러
+
+  @@map("Currency_code")
+}
+
+enum DividendStatus {
+  EXPECTED @map("expected") // 예상
+  PENDING  @map("pending") // 대기
+  RECEIVED @map("received") // 수령 완료
+
+  @@map("Dividend_status")
+}
+
+enum TransactionType {
+  BUY        @map("buy") // 매수
+  SELL       @map("sell") // 매도
+  EXCHANGE   @map("exchange") // 환전
+  DEPOSIT    @map("deposit") // 입금
+  WITHDRAWAL @map("withdrawal") // 출금
+  DIVIDEND   @map("dividend") // 배당
+
+  @@map("Transaction_type")
+}
+
+enum AgentType {
+  AGGRESSIVE // 공격형
+  CONSERVATIVE // 보수형
+  MOMENTUM // 모멘텀형
+  VALUE // 가치형
+  FX_FOCUSED // 환율 집중형
+
+  @@map("Agent_type")
+}
+
+enum TradeFrequency {
+  LOW // 낮음
+  MEDIUM // 보통
+  HIGH // 높음
+
+  @@map("Trade_frequency")
+}
+
+enum StockSector {
+  TECH // 기술
+  BIO // 바이오
+  FINANCE // 금융
+  CONSUMER // 소비재
+
+  @@map("Stock_sector")
+}
+
+enum StockRiskLevel {
+  LOW // 낮음
+  MEDIUM // 보통
+  HIGH // 높음
+
+  @@map("Stock_risk_level")
+}
+
+enum StockTheme {
+  AI // 인공지능
+  SEMICONDUCTOR // 반도체
+  CLOUD // 클라우드
+  PHARMACEUTICAL // 제약
+  MEDICAL_DEVICE // 의료기기
+  HEALTHCARE_SERVICE // 헬스케어 서비스
+  BANKING // 은행
+  SECURITIES // 증권
+  PAYMENT // 결제
+  E_COMMERCE // 전자상거래
+  FOOD_BEVERAGE // 식음료
+  CONTENT // 콘텐츠
+
+  @@map("Stock_theme")
+}
+
+enum StockMarketStatus {
+  LISTED // 상장
+  IPO // 기업공개
+  PRE_LISTING // 상장 전
+
+  @@map("Stock_market_status")
+}
+
 model User {
   id                 BigInt                  @id @default(autoincrement())
   type               UserType                @default(NORMAL)
@@ -64,13 +179,6 @@ model RefreshToken {
   @@index([userId])
   @@index([expiresAt])
   @@map("RefreshToken")
-}
-
-enum UserType {
-  NORMAL
-  AGENT
-
-  @@map("User_type")
 }
 
 model Article {
@@ -170,107 +278,6 @@ model UserArticleCompletion {
 
   @@id([userId, articleId])
   @@map("User_article_completion")
-}
-
-enum TradeOrderType {
-  BUY  @map("매수")
-  SELL @map("매도")
-
-  @@map("Trade_order_type")
-}
-
-enum TradeOrderStatus {
-  PENDING
-  COMPLETED
-  CANCELED
-
-  @@map("Trade_order_status")
-}
-
-enum OrderBookSide {
-  ASK @map("매도")
-  BID @map("매수")
-
-  @@map("Order_book_side")
-}
-
-enum CurrencyCode {
-  KRW
-  USD
-
-  @@map("Currency_code")
-}
-
-enum DividendStatus {
-  EXPECTED @map("expected")
-  PENDING  @map("pending")
-  RECEIVED @map("received")
-
-  @@map("Dividend_status")
-}
-
-enum TransactionType {
-  BUY        @map("buy")
-  SELL       @map("sell")
-  EXCHANGE   @map("exchange")
-  DEPOSIT    @map("deposit")
-  WITHDRAWAL @map("withdrawal")
-  DIVIDEND   @map("dividend")
-
-  @@map("Transaction_type")
-}
-
-enum AgentType {
-  AGGRESSIVE
-  CONSERVATIVE
-  MOMENTUM
-  VALUE
-  FX_FOCUSED
-
-  @@map("Agent_type")
-}
-
-enum TradeFrequency {
-  LOW
-  MEDIUM
-  HIGH
-
-  @@map("Trade_frequency")
-}
-
-enum StockSector {
-  TECH
-  BIO
-  FINANCE
-  CONSUMER
-
-  @@map("Stock_sector")
-}
-
-enum StockRiskLevel {
-  LOW
-  MEDIUM
-  HIGH
-
-  @@map("Stock_risk_level")
-}
-
-enum StockTheme {
-  AI
-  SEMICONDUCTOR
-  BIO
-  CONTENT
-  BANK
-
-  @@map("Stock_theme")
-}
-
-enum StockMarketStatus {
-  LISTED
-  IPO
-  PRE_LISTING
-
-  @@map("Stock_market_status")
 }
 
 model Agent {
