@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchStocks } from "./api";
 
 export const stockQueryKeys = {
@@ -7,9 +7,11 @@ export const stockQueryKeys = {
     [...stockQueryKeys.lists(), market, ranking] as const,
 };
 
-export function useStocksQuery(market: string, ranking: string) {
-  return useQuery({
+export function useStocksInfiniteQuery(market: string, ranking: string) {
+  return useInfiniteQuery({
     queryKey: stockQueryKeys.list(market, ranking),
-    queryFn: () => fetchStocks(market, ranking),
+    queryFn: ({ pageParam }) => fetchStocks(market, ranking, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 }

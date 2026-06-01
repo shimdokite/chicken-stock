@@ -6,6 +6,10 @@ const rankingOrderBy = {
   tradingVolume: { volume: "desc" },
 } as const;
 
+const DEFAULT_STOCKS_PAGE = 1;
+const STOCKS_PAGE_SIZE = 10;
+const MAX_STOCKS_COUNT = 50;
+
 type RankingKey = keyof typeof rankingOrderBy;
 
 function parseMarket(value: string | null) {
@@ -22,6 +26,16 @@ function parseRanking(value: string | null): RankingKey {
   }
 
   return "tradingAmount";
+}
+
+function parsePositiveInteger(value: string | null, fallback: number) {
+  const numberValue = Number(value);
+
+  if (!Number.isInteger(numberValue) || numberValue < 1) {
+    return fallback;
+  }
+
+  return numberValue;
 }
 
 function toNumber(value: { toNumber: () => number }) {
@@ -76,6 +90,27 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const market = parseMarket(searchParams.get("market"));
     const ranking = parseRanking(searchParams.get("ranking"));
+    const page = parsePositiveInteger(
+      searchParams.get("page"),
+      DEFAULT_STOCKS_PAGE,
+    );
+    const limit = Math.min(
+      parsePositiveInteger(searchParams.get("limit"), STOCKS_PAGE_SIZE),
+      STOCKS_PAGE_SIZE,
+    );
+    const skip = (page - 1) * limit;
+    const remainingStocksCount = Math.max(MAX_STOCKS_COUNT - skip, 0);
+    const pageSize = Math.min(limit, remainingStocksCount);
+
+    if (pageSize === 0) {
+      return NextResponse.json({
+        ok: true,
+        data: {
+          stocks: [],
+          nextPage: null,
+        },
+      });
+    }
 
     const stocks = await prisma.stock.findMany({
       where:
@@ -86,7 +121,8 @@ export async function GET(request: NextRequest) {
                 market === "domestic" ? "KR" : { not: "KR" },
             },
       orderBy: rankingOrderBy[ranking],
-      take: 8,
+      skip,
+      take: pageSize + 1,
       select: {
         id: true,
         name: true,
@@ -97,13 +133,16 @@ export async function GET(request: NextRequest) {
         tradingValue: true,
       },
     });
+    const hasNextPage =
+      stocks.length > pageSize && skip + pageSize < MAX_STOCKS_COUNT;
+    const pageStocks = stocks.slice(0, pageSize);
 
-    const data = stocks.map((stock, index) => {
+    const data = pageStocks.map((stock, index) => {
       const changeRate = toNumber(stock.changeRate);
 
       return {
         id: stock.id,
-        rank: index + 1,
+        rank: skip + index + 1,
         name: stock.name,
         price: formatPrice(toNumber(stock.currentPrice), stock.currencyCode),
         changeRate: formatChangeRate(changeRate),
@@ -119,7 +158,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      data,
+      data: {
+        stocks: data,
+        nextPage: hasNextPage ? page + 1 : null,
+      },
     });
   } catch (error) {
     const message =

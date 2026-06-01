@@ -4,6 +4,7 @@ import StockListRow from "../stock-list-row";
 type StockListTableProps = {
   stocks: StockData[];
   selectedRanking: string;
+  isLoading?: boolean;
 };
 
 function getRankingLabel(selectedRanking: string) {
@@ -15,6 +16,7 @@ function getRankingLabel(selectedRanking: string) {
 }
 
 export default function StockListTable({
+  isLoading = false,
   stocks,
   selectedRanking,
 }: StockListTableProps) {
@@ -37,13 +39,19 @@ export default function StockListTable({
         </span>
       </div>
 
-      {stocks.length === 0 && (
+      {isLoading && (
+        <div className="py-16 text-center text-base text-zinc-500">
+          종목을 불러오는 중입니다.
+        </div>
+      )}
+
+      {!isLoading && stocks.length === 0 && (
         <div className="py-16 text-center text-base text-zinc-500">
           표시할 종목이 없습니다.
         </div>
       )}
 
-      {stocks.length > 0 && (
+      {!isLoading && stocks.length > 0 && (
         <ol>
           {stocks.map((stock) => (
             <StockListRow key={stock.id} stock={stock} />
