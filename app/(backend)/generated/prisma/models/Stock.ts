@@ -534,6 +534,9 @@ export type StockWhereInput = {
   dividendEvents?: Prisma.DividendEventListRelationFilter
   candles?: Prisma.StockCandleListRelationFilter
   orderBookSnapshots?: Prisma.OrderBookSnapshotListRelationFilter
+  financialMetric?: Prisma.XOR<Prisma.StockFinancialMetricNullableScalarRelationFilter, Prisma.StockFinancialMetricWhereInput> | null
+  financialStatements?: Prisma.StockFinancialStatementListRelationFilter
+  earnings?: Prisma.StockEarningListRelationFilter
 }
 
 export type StockOrderByWithRelationInput = {
@@ -577,6 +580,9 @@ export type StockOrderByWithRelationInput = {
   dividendEvents?: Prisma.DividendEventOrderByRelationAggregateInput
   candles?: Prisma.StockCandleOrderByRelationAggregateInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotOrderByRelationAggregateInput
+  financialMetric?: Prisma.StockFinancialMetricOrderByWithRelationInput
+  financialStatements?: Prisma.StockFinancialStatementOrderByRelationAggregateInput
+  earnings?: Prisma.StockEarningOrderByRelationAggregateInput
 }
 
 export type StockWhereUniqueInput = Prisma.AtLeast<{
@@ -623,6 +629,9 @@ export type StockWhereUniqueInput = Prisma.AtLeast<{
   dividendEvents?: Prisma.DividendEventListRelationFilter
   candles?: Prisma.StockCandleListRelationFilter
   orderBookSnapshots?: Prisma.OrderBookSnapshotListRelationFilter
+  financialMetric?: Prisma.XOR<Prisma.StockFinancialMetricNullableScalarRelationFilter, Prisma.StockFinancialMetricWhereInput> | null
+  financialStatements?: Prisma.StockFinancialStatementListRelationFilter
+  earnings?: Prisma.StockEarningListRelationFilter
 }, "id" | "ticker">
 
 export type StockOrderByWithAggregationInput = {
@@ -748,6 +757,9 @@ export type StockCreateInput = {
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateInput = {
@@ -791,6 +803,9 @@ export type StockUncheckedCreateInput = {
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockUpdateInput = {
@@ -834,6 +849,9 @@ export type StockUpdateInput = {
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateInput = {
@@ -877,6 +895,9 @@ export type StockUncheckedUpdateInput = {
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateManyInput = {
@@ -1208,6 +1229,48 @@ export type EnumStockMarketStatusFieldUpdateOperationsInput = {
   set?: $Enums.StockMarketStatus
 }
 
+export type StockCreateNestedOneWithoutFinancialMetricInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutFinancialMetricInput, Prisma.StockUncheckedCreateWithoutFinancialMetricInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutFinancialMetricInput
+  connect?: Prisma.StockWhereUniqueInput
+}
+
+export type StockUpdateOneRequiredWithoutFinancialMetricNestedInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutFinancialMetricInput, Prisma.StockUncheckedCreateWithoutFinancialMetricInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutFinancialMetricInput
+  upsert?: Prisma.StockUpsertWithoutFinancialMetricInput
+  connect?: Prisma.StockWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockUpdateToOneWithWhereWithoutFinancialMetricInput, Prisma.StockUpdateWithoutFinancialMetricInput>, Prisma.StockUncheckedUpdateWithoutFinancialMetricInput>
+}
+
+export type StockCreateNestedOneWithoutFinancialStatementsInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutFinancialStatementsInput, Prisma.StockUncheckedCreateWithoutFinancialStatementsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutFinancialStatementsInput
+  connect?: Prisma.StockWhereUniqueInput
+}
+
+export type StockUpdateOneRequiredWithoutFinancialStatementsNestedInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutFinancialStatementsInput, Prisma.StockUncheckedCreateWithoutFinancialStatementsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutFinancialStatementsInput
+  upsert?: Prisma.StockUpsertWithoutFinancialStatementsInput
+  connect?: Prisma.StockWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockUpdateToOneWithWhereWithoutFinancialStatementsInput, Prisma.StockUpdateWithoutFinancialStatementsInput>, Prisma.StockUncheckedUpdateWithoutFinancialStatementsInput>
+}
+
+export type StockCreateNestedOneWithoutEarningsInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutEarningsInput, Prisma.StockUncheckedCreateWithoutEarningsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutEarningsInput
+  connect?: Prisma.StockWhereUniqueInput
+}
+
+export type StockUpdateOneRequiredWithoutEarningsNestedInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutEarningsInput, Prisma.StockUncheckedCreateWithoutEarningsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutEarningsInput
+  upsert?: Prisma.StockUpsertWithoutEarningsInput
+  connect?: Prisma.StockWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockUpdateToOneWithWhereWithoutEarningsInput, Prisma.StockUpdateWithoutEarningsInput>, Prisma.StockUncheckedUpdateWithoutEarningsInput>
+}
+
 export type StockCreateNestedOneWithoutTradeOrdersInput = {
   create?: Prisma.XOR<Prisma.StockCreateWithoutTradeOrdersInput, Prisma.StockUncheckedCreateWithoutTradeOrdersInput>
   connectOrCreate?: Prisma.StockCreateOrConnectWithoutTradeOrdersInput
@@ -1290,6 +1353,9 @@ export type StockCreateWithoutTransactionsInput = {
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutTransactionsInput = {
@@ -1332,6 +1398,9 @@ export type StockUncheckedCreateWithoutTransactionsInput = {
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutTransactionsInput = {
@@ -1390,6 +1459,9 @@ export type StockUpdateWithoutTransactionsInput = {
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutTransactionsInput = {
@@ -1432,6 +1504,9 @@ export type StockUncheckedUpdateWithoutTransactionsInput = {
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateWithoutPortfolioItemsInput = {
@@ -1474,6 +1549,9 @@ export type StockCreateWithoutPortfolioItemsInput = {
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutPortfolioItemsInput = {
@@ -1516,6 +1594,9 @@ export type StockUncheckedCreateWithoutPortfolioItemsInput = {
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutPortfolioItemsInput = {
@@ -1574,6 +1655,9 @@ export type StockUpdateWithoutPortfolioItemsInput = {
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -1616,6 +1700,9 @@ export type StockUncheckedUpdateWithoutPortfolioItemsInput = {
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateWithoutDividendEventsInput = {
@@ -1658,6 +1745,9 @@ export type StockCreateWithoutDividendEventsInput = {
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutDividendEventsInput = {
@@ -1700,6 +1790,9 @@ export type StockUncheckedCreateWithoutDividendEventsInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutDividendEventsInput = {
@@ -1758,6 +1851,9 @@ export type StockUpdateWithoutDividendEventsInput = {
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutDividendEventsInput = {
@@ -1800,6 +1896,597 @@ export type StockUncheckedUpdateWithoutDividendEventsInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
+}
+
+export type StockCreateWithoutFinancialMetricInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
+}
+
+export type StockUncheckedCreateWithoutFinancialMetricInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockCreateOrConnectWithoutFinancialMetricInput = {
+  where: Prisma.StockWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockCreateWithoutFinancialMetricInput, Prisma.StockUncheckedCreateWithoutFinancialMetricInput>
+}
+
+export type StockUpsertWithoutFinancialMetricInput = {
+  update: Prisma.XOR<Prisma.StockUpdateWithoutFinancialMetricInput, Prisma.StockUncheckedUpdateWithoutFinancialMetricInput>
+  create: Prisma.XOR<Prisma.StockCreateWithoutFinancialMetricInput, Prisma.StockUncheckedCreateWithoutFinancialMetricInput>
+  where?: Prisma.StockWhereInput
+}
+
+export type StockUpdateToOneWithWhereWithoutFinancialMetricInput = {
+  where?: Prisma.StockWhereInput
+  data: Prisma.XOR<Prisma.StockUpdateWithoutFinancialMetricInput, Prisma.StockUncheckedUpdateWithoutFinancialMetricInput>
+}
+
+export type StockUpdateWithoutFinancialMetricInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
+}
+
+export type StockUncheckedUpdateWithoutFinancialMetricInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
+}
+
+export type StockCreateWithoutFinancialStatementsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
+}
+
+export type StockUncheckedCreateWithoutFinancialStatementsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockCreateOrConnectWithoutFinancialStatementsInput = {
+  where: Prisma.StockWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockCreateWithoutFinancialStatementsInput, Prisma.StockUncheckedCreateWithoutFinancialStatementsInput>
+}
+
+export type StockUpsertWithoutFinancialStatementsInput = {
+  update: Prisma.XOR<Prisma.StockUpdateWithoutFinancialStatementsInput, Prisma.StockUncheckedUpdateWithoutFinancialStatementsInput>
+  create: Prisma.XOR<Prisma.StockCreateWithoutFinancialStatementsInput, Prisma.StockUncheckedCreateWithoutFinancialStatementsInput>
+  where?: Prisma.StockWhereInput
+}
+
+export type StockUpdateToOneWithWhereWithoutFinancialStatementsInput = {
+  where?: Prisma.StockWhereInput
+  data: Prisma.XOR<Prisma.StockUpdateWithoutFinancialStatementsInput, Prisma.StockUncheckedUpdateWithoutFinancialStatementsInput>
+}
+
+export type StockUpdateWithoutFinancialStatementsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
+}
+
+export type StockUncheckedUpdateWithoutFinancialStatementsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
+}
+
+export type StockCreateWithoutEarningsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+}
+
+export type StockUncheckedCreateWithoutEarningsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockCreateOrConnectWithoutEarningsInput = {
+  where: Prisma.StockWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockCreateWithoutEarningsInput, Prisma.StockUncheckedCreateWithoutEarningsInput>
+}
+
+export type StockUpsertWithoutEarningsInput = {
+  update: Prisma.XOR<Prisma.StockUpdateWithoutEarningsInput, Prisma.StockUncheckedUpdateWithoutEarningsInput>
+  create: Prisma.XOR<Prisma.StockCreateWithoutEarningsInput, Prisma.StockUncheckedCreateWithoutEarningsInput>
+  where?: Prisma.StockWhereInput
+}
+
+export type StockUpdateToOneWithWhereWithoutEarningsInput = {
+  where?: Prisma.StockWhereInput
+  data: Prisma.XOR<Prisma.StockUpdateWithoutEarningsInput, Prisma.StockUncheckedUpdateWithoutEarningsInput>
+}
+
+export type StockUpdateWithoutEarningsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+}
+
+export type StockUncheckedUpdateWithoutEarningsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateWithoutTradeOrdersInput = {
@@ -1842,6 +2529,9 @@ export type StockCreateWithoutTradeOrdersInput = {
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutTradeOrdersInput = {
@@ -1884,6 +2574,9 @@ export type StockUncheckedCreateWithoutTradeOrdersInput = {
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutTradeOrdersInput = {
@@ -1942,6 +2635,9 @@ export type StockUpdateWithoutTradeOrdersInput = {
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutTradeOrdersInput = {
@@ -1984,6 +2680,9 @@ export type StockUncheckedUpdateWithoutTradeOrdersInput = {
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateWithoutCandlesInput = {
@@ -2026,6 +2725,9 @@ export type StockCreateWithoutCandlesInput = {
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutCandlesInput = {
@@ -2068,6 +2770,9 @@ export type StockUncheckedCreateWithoutCandlesInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutCandlesInput = {
@@ -2126,6 +2831,9 @@ export type StockUpdateWithoutCandlesInput = {
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutCandlesInput = {
@@ -2168,6 +2876,9 @@ export type StockUncheckedUpdateWithoutCandlesInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockCreateWithoutOrderBookSnapshotsInput = {
@@ -2210,6 +2921,9 @@ export type StockCreateWithoutOrderBookSnapshotsInput = {
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
 }
 
 export type StockUncheckedCreateWithoutOrderBookSnapshotsInput = {
@@ -2252,6 +2966,9 @@ export type StockUncheckedCreateWithoutOrderBookSnapshotsInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockCreateOrConnectWithoutOrderBookSnapshotsInput = {
@@ -2310,6 +3027,9 @@ export type StockUpdateWithoutOrderBookSnapshotsInput = {
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
 }
 
 export type StockUncheckedUpdateWithoutOrderBookSnapshotsInput = {
@@ -2352,6 +3072,9 @@ export type StockUncheckedUpdateWithoutOrderBookSnapshotsInput = {
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
 }
 
 
@@ -2366,6 +3089,8 @@ export type StockCountOutputType = {
   dividendEvents: number
   candles: number
   orderBookSnapshots: number
+  financialStatements: number
+  earnings: number
 }
 
 export type StockCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2375,6 +3100,8 @@ export type StockCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   dividendEvents?: boolean | StockCountOutputTypeCountDividendEventsArgs
   candles?: boolean | StockCountOutputTypeCountCandlesArgs
   orderBookSnapshots?: boolean | StockCountOutputTypeCountOrderBookSnapshotsArgs
+  financialStatements?: boolean | StockCountOutputTypeCountFinancialStatementsArgs
+  earnings?: boolean | StockCountOutputTypeCountEarningsArgs
 }
 
 /**
@@ -2429,6 +3156,20 @@ export type StockCountOutputTypeCountOrderBookSnapshotsArgs<ExtArgs extends runt
   where?: Prisma.OrderBookSnapshotWhereInput
 }
 
+/**
+ * StockCountOutputType without action
+ */
+export type StockCountOutputTypeCountFinancialStatementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockFinancialStatementWhereInput
+}
+
+/**
+ * StockCountOutputType without action
+ */
+export type StockCountOutputTypeCountEarningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockEarningWhereInput
+}
+
 
 export type StockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2471,6 +3212,9 @@ export type StockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dividendEvents?: boolean | Prisma.Stock$dividendEventsArgs<ExtArgs>
   candles?: boolean | Prisma.Stock$candlesArgs<ExtArgs>
   orderBookSnapshots?: boolean | Prisma.Stock$orderBookSnapshotsArgs<ExtArgs>
+  financialMetric?: boolean | Prisma.Stock$financialMetricArgs<ExtArgs>
+  financialStatements?: boolean | Prisma.Stock$financialStatementsArgs<ExtArgs>
+  earnings?: boolean | Prisma.Stock$earningsArgs<ExtArgs>
   _count?: boolean | Prisma.StockCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stock"]>
 
@@ -2593,6 +3337,9 @@ export type StockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   dividendEvents?: boolean | Prisma.Stock$dividendEventsArgs<ExtArgs>
   candles?: boolean | Prisma.Stock$candlesArgs<ExtArgs>
   orderBookSnapshots?: boolean | Prisma.Stock$orderBookSnapshotsArgs<ExtArgs>
+  financialMetric?: boolean | Prisma.Stock$financialMetricArgs<ExtArgs>
+  financialStatements?: boolean | Prisma.Stock$financialStatementsArgs<ExtArgs>
+  earnings?: boolean | Prisma.Stock$earningsArgs<ExtArgs>
   _count?: boolean | Prisma.StockCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StockIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2607,6 +3354,9 @@ export type $StockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     dividendEvents: Prisma.$DividendEventPayload<ExtArgs>[]
     candles: Prisma.$StockCandlePayload<ExtArgs>[]
     orderBookSnapshots: Prisma.$OrderBookSnapshotPayload<ExtArgs>[]
+    financialMetric: Prisma.$StockFinancialMetricPayload<ExtArgs> | null
+    financialStatements: Prisma.$StockFinancialStatementPayload<ExtArgs>[]
+    earnings: Prisma.$StockEarningPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -3043,6 +3793,9 @@ export interface Prisma__StockClient<T, Null = never, ExtArgs extends runtime.Ty
   dividendEvents<T extends Prisma.Stock$dividendEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$dividendEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DividendEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   candles<T extends Prisma.Stock$candlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$candlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockCandlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderBookSnapshots<T extends Prisma.Stock$orderBookSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$orderBookSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderBookSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  financialMetric<T extends Prisma.Stock$financialMetricArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$financialMetricArgs<ExtArgs>>): Prisma.Prisma__StockFinancialMetricClient<runtime.Types.Result.GetResult<Prisma.$StockFinancialMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  financialStatements<T extends Prisma.Stock$financialStatementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$financialStatementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockFinancialStatementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  earnings<T extends Prisma.Stock$earningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$earningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockEarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3635,6 +4388,73 @@ export type Stock$orderBookSnapshotsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.OrderBookSnapshotScalarFieldEnum | Prisma.OrderBookSnapshotScalarFieldEnum[]
+}
+
+/**
+ * Stock.financialMetric
+ */
+export type Stock$financialMetricArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockFinancialMetric
+   */
+  select?: Prisma.StockFinancialMetricSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockFinancialMetric
+   */
+  omit?: Prisma.StockFinancialMetricOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockFinancialMetricInclude<ExtArgs> | null
+  where?: Prisma.StockFinancialMetricWhereInput
+}
+
+/**
+ * Stock.financialStatements
+ */
+export type Stock$financialStatementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockFinancialStatement
+   */
+  select?: Prisma.StockFinancialStatementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockFinancialStatement
+   */
+  omit?: Prisma.StockFinancialStatementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockFinancialStatementInclude<ExtArgs> | null
+  where?: Prisma.StockFinancialStatementWhereInput
+  orderBy?: Prisma.StockFinancialStatementOrderByWithRelationInput | Prisma.StockFinancialStatementOrderByWithRelationInput[]
+  cursor?: Prisma.StockFinancialStatementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockFinancialStatementScalarFieldEnum | Prisma.StockFinancialStatementScalarFieldEnum[]
+}
+
+/**
+ * Stock.earnings
+ */
+export type Stock$earningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockEarning
+   */
+  select?: Prisma.StockEarningSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockEarning
+   */
+  omit?: Prisma.StockEarningOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockEarningInclude<ExtArgs> | null
+  where?: Prisma.StockEarningWhereInput
+  orderBy?: Prisma.StockEarningOrderByWithRelationInput | Prisma.StockEarningOrderByWithRelationInput[]
+  cursor?: Prisma.StockEarningWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockEarningScalarFieldEnum | Prisma.StockEarningScalarFieldEnum[]
 }
 
 /**

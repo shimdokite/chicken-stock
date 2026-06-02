@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { StockData, StockTrend } from "../types";
 
 type StockListRowProps = {
@@ -32,31 +33,36 @@ export default function StockListRow({ stock }: StockListRowProps) {
   const logoColorClassName = getLogoColorClassName(stock.id);
 
   return (
-    <li className="grid grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 py-3 text-lg">
-      <span className="text-left text-base">{stock.rank}</span>
-
-      <span
-        className={`flex size-8 shrink-0 items-center justify-center rounded-full border text-base font-bold ${logoColorClassName}`}
-        aria-hidden="true"
+    <li>
+      <Link
+        href={`/stock/${stock.id}/order`}
+        className="grid grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 py-3 text-lg transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
       >
-        {stock.logoLabel}
-      </span>
+        <span className="text-left text-base">{stock.rank}</span>
 
-      <strong className="truncate text-left text-lg font-semibold">
-        {stock.name}
-      </strong>
-
-      <span className="col-start-4 text-right">{stock.price}</span>
-
-      <span className="col-start-5 translate-x-1/2 text-center">
         <span
-          className={`inline-flex rounded-full px-2 py-0.5 text-base ${changeRateClassName}`}
+          className={`flex size-8 shrink-0 items-center justify-center rounded-full border text-base font-bold ${logoColorClassName}`}
+          aria-hidden="true"
         >
-          {stock.changeRate}
+          {stock.logoLabel}
         </span>
-      </span>
 
-      <span className="col-start-7 text-right">{stock.tradingAmount}</span>
+        <strong className="truncate text-left text-lg font-semibold">
+          {stock.name}
+        </strong>
+
+        <span className="col-start-4 text-right">{stock.price}</span>
+
+        <span className="col-start-5 translate-x-1/2 text-center">
+          <span
+            className={`inline-flex rounded-full px-2 py-0.5 text-base ${changeRateClassName}`}
+          >
+            {stock.changeRate}
+          </span>
+        </span>
+
+        <span className="col-start-7 text-right">{stock.tradingAmount}</span>
+      </Link>
     </li>
   );
 }

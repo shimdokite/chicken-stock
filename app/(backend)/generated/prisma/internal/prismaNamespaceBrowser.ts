@@ -65,6 +65,9 @@ export const ModelName = {
   DividendEvent: 'DividendEvent',
   PortfolioDividend: 'PortfolioDividend',
   Stock: 'Stock',
+  StockFinancialMetric: 'StockFinancialMetric',
+  StockFinancialStatement: 'StockFinancialStatement',
+  StockEarning: 'StockEarning',
   TradeOrder: 'TradeOrder',
   StockCandle: 'StockCandle',
   OrderBookSnapshot: 'OrderBookSnapshot',
@@ -362,6 +365,52 @@ export const StockScalarFieldEnum = {
 export type StockScalarFieldEnum = (typeof StockScalarFieldEnum)[keyof typeof StockScalarFieldEnum]
 
 
+export const StockFinancialMetricScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  debtRatio: 'debtRatio',
+  currentRatio: 'currentRatio',
+  interestCoverageRatio: 'interestCoverageRatio',
+  per: 'per',
+  pbr: 'pbr',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockFinancialMetricScalarFieldEnum = (typeof StockFinancialMetricScalarFieldEnum)[keyof typeof StockFinancialMetricScalarFieldEnum]
+
+
+export const StockFinancialStatementScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  statementType: 'statementType',
+  periodType: 'periodType',
+  fiscalYear: 'fiscalYear',
+  fiscalQuarter: 'fiscalQuarter',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockFinancialStatementScalarFieldEnum = (typeof StockFinancialStatementScalarFieldEnum)[keyof typeof StockFinancialStatementScalarFieldEnum]
+
+
+export const StockEarningScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  announcementDate: 'announcementDate',
+  periodType: 'periodType',
+  fiscalYear: 'fiscalYear',
+  fiscalQuarter: 'fiscalQuarter',
+  estimatedRevenue: 'estimatedRevenue',
+  estimatedOperatingProfit: 'estimatedOperatingProfit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockEarningScalarFieldEnum = (typeof StockEarningScalarFieldEnum)[keyof typeof StockEarningScalarFieldEnum]
+
+
 export const TradeOrderScalarFieldEnum = {
   orderId: 'orderId',
   portfolioId: 'portfolioId',
@@ -472,6 +521,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -486,4 +542,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

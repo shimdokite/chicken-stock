@@ -164,3 +164,20 @@ export const StockMarketStatus = {
 } as const
 
 export type StockMarketStatus = (typeof StockMarketStatus)[keyof typeof StockMarketStatus]
+
+
+export const StatementType = {
+  INCOME_STATEMENT: 'INCOME_STATEMENT',
+  BALANCE_SHEET: 'BALANCE_SHEET',
+  CASH_FLOW: 'CASH_FLOW'
+} as const
+
+export type StatementType = (typeof StatementType)[keyof typeof StatementType]
+
+
+export const PeriodType = {
+  ANNUAL: 'ANNUAL',
+  QUARTER: 'QUARTER'
+} as const
+
+export type PeriodType = (typeof PeriodType)[keyof typeof PeriodType]

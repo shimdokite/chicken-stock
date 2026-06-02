@@ -98,6 +98,21 @@ export type PortfolioDividend = Prisma.PortfolioDividendModel
  */
 export type Stock = Prisma.StockModel
 /**
+ * Model StockFinancialMetric
+ * 
+ */
+export type StockFinancialMetric = Prisma.StockFinancialMetricModel
+/**
+ * Model StockFinancialStatement
+ * 
+ */
+export type StockFinancialStatement = Prisma.StockFinancialStatementModel
+/**
+ * Model StockEarning
+ * 
+ */
+export type StockEarning = Prisma.StockEarningModel
+/**
  * Model TradeOrder
  * 
  */

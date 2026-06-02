@@ -406,6 +406,9 @@ export const ModelName = {
   DividendEvent: 'DividendEvent',
   PortfolioDividend: 'PortfolioDividend',
   Stock: 'Stock',
+  StockFinancialMetric: 'StockFinancialMetric',
+  StockFinancialStatement: 'StockFinancialStatement',
+  StockEarning: 'StockEarning',
   TradeOrder: 'TradeOrder',
   StockCandle: 'StockCandle',
   OrderBookSnapshot: 'OrderBookSnapshot',
@@ -427,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "refreshToken" | "article" | "quiz" | "userQuizSubmission" | "educationSummary" | "userEducationLevelProgress" | "userArticleCompletion" | "agent" | "agentStockSector" | "portfolio" | "portfolioTransaction" | "portfolioItem" | "dividendEvent" | "portfolioDividend" | "stock" | "tradeOrder" | "stockCandle" | "orderBookSnapshot" | "orderBookLevel" | "marketIndex" | "marketIndexCandle"
+    modelProps: "user" | "refreshToken" | "article" | "quiz" | "userQuizSubmission" | "educationSummary" | "userEducationLevelProgress" | "userArticleCompletion" | "agent" | "agentStockSector" | "portfolio" | "portfolioTransaction" | "portfolioItem" | "dividendEvent" | "portfolioDividend" | "stock" | "stockFinancialMetric" | "stockFinancialStatement" | "stockEarning" | "tradeOrder" | "stockCandle" | "orderBookSnapshot" | "orderBookLevel" | "marketIndex" | "marketIndexCandle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1615,6 +1618,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StockFinancialMetric: {
+      payload: Prisma.$StockFinancialMetricPayload<ExtArgs>
+      fields: Prisma.StockFinancialMetricFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockFinancialMetricFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockFinancialMetricFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        findFirst: {
+          args: Prisma.StockFinancialMetricFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockFinancialMetricFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        findMany: {
+          args: Prisma.StockFinancialMetricFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>[]
+        }
+        create: {
+          args: Prisma.StockFinancialMetricCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        createMany: {
+          args: Prisma.StockFinancialMetricCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockFinancialMetricCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>[]
+        }
+        delete: {
+          args: Prisma.StockFinancialMetricDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        update: {
+          args: Prisma.StockFinancialMetricUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        deleteMany: {
+          args: Prisma.StockFinancialMetricDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockFinancialMetricUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockFinancialMetricUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>[]
+        }
+        upsert: {
+          args: Prisma.StockFinancialMetricUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialMetricPayload>
+        }
+        aggregate: {
+          args: Prisma.StockFinancialMetricAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockFinancialMetric>
+        }
+        groupBy: {
+          args: Prisma.StockFinancialMetricGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockFinancialMetricGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockFinancialMetricCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockFinancialMetricCountAggregateOutputType> | number
+        }
+      }
+    }
+    StockFinancialStatement: {
+      payload: Prisma.$StockFinancialStatementPayload<ExtArgs>
+      fields: Prisma.StockFinancialStatementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockFinancialStatementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockFinancialStatementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        findFirst: {
+          args: Prisma.StockFinancialStatementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockFinancialStatementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        findMany: {
+          args: Prisma.StockFinancialStatementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>[]
+        }
+        create: {
+          args: Prisma.StockFinancialStatementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        createMany: {
+          args: Prisma.StockFinancialStatementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockFinancialStatementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>[]
+        }
+        delete: {
+          args: Prisma.StockFinancialStatementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        update: {
+          args: Prisma.StockFinancialStatementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        deleteMany: {
+          args: Prisma.StockFinancialStatementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockFinancialStatementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockFinancialStatementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>[]
+        }
+        upsert: {
+          args: Prisma.StockFinancialStatementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockFinancialStatementPayload>
+        }
+        aggregate: {
+          args: Prisma.StockFinancialStatementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockFinancialStatement>
+        }
+        groupBy: {
+          args: Prisma.StockFinancialStatementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockFinancialStatementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockFinancialStatementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockFinancialStatementCountAggregateOutputType> | number
+        }
+      }
+    }
+    StockEarning: {
+      payload: Prisma.$StockEarningPayload<ExtArgs>
+      fields: Prisma.StockEarningFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockEarningFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockEarningFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        findFirst: {
+          args: Prisma.StockEarningFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockEarningFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        findMany: {
+          args: Prisma.StockEarningFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>[]
+        }
+        create: {
+          args: Prisma.StockEarningCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        createMany: {
+          args: Prisma.StockEarningCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockEarningCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>[]
+        }
+        delete: {
+          args: Prisma.StockEarningDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        update: {
+          args: Prisma.StockEarningUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        deleteMany: {
+          args: Prisma.StockEarningDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockEarningUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockEarningUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>[]
+        }
+        upsert: {
+          args: Prisma.StockEarningUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEarningPayload>
+        }
+        aggregate: {
+          args: Prisma.StockEarningAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockEarning>
+        }
+        groupBy: {
+          args: Prisma.StockEarningGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockEarningGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockEarningCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockEarningCountAggregateOutputType> | number
+        }
+      }
+    }
     TradeOrder: {
       payload: Prisma.$TradeOrderPayload<ExtArgs>
       fields: Prisma.TradeOrderFieldRefs
@@ -2371,6 +2596,52 @@ export const StockScalarFieldEnum = {
 export type StockScalarFieldEnum = (typeof StockScalarFieldEnum)[keyof typeof StockScalarFieldEnum]
 
 
+export const StockFinancialMetricScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  debtRatio: 'debtRatio',
+  currentRatio: 'currentRatio',
+  interestCoverageRatio: 'interestCoverageRatio',
+  per: 'per',
+  pbr: 'pbr',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockFinancialMetricScalarFieldEnum = (typeof StockFinancialMetricScalarFieldEnum)[keyof typeof StockFinancialMetricScalarFieldEnum]
+
+
+export const StockFinancialStatementScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  statementType: 'statementType',
+  periodType: 'periodType',
+  fiscalYear: 'fiscalYear',
+  fiscalQuarter: 'fiscalQuarter',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockFinancialStatementScalarFieldEnum = (typeof StockFinancialStatementScalarFieldEnum)[keyof typeof StockFinancialStatementScalarFieldEnum]
+
+
+export const StockEarningScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  announcementDate: 'announcementDate',
+  periodType: 'periodType',
+  fiscalYear: 'fiscalYear',
+  fiscalQuarter: 'fiscalQuarter',
+  estimatedRevenue: 'estimatedRevenue',
+  estimatedOperatingProfit: 'estimatedOperatingProfit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockEarningScalarFieldEnum = (typeof StockEarningScalarFieldEnum)[keyof typeof StockEarningScalarFieldEnum]
+
+
 export const TradeOrderScalarFieldEnum = {
   orderId: 'orderId',
   portfolioId: 'portfolioId',
@@ -2481,6 +2752,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -2495,6 +2773,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -2763,6 +3050,62 @@ export type ListEnumStockMarketStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatementType'
+ */
+export type EnumStatementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatementType'>
+    
+
+
+/**
+ * Reference to a field of type 'StatementType[]'
+ */
+export type ListEnumStatementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatementType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PeriodType'
+ */
+export type EnumPeriodTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PeriodType'>
+    
+
+
+/**
+ * Reference to a field of type 'PeriodType[]'
+ */
+export type ListEnumPeriodTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PeriodType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'TradeOrderType'
  */
 export type EnumTradeOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeOrderType'>
@@ -2801,20 +3144,6 @@ export type EnumOrderBookSideFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'OrderBookSide[]'
  */
 export type ListEnumOrderBookSideFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderBookSide[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -2920,6 +3249,9 @@ export type GlobalOmitConfig = {
   dividendEvent?: Prisma.DividendEventOmit
   portfolioDividend?: Prisma.PortfolioDividendOmit
   stock?: Prisma.StockOmit
+  stockFinancialMetric?: Prisma.StockFinancialMetricOmit
+  stockFinancialStatement?: Prisma.StockFinancialStatementOmit
+  stockEarning?: Prisma.StockEarningOmit
   tradeOrder?: Prisma.TradeOrderOmit
   stockCandle?: Prisma.StockCandleOmit
   orderBookSnapshot?: Prisma.OrderBookSnapshotOmit
