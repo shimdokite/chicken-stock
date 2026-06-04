@@ -2,8 +2,10 @@ import type {
   StockCurrencyCode,
   StockDetailData,
 } from "../../types/stock/stock-detail";
-
-export const USD_KRW_EXCHANGE_RATE = 1478.55;
+import {
+  convertCurrencyValue,
+  USD_KRW_EXCHANGE_RATE,
+} from "../../../(shared)/utils/currency";
 
 const financialStatementMoneyKeys = new Set([
   "revenue",
@@ -112,20 +114,6 @@ export function formatTradingValue(
   }
 
   return formatPrice(value, currencyCode);
-}
-
-export function convertCurrencyValue(
-  value: number,
-  fromCurrencyCode: StockCurrencyCode,
-  toCurrencyCode: StockCurrencyCode,
-) {
-  if (fromCurrencyCode === toCurrencyCode) {
-    return value;
-  }
-
-  return toCurrencyCode === "KRW"
-    ? Math.round(value * USD_KRW_EXCHANGE_RATE)
-    : value / USD_KRW_EXCHANGE_RATE;
 }
 
 function convertNullableCurrencyValue(
@@ -291,3 +279,5 @@ export function formatDateLabel(timestamp: number) {
 
   return `${date.getMonth() + 1}월`;
 }
+
+export { convertCurrencyValue, USD_KRW_EXCHANGE_RATE };

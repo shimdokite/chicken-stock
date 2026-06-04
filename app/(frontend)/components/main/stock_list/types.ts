@@ -9,6 +9,8 @@ export type StockData = {
   price: string;
   changeRate: string;
   tradingAmount: string;
+  tradingVolume: string;
+  rankingValue: string;
   market: StockMarket;
   trend: StockTrend;
   logoLabel: string;

@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  convertCurrencyValue,
+  type CurrencyCode,
+} from "../../../(shared)/utils/currency";
 import { prisma } from "../../lib/prisma";
-
-const rankingOrderBy = {
-  tradingAmount: { tradingValue: "desc" },
-  tradingVolume: { volume: "desc" },
-} as const;
 
 const DEFAULT_STOCKS_PAGE = 1;
 const STOCKS_PAGE_SIZE = 10;
 const MAX_STOCKS_COUNT = 50;
 
-type RankingKey = keyof typeof rankingOrderBy;
+type RankingKey = "tradingAmount" | "tradingVolume";
 
 function parseMarket(value: string | null) {
   if (value === "domestic" || value === "global") {
@@ -42,18 +41,12 @@ function toNumber(value: { toNumber: () => number }) {
   return value.toNumber();
 }
 
-function formatPrice(value: number, currencyCode: string) {
-  if (currencyCode === "KRW") {
-    return `${new Intl.NumberFormat("ko-KR", {
-      maximumFractionDigits: 0,
-    }).format(value)}원`;
-  }
+function formatPrice(value: number, currencyCode: CurrencyCode) {
+  const krwValue = convertCurrencyValue(value, currencyCode, "KRW");
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currencyCode,
-    maximumFractionDigits: 2,
-  }).format(value);
+  return `${new Intl.NumberFormat("ko-KR", {
+    maximumFractionDigits: 0,
+  }).format(krwValue)}원`;
 }
 
 function formatChangeRate(value: number) {
@@ -62,27 +55,45 @@ function formatChangeRate(value: number) {
   return `${sign}${value.toFixed(2)}%`;
 }
 
-function formatTradingValue(value: number, currencyCode: string) {
-  if (currencyCode === "KRW") {
-    if (Math.abs(value) >= 100_000_000) {
-      return `${new Intl.NumberFormat("ko-KR", {
-        maximumFractionDigits: 1,
-      }).format(value / 100_000_000)}억원`;
-    }
+function formatTradingValue(value: number, currencyCode: CurrencyCode) {
+  const krwValue = convertCurrencyValue(value, currencyCode, "KRW");
 
-    return `${new Intl.NumberFormat("ko-KR").format(value)}원`;
+  if (Math.abs(krwValue) >= 100_000_000) {
+    return `${new Intl.NumberFormat("ko-KR", {
+      maximumFractionDigits: 1,
+    }).format(krwValue / 100_000_000)}억원`;
   }
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currencyCode,
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
+  return `${new Intl.NumberFormat("ko-KR").format(krwValue)}원`;
+}
+
+function formatVolume(value: number) {
+  return `${new Intl.NumberFormat("ko-KR", {
+    maximumFractionDigits: 0,
+  }).format(value)}주`;
 }
 
 function getLogoLabel(name: string) {
   return name.trim().charAt(0).toUpperCase();
+}
+
+function getRankingValue(
+  stock: {
+    tradingValue: { toNumber: () => number };
+    volume: { toNumber: () => number };
+    currencyCode: CurrencyCode;
+  },
+  ranking: RankingKey,
+) {
+  if (ranking === "tradingVolume") {
+    return toNumber(stock.volume);
+  }
+
+  return convertCurrencyValue(
+    toNumber(stock.tradingValue),
+    stock.currencyCode,
+    "KRW",
+  );
 }
 
 export async function GET(request: NextRequest) {
@@ -118,13 +129,9 @@ export async function GET(request: NextRequest) {
         ...(market === "all"
           ? {}
           : {
-              countryCode:
-                market === "domestic" ? "KR" : { not: "KR" },
+              countryCode: market === "domestic" ? "KR" : { not: "KR" },
             }),
       },
-      orderBy: rankingOrderBy[ranking],
-      skip,
-      take: pageSize + 1,
       select: {
         id: true,
         name: true,
@@ -133,13 +140,22 @@ export async function GET(request: NextRequest) {
         currentPrice: true,
         changeRate: true,
         tradingValue: true,
+        volume: true,
       },
     });
-    const hasNextPage =
-      stocks.length > pageSize && skip + pageSize < MAX_STOCKS_COUNT;
-    const pageStocks = stocks.slice(0, pageSize);
 
-    const data = pageStocks.map((stock, index) => {
+    const sortedStocks = stocks
+      .toSorted(
+        (a, b) => getRankingValue(b, ranking) - getRankingValue(a, ranking),
+      )
+      .slice(0, MAX_STOCKS_COUNT + 1);
+
+    const pageStocks = sortedStocks.slice(skip, skip + pageSize + 1);
+    const hasNextPage =
+      pageStocks.length > pageSize && skip + pageSize < MAX_STOCKS_COUNT;
+    const visibleStocks = pageStocks.slice(0, pageSize);
+
+    const data = visibleStocks.map((stock, index) => {
       const changeRate = toNumber(stock.changeRate);
 
       return {
@@ -152,6 +168,14 @@ export async function GET(request: NextRequest) {
           toNumber(stock.tradingValue),
           stock.currencyCode,
         ),
+        tradingVolume: formatVolume(toNumber(stock.volume)),
+        rankingValue:
+          ranking === "tradingVolume"
+            ? formatVolume(toNumber(stock.volume))
+            : formatTradingValue(
+                toNumber(stock.tradingValue),
+                stock.currencyCode,
+              ),
         market: stock.countryCode === "KR" ? "domestic" : "global",
         trend: changeRate >= 0 ? "up" : "down",
         logoLabel: getLogoLabel(stock.name),
@@ -170,8 +194,8 @@ export async function GET(request: NextRequest) {
       process.env.NODE_ENV === "production"
         ? "STOCKS_FETCH_FAILED"
         : error instanceof Error
-        ? error.message
-        : "STOCKS_FETCH_FAILED";
+          ? error.message
+          : "STOCKS_FETCH_FAILED";
 
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }

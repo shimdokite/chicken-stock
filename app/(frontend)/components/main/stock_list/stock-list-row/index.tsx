@@ -61,7 +61,7 @@ export default function StockListRow({ stock }: StockListRowProps) {
           </span>
         </span>
 
-        <span className="col-start-7 text-right">{stock.tradingAmount}</span>
+        <span className="col-start-7 text-right">{stock.rankingValue}</span>
       </Link>
     </li>
   );
