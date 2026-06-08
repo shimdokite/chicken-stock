@@ -17,18 +17,37 @@ export type StockCandleData = {
 export type StockOrderBookLevelData = {
   side: "ASK" | "BID";
   levelRank: number;
+  orderCount: number;
   price: number;
   quantity: number;
 };
 
+export type StockOrderBookRecentOrderData = {
+  id: string;
+  orderedAt: string;
+  price: number;
+  quantity: number;
+  side: "BUY" | "SELL";
+  status: "PENDING" | "COMPLETED" | "CANCELED";
+};
+
 export type StockOrderBookSnapshotData = {
+  timestamp: number;
+  currentPrice?: number;
+  previousClose?: number;
+  changeRate?: number;
+  dayHigh?: number;
+  dayLow?: number;
+  volumeAmount?: number;
   totalAskSize: number;
   totalBidSize: number;
   volume: number;
   buyVolume: number;
   sellVolume: number;
   executionStrength: number;
+  lastTradeVolume: number;
   levels: StockOrderBookLevelData[];
+  recentOrders: StockOrderBookRecentOrderData[];
 };
 
 export type StockFinancialMetricData = {

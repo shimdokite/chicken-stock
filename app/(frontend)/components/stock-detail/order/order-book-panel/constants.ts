@@ -1,0 +1,2 @@
+export const DISPLAY_LEVEL_COUNT = 6;
+export const ORDER_BOOK_ROW_COUNT = DISPLAY_LEVEL_COUNT * 2;

@@ -158,7 +158,7 @@ model User {
   refreshTokens      RefreshToken[]
   articleCompletions UserArticleCompletion[]
   agent              Agent?
-  portfolio         Portfolio?
+  portfolio          Portfolio?
 
   @@index([email])
   @@map("User")
@@ -432,42 +432,43 @@ model PortfolioDividend {
 }
 
 model Stock {
-  id                       Int                    @id
-  ticker                   String                 @unique @db.VarChar(255)
-  name                     String                 @db.VarChar(255)
-  imageUrl                 String                 @map("image_url") @db.VarChar(255)
+  id                       Int                       @id
+  ticker                   String                    @unique @db.VarChar(255)
+  name                     String                    @db.VarChar(255)
+  imageUrl                 String                    @map("image_url") @db.VarChar(255)
   sector                   StockSector
-  riskLevel                StockRiskLevel         @map("risk_level")
+  riskLevel                StockRiskLevel            @map("risk_level")
   theme                    StockTheme
-  countryCode              String                 @map("country_code") @db.VarChar(255)
-  currencyCode             CurrencyCode           @map("currency_code")
-  currentPrice             Decimal                @map("current_price")
-  previousClose            Decimal                @map("previous_close")
-  changeAmount             Decimal                @map("change_amount")
-  changeRate               Decimal                @map("change_rate")
-  dayHigh                  Decimal                @map("day_high")
-  dayLow                   Decimal                @map("day_low")
-  high52w                  Decimal                @map("high_52w")
-  low52w                   Decimal                @map("low_52w")
+  countryCode              String                    @map("country_code") @db.VarChar(255)
+  currencyCode             CurrencyCode              @map("currency_code")
+  currentPrice             Decimal                   @map("current_price")
+  previousClose            Decimal                   @map("previous_close")
+  changeAmount             Decimal                   @map("change_amount")
+  changeRate               Decimal                   @map("change_rate")
+  dayHigh                  Decimal                   @map("day_high")
+  dayLow                   Decimal                   @map("day_low")
+  high52w                  Decimal                   @map("high_52w")
+  low52w                   Decimal                   @map("low_52w")
   volume                   Decimal
-  tradingValue             Decimal                @map("trading_value")
-  marketCap                Decimal                @map("market_cap")
+  tradingValue             Decimal                   @map("trading_value")
+  marketCap                Decimal                   @map("market_cap")
   per                      Decimal
   eps                      Decimal
-  marketStatus             StockMarketStatus      @map("market_status")
-  debtRatio                Decimal                @map("debt_ratio")
-  currentRatio             Decimal                @map("current_ratio")
-  interestCoverageRatio    Decimal                @map("interest_coverage_ratio")
-  announcementDate         DateTime               @map("announcement_date") @db.Date
-  estimatedOperatingProfit String                 @map("estimated_operating_profit") @db.VarChar(255)
-  estimatedRevenue         Decimal                @map("estimated_revenue")
-  dividendCount            Int                    @map("dividend_count")
-  dividendPerShare         Decimal                @map("dividend_per_share")
-  dividendYield            Decimal                @map("dividend_yield")
-  createdAt                DateTime               @default(now()) @map("created_at")
-  updatedAt                DateTime               @updatedAt @map("updated_at")
+  marketStatus             StockMarketStatus         @map("market_status")
+  debtRatio                Decimal                   @map("debt_ratio")
+  currentRatio             Decimal                   @map("current_ratio")
+  interestCoverageRatio    Decimal                   @map("interest_coverage_ratio")
+  announcementDate         DateTime                  @map("announcement_date") @db.Date
+  estimatedOperatingProfit String                    @map("estimated_operating_profit") @db.VarChar(255)
+  estimatedRevenue         Decimal                   @map("estimated_revenue")
+  dividendCount            Int                       @map("dividend_count")
+  dividendPerShare         Decimal                   @map("dividend_per_share")
+  dividendYield            Decimal                   @map("dividend_yield")
+  createdAt                DateTime                  @default(now()) @map("created_at")
+  updatedAt                DateTime                  @updatedAt @map("updated_at")
   portfolioItems           PortfolioItem[]
   tradeOrders              TradeOrder[]
+  tradeExecutions          TradeExecution[]
   transactions             PortfolioTransaction[]
   dividendEvents           DividendEvent[]
   candles                  StockCandle[]
@@ -549,8 +550,31 @@ model TradeOrder {
   portfolio         Portfolio              @relation(fields: [portfolioId], references: [id])
   stock             Stock                  @relation(fields: [stockId], references: [id])
   transactions      PortfolioTransaction[]
+  buyExecutions     TradeExecution[]       @relation("BuyTradeExecutions")
+  sellExecutions    TradeExecution[]       @relation("SellTradeExecutions")
 
   @@map("Trade_order")
+}
+
+model TradeExecution {
+  id            String         @id @default(cuid()) @db.VarChar(255)
+  stockId       Int            @map("stock_id")
+  ticker        String         @db.VarChar(255)
+  buyOrderId    BigInt?        @map("buy_order_id")
+  sellOrderId   BigInt?        @map("sell_order_id")
+  price         Decimal        @db.Decimal(20, 2)
+  quantity      Int
+  aggressorSide TradeOrderType @map("aggressor_side")
+  executedAt    DateTime       @map("executed_at")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  stock         Stock          @relation(fields: [stockId], references: [id])
+  buyOrder      TradeOrder?    @relation("BuyTradeExecutions", fields: [buyOrderId], references: [orderId])
+  sellOrder     TradeOrder?    @relation("SellTradeExecutions", fields: [sellOrderId], references: [orderId])
+
+  @@index([stockId, executedAt])
+  @@index([buyOrderId])
+  @@index([sellOrderId])
+  @@map("Trade_execution")
 }
 
 model StockCandle {

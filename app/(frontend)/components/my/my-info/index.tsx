@@ -2,6 +2,7 @@
 
 import { useGetMyInfo } from "@/app/(frontend)/apis/auth/queries";
 import { Avatar } from "@/app/(frontend)/components/ui";
+import { getInvestmentTypeLabel } from "@/app/(frontend)/lib/classify-investment-type";
 
 export default function MyInfo() {
   const { data, isPending } = useGetMyInfo();
@@ -36,7 +37,9 @@ export default function MyInfo() {
           <div className="flex gap-7">
             <p className="w-25 text-lg">내 투자유형</p>
             <p className="text-lg font-semibold text-[#1B8CC0]">
-              {data.user.investmentType ?? "미정"}
+              {data.user.investmentType
+                ? getInvestmentTypeLabel(data.user.investmentType)
+                : "미정"}
             </p>
           </div>
         </div>

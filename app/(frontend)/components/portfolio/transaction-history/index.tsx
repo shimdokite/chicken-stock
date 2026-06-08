@@ -43,7 +43,7 @@ export default function TransactionHistory() {
       : itemByStockId.get(selectedTransaction.stockId);
 
   return (
-    <div className="col gap-10 pt-8">
+    <div className="col min-h-0 flex-1 gap-10 overflow-hidden pt-8">
       <CurrencyFilter
         krwBalance={data.krwBalance}
         selectedCurrency={selectedCurrency}
@@ -51,8 +51,8 @@ export default function TransactionHistory() {
         usdBalance={data.usdBalance}
       />
 
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="col min-h-[360px] rounded-lg px-8 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]">
+      <section className="grid min-h-0 flex-1 grid-cols-1 grid-rows-2 gap-6 overflow-hidden p-4 xl:grid-cols-2 xl:grid-rows-1">
+        <div className="col min-h-0 overflow-hidden rounded-lg px-8 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]">
           <TransactionFilter
             selectedFilter={selectedFilter}
             setSelectedFilter={(filter) => {
@@ -61,14 +61,16 @@ export default function TransactionHistory() {
             }}
           />
 
-          <TransactionList
-            selectedTransactionId={selectedTransaction?.id ?? null}
-            setSelectedTransactionId={setSelectedTransactionId}
-            transactions={transactions}
-          />
+          <div className="min-h-0 flex-1 overflow-y-auto pr-2">
+            <TransactionList
+              selectedTransactionId={selectedTransaction?.id ?? null}
+              setSelectedTransactionId={setSelectedTransactionId}
+              transactions={transactions}
+            />
+          </div>
         </div>
 
-        <div className="h-[600px] min-h-[360px] rounded-lg px-10 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)] xl:sticky xl:top-24 xl:max-h-[calc(100dvh-8rem)] xl:self-start xl:overflow-y-auto">
+        <div className="min-h-0 overflow-y-auto rounded-lg px-10 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]">
           {selectedTransaction && (
             <TransactionDetail
               item={selectedItem}

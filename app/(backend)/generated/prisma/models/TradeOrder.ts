@@ -351,6 +351,8 @@ export type TradeOrderWhereInput = {
   portfolio?: Prisma.XOR<Prisma.PortfolioScalarRelationFilter, Prisma.PortfolioWhereInput>
   stock?: Prisma.XOR<Prisma.StockScalarRelationFilter, Prisma.StockWhereInput>
   transactions?: Prisma.PortfolioTransactionListRelationFilter
+  buyExecutions?: Prisma.TradeExecutionListRelationFilter
+  sellExecutions?: Prisma.TradeExecutionListRelationFilter
 }
 
 export type TradeOrderOrderByWithRelationInput = {
@@ -375,6 +377,8 @@ export type TradeOrderOrderByWithRelationInput = {
   portfolio?: Prisma.PortfolioOrderByWithRelationInput
   stock?: Prisma.StockOrderByWithRelationInput
   transactions?: Prisma.PortfolioTransactionOrderByRelationAggregateInput
+  buyExecutions?: Prisma.TradeExecutionOrderByRelationAggregateInput
+  sellExecutions?: Prisma.TradeExecutionOrderByRelationAggregateInput
 }
 
 export type TradeOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -402,6 +406,8 @@ export type TradeOrderWhereUniqueInput = Prisma.AtLeast<{
   portfolio?: Prisma.XOR<Prisma.PortfolioScalarRelationFilter, Prisma.PortfolioWhereInput>
   stock?: Prisma.XOR<Prisma.StockScalarRelationFilter, Prisma.StockWhereInput>
   transactions?: Prisma.PortfolioTransactionListRelationFilter
+  buyExecutions?: Prisma.TradeExecutionListRelationFilter
+  sellExecutions?: Prisma.TradeExecutionListRelationFilter
 }, "orderId">
 
 export type TradeOrderOrderByWithAggregationInput = {
@@ -474,6 +480,8 @@ export type TradeOrderCreateInput = {
   portfolio: Prisma.PortfolioCreateNestedOneWithoutTradeOrdersInput
   stock: Prisma.StockCreateNestedOneWithoutTradeOrdersInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderUncheckedCreateInput = {
@@ -496,6 +504,8 @@ export type TradeOrderUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderUpdateInput = {
@@ -518,6 +528,8 @@ export type TradeOrderUpdateInput = {
   portfolio?: Prisma.PortfolioUpdateOneRequiredWithoutTradeOrdersNestedInput
   stock?: Prisma.StockUpdateOneRequiredWithoutTradeOrdersNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateInput = {
@@ -540,6 +552,8 @@ export type TradeOrderUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderCreateManyInput = {
@@ -811,6 +825,38 @@ export type EnumTradeOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.TradeOrderStatus
 }
 
+export type TradeOrderCreateNestedOneWithoutBuyExecutionsInput = {
+  create?: Prisma.XOR<Prisma.TradeOrderCreateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutBuyExecutionsInput>
+  connectOrCreate?: Prisma.TradeOrderCreateOrConnectWithoutBuyExecutionsInput
+  connect?: Prisma.TradeOrderWhereUniqueInput
+}
+
+export type TradeOrderCreateNestedOneWithoutSellExecutionsInput = {
+  create?: Prisma.XOR<Prisma.TradeOrderCreateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutSellExecutionsInput>
+  connectOrCreate?: Prisma.TradeOrderCreateOrConnectWithoutSellExecutionsInput
+  connect?: Prisma.TradeOrderWhereUniqueInput
+}
+
+export type TradeOrderUpdateOneWithoutBuyExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TradeOrderCreateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutBuyExecutionsInput>
+  connectOrCreate?: Prisma.TradeOrderCreateOrConnectWithoutBuyExecutionsInput
+  upsert?: Prisma.TradeOrderUpsertWithoutBuyExecutionsInput
+  disconnect?: Prisma.TradeOrderWhereInput | boolean
+  delete?: Prisma.TradeOrderWhereInput | boolean
+  connect?: Prisma.TradeOrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TradeOrderUpdateToOneWithWhereWithoutBuyExecutionsInput, Prisma.TradeOrderUpdateWithoutBuyExecutionsInput>, Prisma.TradeOrderUncheckedUpdateWithoutBuyExecutionsInput>
+}
+
+export type TradeOrderUpdateOneWithoutSellExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TradeOrderCreateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutSellExecutionsInput>
+  connectOrCreate?: Prisma.TradeOrderCreateOrConnectWithoutSellExecutionsInput
+  upsert?: Prisma.TradeOrderUpsertWithoutSellExecutionsInput
+  disconnect?: Prisma.TradeOrderWhereInput | boolean
+  delete?: Prisma.TradeOrderWhereInput | boolean
+  connect?: Prisma.TradeOrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TradeOrderUpdateToOneWithWhereWithoutSellExecutionsInput, Prisma.TradeOrderUpdateWithoutSellExecutionsInput>, Prisma.TradeOrderUncheckedUpdateWithoutSellExecutionsInput>
+}
+
 export type TradeOrderCreateWithoutPortfolioInput = {
   orderId: bigint | number
   ticker: string
@@ -830,6 +876,8 @@ export type TradeOrderCreateWithoutPortfolioInput = {
   updatedAt?: Date | string
   stock: Prisma.StockCreateNestedOneWithoutTradeOrdersInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderUncheckedCreateWithoutPortfolioInput = {
@@ -851,6 +899,8 @@ export type TradeOrderUncheckedCreateWithoutPortfolioInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderCreateOrConnectWithoutPortfolioInput = {
@@ -922,6 +972,8 @@ export type TradeOrderCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   portfolio: Prisma.PortfolioCreateNestedOneWithoutTradeOrdersInput
   stock: Prisma.StockCreateNestedOneWithoutTradeOrdersInput
+  buyExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderUncheckedCreateWithoutTransactionsInput = {
@@ -943,6 +995,8 @@ export type TradeOrderUncheckedCreateWithoutTransactionsInput = {
   currencyCode: $Enums.CurrencyCode
   createdAt?: Date | string
   updatedAt?: Date | string
+  buyExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderCreateOrConnectWithoutTransactionsInput = {
@@ -980,6 +1034,8 @@ export type TradeOrderUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolio?: Prisma.PortfolioUpdateOneRequiredWithoutTradeOrdersNestedInput
   stock?: Prisma.StockUpdateOneRequiredWithoutTradeOrdersNestedInput
+  buyExecutions?: Prisma.TradeExecutionUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateWithoutTransactionsInput = {
@@ -1001,6 +1057,8 @@ export type TradeOrderUncheckedUpdateWithoutTransactionsInput = {
   currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderCreateWithoutStockInput = {
@@ -1022,6 +1080,8 @@ export type TradeOrderCreateWithoutStockInput = {
   updatedAt?: Date | string
   portfolio: Prisma.PortfolioCreateNestedOneWithoutTradeOrdersInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderUncheckedCreateWithoutStockInput = {
@@ -1043,6 +1103,8 @@ export type TradeOrderUncheckedCreateWithoutStockInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutBuyOrderInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutSellOrderInput
 }
 
 export type TradeOrderCreateOrConnectWithoutStockInput = {
@@ -1069,6 +1131,222 @@ export type TradeOrderUpdateWithWhereUniqueWithoutStockInput = {
 export type TradeOrderUpdateManyWithWhereWithoutStockInput = {
   where: Prisma.TradeOrderScalarWhereInput
   data: Prisma.XOR<Prisma.TradeOrderUpdateManyMutationInput, Prisma.TradeOrderUncheckedUpdateManyWithoutStockInput>
+}
+
+export type TradeOrderCreateWithoutBuyExecutionsInput = {
+  orderId: bigint | number
+  ticker: string
+  type: $Enums.TradeOrderType
+  quantity: number
+  pricePerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status: $Enums.TradeOrderStatus
+  orderedAt: Date | string
+  filledQuantity: number
+  remainingQuantity: number
+  executedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  rejectReason?: string | null
+  currencyCode: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolio: Prisma.PortfolioCreateNestedOneWithoutTradeOrdersInput
+  stock: Prisma.StockCreateNestedOneWithoutTradeOrdersInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutTradeOrderInput
+  sellExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutSellOrderInput
+}
+
+export type TradeOrderUncheckedCreateWithoutBuyExecutionsInput = {
+  orderId: bigint | number
+  portfolioId: bigint | number
+  stockId: number
+  ticker: string
+  type: $Enums.TradeOrderType
+  quantity: number
+  pricePerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status: $Enums.TradeOrderStatus
+  orderedAt: Date | string
+  filledQuantity: number
+  remainingQuantity: number
+  executedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  rejectReason?: string | null
+  currencyCode: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutTradeOrderInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutSellOrderInput
+}
+
+export type TradeOrderCreateOrConnectWithoutBuyExecutionsInput = {
+  where: Prisma.TradeOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.TradeOrderCreateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutBuyExecutionsInput>
+}
+
+export type TradeOrderCreateWithoutSellExecutionsInput = {
+  orderId: bigint | number
+  ticker: string
+  type: $Enums.TradeOrderType
+  quantity: number
+  pricePerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status: $Enums.TradeOrderStatus
+  orderedAt: Date | string
+  filledQuantity: number
+  remainingQuantity: number
+  executedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  rejectReason?: string | null
+  currencyCode: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolio: Prisma.PortfolioCreateNestedOneWithoutTradeOrdersInput
+  stock: Prisma.StockCreateNestedOneWithoutTradeOrdersInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutBuyOrderInput
+}
+
+export type TradeOrderUncheckedCreateWithoutSellExecutionsInput = {
+  orderId: bigint | number
+  portfolioId: bigint | number
+  stockId: number
+  ticker: string
+  type: $Enums.TradeOrderType
+  quantity: number
+  pricePerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status: $Enums.TradeOrderStatus
+  orderedAt: Date | string
+  filledQuantity: number
+  remainingQuantity: number
+  executedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  rejectReason?: string | null
+  currencyCode: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutTradeOrderInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutBuyOrderInput
+}
+
+export type TradeOrderCreateOrConnectWithoutSellExecutionsInput = {
+  where: Prisma.TradeOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.TradeOrderCreateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutSellExecutionsInput>
+}
+
+export type TradeOrderUpsertWithoutBuyExecutionsInput = {
+  update: Prisma.XOR<Prisma.TradeOrderUpdateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedUpdateWithoutBuyExecutionsInput>
+  create: Prisma.XOR<Prisma.TradeOrderCreateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutBuyExecutionsInput>
+  where?: Prisma.TradeOrderWhereInput
+}
+
+export type TradeOrderUpdateToOneWithWhereWithoutBuyExecutionsInput = {
+  where?: Prisma.TradeOrderWhereInput
+  data: Prisma.XOR<Prisma.TradeOrderUpdateWithoutBuyExecutionsInput, Prisma.TradeOrderUncheckedUpdateWithoutBuyExecutionsInput>
+}
+
+export type TradeOrderUpdateWithoutBuyExecutionsInput = {
+  orderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTradeOrderTypeFieldUpdateOperationsInput | $Enums.TradeOrderType
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTradeOrderStatusFieldUpdateOperationsInput | $Enums.TradeOrderStatus
+  orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  filledQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  remainingQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  executedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolio?: Prisma.PortfolioUpdateOneRequiredWithoutTradeOrdersNestedInput
+  stock?: Prisma.StockUpdateOneRequiredWithoutTradeOrdersNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutTradeOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUpdateManyWithoutSellOrderNestedInput
+}
+
+export type TradeOrderUncheckedUpdateWithoutBuyExecutionsInput = {
+  orderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  portfolioId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  stockId?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTradeOrderTypeFieldUpdateOperationsInput | $Enums.TradeOrderType
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTradeOrderStatusFieldUpdateOperationsInput | $Enums.TradeOrderStatus
+  orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  filledQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  remainingQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  executedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutTradeOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutSellOrderNestedInput
+}
+
+export type TradeOrderUpsertWithoutSellExecutionsInput = {
+  update: Prisma.XOR<Prisma.TradeOrderUpdateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedUpdateWithoutSellExecutionsInput>
+  create: Prisma.XOR<Prisma.TradeOrderCreateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedCreateWithoutSellExecutionsInput>
+  where?: Prisma.TradeOrderWhereInput
+}
+
+export type TradeOrderUpdateToOneWithWhereWithoutSellExecutionsInput = {
+  where?: Prisma.TradeOrderWhereInput
+  data: Prisma.XOR<Prisma.TradeOrderUpdateWithoutSellExecutionsInput, Prisma.TradeOrderUncheckedUpdateWithoutSellExecutionsInput>
+}
+
+export type TradeOrderUpdateWithoutSellExecutionsInput = {
+  orderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTradeOrderTypeFieldUpdateOperationsInput | $Enums.TradeOrderType
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTradeOrderStatusFieldUpdateOperationsInput | $Enums.TradeOrderStatus
+  orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  filledQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  remainingQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  executedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolio?: Prisma.PortfolioUpdateOneRequiredWithoutTradeOrdersNestedInput
+  stock?: Prisma.StockUpdateOneRequiredWithoutTradeOrdersNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUpdateManyWithoutBuyOrderNestedInput
+}
+
+export type TradeOrderUncheckedUpdateWithoutSellExecutionsInput = {
+  orderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  portfolioId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  stockId?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTradeOrderTypeFieldUpdateOperationsInput | $Enums.TradeOrderType
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTradeOrderStatusFieldUpdateOperationsInput | $Enums.TradeOrderStatus
+  orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  filledQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  remainingQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  executedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutBuyOrderNestedInput
 }
 
 export type TradeOrderCreateManyPortfolioInput = {
@@ -1110,6 +1388,8 @@ export type TradeOrderUpdateWithoutPortfolioInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stock?: Prisma.StockUpdateOneRequiredWithoutTradeOrdersNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateWithoutPortfolioInput = {
@@ -1131,6 +1411,8 @@ export type TradeOrderUncheckedUpdateWithoutPortfolioInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateManyWithoutPortfolioInput = {
@@ -1192,6 +1474,8 @@ export type TradeOrderUpdateWithoutStockInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolio?: Prisma.PortfolioUpdateOneRequiredWithoutTradeOrdersNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateWithoutStockInput = {
@@ -1213,6 +1497,8 @@ export type TradeOrderUncheckedUpdateWithoutStockInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutTradeOrderNestedInput
+  buyExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutBuyOrderNestedInput
+  sellExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutSellOrderNestedInput
 }
 
 export type TradeOrderUncheckedUpdateManyWithoutStockInput = {
@@ -1242,10 +1528,14 @@ export type TradeOrderUncheckedUpdateManyWithoutStockInput = {
 
 export type TradeOrderCountOutputType = {
   transactions: number
+  buyExecutions: number
+  sellExecutions: number
 }
 
 export type TradeOrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactions?: boolean | TradeOrderCountOutputTypeCountTransactionsArgs
+  buyExecutions?: boolean | TradeOrderCountOutputTypeCountBuyExecutionsArgs
+  sellExecutions?: boolean | TradeOrderCountOutputTypeCountSellExecutionsArgs
 }
 
 /**
@@ -1263,6 +1553,20 @@ export type TradeOrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
  */
 export type TradeOrderCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PortfolioTransactionWhereInput
+}
+
+/**
+ * TradeOrderCountOutputType without action
+ */
+export type TradeOrderCountOutputTypeCountBuyExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeExecutionWhereInput
+}
+
+/**
+ * TradeOrderCountOutputType without action
+ */
+export type TradeOrderCountOutputTypeCountSellExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeExecutionWhereInput
 }
 
 
@@ -1288,6 +1592,8 @@ export type TradeOrderSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   portfolio?: boolean | Prisma.PortfolioDefaultArgs<ExtArgs>
   stock?: boolean | Prisma.StockDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.TradeOrder$transactionsArgs<ExtArgs>
+  buyExecutions?: boolean | Prisma.TradeOrder$buyExecutionsArgs<ExtArgs>
+  sellExecutions?: boolean | Prisma.TradeOrder$sellExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.TradeOrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tradeOrder"]>
 
@@ -1363,6 +1669,8 @@ export type TradeOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   portfolio?: boolean | Prisma.PortfolioDefaultArgs<ExtArgs>
   stock?: boolean | Prisma.StockDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.TradeOrder$transactionsArgs<ExtArgs>
+  buyExecutions?: boolean | Prisma.TradeOrder$buyExecutionsArgs<ExtArgs>
+  sellExecutions?: boolean | Prisma.TradeOrder$sellExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.TradeOrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TradeOrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1380,6 +1688,8 @@ export type $TradeOrderPayload<ExtArgs extends runtime.Types.Extensions.Internal
     portfolio: Prisma.$PortfolioPayload<ExtArgs>
     stock: Prisma.$StockPayload<ExtArgs>
     transactions: Prisma.$PortfolioTransactionPayload<ExtArgs>[]
+    buyExecutions: Prisma.$TradeExecutionPayload<ExtArgs>[]
+    sellExecutions: Prisma.$TradeExecutionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     orderId: bigint
@@ -1797,6 +2107,8 @@ export interface Prisma__TradeOrderClient<T, Null = never, ExtArgs extends runti
   portfolio<T extends Prisma.PortfolioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PortfolioDefaultArgs<ExtArgs>>): Prisma.Prisma__PortfolioClient<runtime.Types.Result.GetResult<Prisma.$PortfolioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stock<T extends Prisma.StockDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockDefaultArgs<ExtArgs>>): Prisma.Prisma__StockClient<runtime.Types.Result.GetResult<Prisma.$StockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.TradeOrder$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TradeOrder$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PortfolioTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyExecutions<T extends Prisma.TradeOrder$buyExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TradeOrder$buyExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sellExecutions<T extends Prisma.TradeOrder$sellExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TradeOrder$sellExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2261,6 +2573,54 @@ export type TradeOrder$transactionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.PortfolioTransactionScalarFieldEnum | Prisma.PortfolioTransactionScalarFieldEnum[]
+}
+
+/**
+ * TradeOrder.buyExecutions
+ */
+export type TradeOrder$buyExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeExecution
+   */
+  select?: Prisma.TradeExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeExecution
+   */
+  omit?: Prisma.TradeExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeExecutionInclude<ExtArgs> | null
+  where?: Prisma.TradeExecutionWhereInput
+  orderBy?: Prisma.TradeExecutionOrderByWithRelationInput | Prisma.TradeExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.TradeExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeExecutionScalarFieldEnum | Prisma.TradeExecutionScalarFieldEnum[]
+}
+
+/**
+ * TradeOrder.sellExecutions
+ */
+export type TradeOrder$sellExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeExecution
+   */
+  select?: Prisma.TradeExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeExecution
+   */
+  omit?: Prisma.TradeExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeExecutionInclude<ExtArgs> | null
+  where?: Prisma.TradeExecutionWhereInput
+  orderBy?: Prisma.TradeExecutionOrderByWithRelationInput | Prisma.TradeExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.TradeExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeExecutionScalarFieldEnum | Prisma.TradeExecutionScalarFieldEnum[]
 }
 
 /**

@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
   ACCESS_TOKEN_COOKIE_NAME,
@@ -8,14 +9,27 @@ import {
   getTotalAvailableOrderAmountKrw,
 } from "@/app/(backend)/lib/portfolio-balance";
 import { prisma } from "@/app/(backend)/lib/prisma";
+import { lockPortfolioRows } from "@/app/(backend)/lib/stock-order-matching";
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
-import { TransactionType } from "@/app/(backend)/generated/prisma/enums";
+import {
+  CurrencyCode,
+  TradeOrderStatus,
+  TradeOrderType,
+  TransactionType,
+} from "@/app/(backend)/generated/prisma/enums";
 
 export const runtime = "nodejs";
 
 const exchangeTypes = new Set(["krwToUsd", "usdToKrw"]);
+const EXCHANGE_TRANSACTION_MAX_ATTEMPTS = 3;
+const EXCHANGE_TRANSACTION_RETRY_DELAY_MS = 30;
 
 type ExchangeType = "krwToUsd" | "usdToKrw";
+type TransactionClient = Prisma.TransactionClient;
+type PendingBuyOrderAmount = {
+  pricePerShare: Prisma.Decimal;
+  remainingQuantity: number;
+};
 
 class PortfolioExchangeError extends Error {
   constructor(
@@ -28,6 +42,69 @@ class PortfolioExchangeError extends Error {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function getErrorCode(error: unknown) {
+  if (!isRecord(error)) {
+    return null;
+  }
+
+  if (typeof error.code === "string") {
+    return error.code;
+  }
+
+  if (isRecord(error.meta) && typeof error.meta.code === "string") {
+    return error.meta.code;
+  }
+
+  return null;
+}
+
+function isRetryablePortfolioTransactionError(error: unknown) {
+  const code = getErrorCode(error);
+
+  return code === "P2034" || code === "40001" || code === "40P01";
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function runSerializablePortfolioTransaction<T>(
+  operation: (tx: TransactionClient) => Promise<T>,
+) {
+  for (
+    let attempt = 1;
+    attempt <= EXCHANGE_TRANSACTION_MAX_ATTEMPTS;
+    attempt += 1
+  ) {
+    try {
+      return await prisma.$transaction(operation, {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      });
+    } catch (error) {
+      if (
+        !isRetryablePortfolioTransactionError(error) ||
+        attempt >= EXCHANGE_TRANSACTION_MAX_ATTEMPTS
+      ) {
+        if (isRetryablePortfolioTransactionError(error)) {
+          throw new PortfolioExchangeError(
+            "동시 요청이 몰려 환전을 처리하지 못했습니다. 다시 시도해주세요.",
+            409,
+          );
+        }
+
+        throw error;
+      }
+
+      await wait(EXCHANGE_TRANSACTION_RETRY_DELAY_MS * attempt);
+    }
+  }
+
+  throw new PortfolioExchangeError(
+    "동시 요청이 몰려 환전을 처리하지 못했습니다. 다시 시도해주세요.",
+    409,
+  );
 }
 
 function isExchangeType(value: unknown): value is ExchangeType {
@@ -89,6 +166,10 @@ function serializeDecimalNumber(value: { toString: () => string }) {
   return Number(value.toString());
 }
 
+function createPortfolioTransactionId() {
+  return randomUUID();
+}
+
 function getExchangedValue(type: ExchangeType, value: Prisma.Decimal) {
   const exchangeRate = new Prisma.Decimal(EXCHANGE_RATE);
 
@@ -99,6 +180,28 @@ function getExchangedValue(type: ExchangeType, value: Prisma.Decimal) {
 
 function getExchangeCompanyName(type: ExchangeType) {
   return type === "krwToUsd" ? "달러 환전" : "원화 환전";
+}
+
+function getPendingBuyOrderAmount(orders: PendingBuyOrderAmount[]) {
+  return orders.reduce(
+    (sum, order) =>
+      sum.add(order.pricePerShare.mul(order.remainingQuantity)),
+    new Prisma.Decimal(0),
+  );
+}
+
+function getExchangeSourceCurrencyCode(type: ExchangeType) {
+  return type === "krwToUsd" ? CurrencyCode.KRW : CurrencyCode.USD;
+}
+
+function getExchangeSourceBalance(
+  portfolio: {
+    krwBalance: Prisma.Decimal;
+    usdBalance: Prisma.Decimal;
+  },
+  type: ExchangeType,
+) {
+  return type === "krwToUsd" ? portfolio.krwBalance : portfolio.usdBalance;
 }
 
 export async function POST(request: NextRequest) {
@@ -123,7 +226,7 @@ export async function POST(request: NextRequest) {
   const exchangedValue = getExchangedValue(payload.type, payload.value);
 
   try {
-    const portfolio = await prisma.$transaction(async (tx) => {
+    const portfolio = await runSerializablePortfolioTransaction(async (tx) => {
       const currentPortfolio = await tx.portfolio.findUnique({
         select: {
           id: true,
@@ -135,6 +238,49 @@ export async function POST(request: NextRequest) {
 
       if (!currentPortfolio) {
         throw new PortfolioExchangeError("계좌가 없습니다.", 404);
+      }
+
+      await lockPortfolioRows(tx, [currentPortfolio.id]);
+
+      const lockedPortfolio = await tx.portfolio.findUnique({
+        select: {
+          krwBalance: true,
+          usdBalance: true,
+        },
+        where: {
+          id: currentPortfolio.id,
+        },
+      });
+
+      if (!lockedPortfolio) {
+        throw new PortfolioExchangeError("계좌가 없습니다.", 404);
+      }
+
+      const sourceCurrencyCode = getExchangeSourceCurrencyCode(payload.type);
+      const pendingBuyOrders = await tx.tradeOrder.findMany({
+        select: {
+          pricePerShare: true,
+          remainingQuantity: true,
+        },
+        where: {
+          currencyCode: sourceCurrencyCode,
+          portfolioId: currentPortfolio.id,
+          remainingQuantity: {
+            gt: 0,
+          },
+          status: TradeOrderStatus.PENDING,
+          type: TradeOrderType.BUY,
+        },
+      });
+      const availableExchangeAmount = getExchangeSourceBalance(
+        lockedPortfolio,
+        payload.type,
+      )
+        .sub(getPendingBuyOrderAmount(pendingBuyOrders))
+        .toDecimalPlaces(2);
+
+      if (payload.value.gt(availableExchangeAmount)) {
+        throw new PortfolioExchangeError("환전 가능 금액이 부족합니다.", 400);
       }
 
       const updateResult = await tx.portfolio.updateMany({
@@ -185,6 +331,7 @@ export async function POST(request: NextRequest) {
           exchangeType: payload.type,
           executedAt,
           fee: new Prisma.Decimal(0),
+          id: createPortfolioTransactionId(),
           paidAmount: payload.value,
           portfolioId: currentPortfolio.id,
           receivedAmount: exchangedValue,

@@ -241,6 +241,16 @@ export function convertStockCurrency(
               toCurrencyCode,
             ),
           })),
+          recentOrders: (stock.orderBookSnapshot.recentOrders ?? []).map(
+            (order) => ({
+              ...order,
+              price: convertCurrencyValue(
+                order.price,
+                fromCurrencyCode,
+                toCurrencyCode,
+              ),
+            }),
+          ),
         }
       : null,
     financialStatements: stock.financialStatements.map((statement) => ({

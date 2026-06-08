@@ -1,4 +1,10 @@
 import { prisma } from "../../../../(backend)/lib/prisma";
+import {
+  getOrderBookActivity,
+  hasOrderBookActivity,
+  serializeOrderBookActivitySnapshot,
+  serializeOrderBookSnapshot,
+} from "../../../../(backend)/lib/stock-order-book";
 import type {
   StockDetailData,
   StockFinancialStatementData,
@@ -34,9 +40,7 @@ function bigintToNullableNumber(value: bigint | null) {
   return value === null ? null : Number(value);
 }
 
-function toStatementData(
-  value: unknown,
-): StockFinancialStatementData["data"] {
+function toStatementData(value: unknown): StockFinancialStatementData["data"] {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
   }
@@ -155,9 +159,7 @@ function calculateForwardPer(stock: ValuationSourceStock) {
 
 function getLatestCandleBaseDate(candles: { timestamp: bigint }[]) {
   const latestTimestamp = candles[0]?.timestamp;
-  const date = latestTimestamp
-    ? new Date(Number(latestTimestamp))
-    : new Date();
+  const date = latestTimestamp ? new Date(Number(latestTimestamp)) : new Date();
 
   return date.toISOString();
 }
@@ -226,10 +228,8 @@ export async function getStockDetailData(
   }
 
   const [orderBookSnapshot] = stock.orderBookSnapshots;
-  const [
-    themePeerCount,
-    themeFinancialMetricAverage,
-  ] = await Promise.all([
+  const [themePeerCount, themeFinancialMetricAverage, orderBookActivity] =
+    await Promise.all([
       prisma.stock.count({
         where: {
           theme: stock.theme,
@@ -252,6 +252,7 @@ export async function getStockDetailData(
           pbr: true,
         },
       }),
+      getOrderBookActivity(stock.id),
     ]);
   const valuationPeerStocks = await prisma.stock.findMany({
     where: {
@@ -316,20 +317,9 @@ export async function getStockDetailData(
       }))
       .reverse(),
     orderBookSnapshot: orderBookSnapshot
-      ? {
-          totalAskSize: toNumber(orderBookSnapshot.totalAskSize),
-          totalBidSize: toNumber(orderBookSnapshot.totalBidSize),
-          volume: toNumber(orderBookSnapshot.volume),
-          buyVolume: toNumber(orderBookSnapshot.buyVolume),
-          sellVolume: toNumber(orderBookSnapshot.sellVolume),
-          executionStrength: toNumber(orderBookSnapshot.executionStrength),
-          levels: orderBookSnapshot.levels.map((level) => ({
-            side: level.side,
-            levelRank: level.levelRank,
-            price: toNumber(level.price),
-            quantity: toNumber(level.quantity),
-          })),
-        }
+      ? serializeOrderBookSnapshot(orderBookSnapshot, orderBookActivity, stock)
+      : hasOrderBookActivity(orderBookActivity)
+        ? serializeOrderBookActivitySnapshot(orderBookActivity, stock)
       : null,
     financialMetric: stock.financialMetric
       ? {

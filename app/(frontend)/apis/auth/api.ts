@@ -10,6 +10,7 @@ export type MyInfoUser = {
   investmentType: InvestmentType | null;
   name: string;
   profileImageUrl: string | null;
+  realtimeOrderChannel: string;
   totalSteps: number | null;
   type: "NORMAL" | "AGENT";
   updatedAt: string;

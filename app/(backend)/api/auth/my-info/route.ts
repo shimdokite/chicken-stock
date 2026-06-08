@@ -8,6 +8,7 @@ import {
 } from "@/app/(backend)/lib/auth";
 import { rotateAuthSession } from "@/app/(backend)/lib/auth-session";
 import { prisma } from "@/app/(backend)/lib/prisma";
+import { getUserOrderRealtimeChannelName } from "@/app/(backend)/lib/realtime-channels";
 import {
   InvestmentType,
   type InvestmentType as InvestmentTypeValue,
@@ -58,6 +59,7 @@ function serializeUser(user: UserForMyInfo) {
     ...user,
     createdAt: user.createdAt.toISOString(),
     id: user.id.toString(),
+    realtimeOrderChannel: getUserOrderRealtimeChannelName(user.id),
     updatedAt: user.updatedAt.toISOString(),
   };
 }

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "sonner";
 import QueryProvider from "../components/providers/query-provider";
+import RealtimeBridge from "../components/providers/realtime-bridge";
 import Header from "../components/header";
 
 const atoz = localFont({
@@ -75,6 +76,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <QueryProvider>
+          <RealtimeBridge />
           <ReactQueryDevtools initialIsOpen={false} />
 
           <Header />

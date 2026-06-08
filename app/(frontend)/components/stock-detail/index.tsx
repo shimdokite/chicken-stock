@@ -2,11 +2,18 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useStockOrderBookQuery } from "../../apis/stocks/queries";
 import ChartPanel from "./order/chart-panel";
 import InfoPanel from "./analytics/info-panel";
 import StockLogo from "./stock-logo";
 import OrderBookPanel from "./order/order-book-panel";
 import OrderPanel from "./order/order-panel";
+import { useStockRealtime } from "../../hooks/use-stock-realtime";
+import type {
+  MainOrderTab,
+  NormalOrderTab,
+  SelectedOrderBookLimitPrice,
+} from "./order/order-panel";
 import { SegmentedControl, Tab } from "../ui";
 import type {
   StockCurrencyCode,
@@ -14,6 +21,7 @@ import type {
   StockOnlyProps,
 } from "../../types/stock/stock-detail";
 import {
+  convertCurrencyValue,
   convertStockCurrency,
   formatChange,
   formatPercent,
@@ -32,12 +40,46 @@ const sideTabs: { label: string; value: StockDetailTab }[] = [
 
 export default function StockDetail({ stock, activeTab }: StockDetailProps) {
   const router = useRouter();
+  useStockRealtime(stock.id);
   const [selectedCurrencyCode, setSelectedCurrencyCode] =
     useState<StockCurrencyCode>(stock.currencyCode);
+  const [orderPanelMainTab, setOrderPanelMainTab] =
+    useState<MainOrderTab>("normal");
+  const [orderPanelNormalTab, setOrderPanelNormalTab] =
+    useState<NormalOrderTab>("buy");
+  const [selectedLimitPrice, setSelectedLimitPrice] =
+    useState<SelectedOrderBookLimitPrice | null>(null);
+  const { data: liveOrderBookSnapshot } = useStockOrderBookQuery(
+    stock.id,
+    stock.orderBookSnapshot,
+  );
+
+  const liveStock = useMemo(() => {
+    const snapshot = liveOrderBookSnapshot ?? stock.orderBookSnapshot;
+
+    if (!snapshot) {
+      return stock;
+    }
+
+    const previousClose = snapshot.previousClose ?? stock.previousClose;
+    const currentPrice = snapshot.currentPrice ?? stock.currentPrice;
+
+    return {
+      ...stock,
+      changeAmount: currentPrice - previousClose,
+      changeRate: snapshot.changeRate ?? stock.changeRate,
+      currentPrice,
+      dayHigh: snapshot.dayHigh ?? stock.dayHigh,
+      dayLow: snapshot.dayLow ?? stock.dayLow,
+      orderBookSnapshot: snapshot,
+      previousClose,
+      volume: snapshot.volumeAmount ?? stock.volume,
+    };
+  }, [liveOrderBookSnapshot, stock]);
 
   const displayStock = useMemo(
-    () => convertStockCurrency(stock, selectedCurrencyCode),
-    [selectedCurrencyCode, stock],
+    () => convertStockCurrency(liveStock, selectedCurrencyCode),
+    [liveStock, selectedCurrencyCode],
   );
   const isUp = displayStock.changeRate >= 0;
   const changeClassName = isUp ? "text-red-500" : "text-blue-500";
@@ -61,24 +103,47 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
 
   const handleTabChange = (nextTab: string) => {
     if (nextTab === "chart-orderbook") {
-      router.push(`/stock/${stock.id}/order`);
+      router.push(`/stock/${liveStock.id}/order`);
       return;
     }
 
     if (nextTab === "portfolio-info") {
-      router.push(`/stock/${stock.id}/analytics`);
+      router.push(`/stock/${liveStock.id}/analytics`);
     }
+  };
+
+  const selectedDisplayPrice = selectedLimitPrice
+    ? convertCurrencyValue(
+        selectedLimitPrice.price,
+        liveStock.currencyCode,
+        displayStock.currencyCode,
+      )
+    : null;
+
+  const handleOrderBookPriceSelect = (price: number) => {
+    setSelectedLimitPrice((previous) => ({
+      price: convertCurrencyValue(
+        price,
+        displayStock.currencyCode,
+        liveStock.currencyCode,
+      ),
+      sequence: (previous?.sequence ?? 0) + 1,
+    }));
+    setOrderPanelMainTab("normal");
+    setOrderPanelNormalTab((previous) =>
+      previous === "sell" ? "sell" : "buy",
+    );
   };
 
   return (
     <main className="mx-auto w-full max-w-355 px-8 py-16 text-zinc-950">
       <section className="mb-9 flex items-end justify-between gap-8">
         <div className="flex items-center gap-3">
-          <StockLogo stock={stock} />
+          <StockLogo stock={liveStock} />
 
           <div>
             <div className="mb-3 flex items-center gap-3">
-              <h1 className="text-2xl font-bold">{stock.name}</h1>
+              <h1 className="text-2xl font-bold">{liveStock.name}</h1>
 
               <span className="bg-zinc-200 px-2 py-1 text-lg">
                 {marketLabel}
@@ -159,16 +224,42 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
       {activeTab === "chart-orderbook" && (
         <div className="grid grid-cols-[minmax(0,1fr)_20rem_20rem] gap-7">
           <ChartPanel stock={displayStock} />
-          <OrderBookPanel stock={displayStock} />
-          <OrderPanel stock={displayStock} />
+          <OrderBookPanel
+            initialOrderBookSnapshot={liveStock.orderBookSnapshot}
+            onPriceSelect={handleOrderBookPriceSelect}
+            selectedPrice={selectedDisplayPrice}
+            sourceCurrencyCode={liveStock.currencyCode}
+            stock={displayStock}
+          />
+          <OrderPanel
+            mainTab={orderPanelMainTab}
+            normalTab={orderPanelNormalTab}
+            selectedLimitPrice={selectedLimitPrice}
+            stock={liveStock}
+            onMainTabChange={setOrderPanelMainTab}
+            onNormalTabChange={setOrderPanelNormalTab}
+          />
         </div>
       )}
 
       {activeTab === "portfolio-info" && (
         <div className="grid grid-cols-[minmax(0,1fr)_20rem_20rem] gap-7">
           <InfoPanel stock={displayStock} />
-          <OrderBookPanel stock={displayStock} />
-          <OrderPanel stock={displayStock} />
+          <OrderBookPanel
+            initialOrderBookSnapshot={liveStock.orderBookSnapshot}
+            onPriceSelect={handleOrderBookPriceSelect}
+            selectedPrice={selectedDisplayPrice}
+            sourceCurrencyCode={liveStock.currencyCode}
+            stock={displayStock}
+          />
+          <OrderPanel
+            mainTab={orderPanelMainTab}
+            normalTab={orderPanelNormalTab}
+            selectedLimitPrice={selectedLimitPrice}
+            stock={liveStock}
+            onMainTabChange={setOrderPanelMainTab}
+            onNormalTabChange={setOrderPanelNormalTab}
+          />
         </div>
       )}
     </main>

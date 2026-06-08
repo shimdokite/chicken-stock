@@ -118,6 +118,11 @@ export type StockEarning = Prisma.StockEarningModel
  */
 export type TradeOrder = Prisma.TradeOrderModel
 /**
+ * Model TradeExecution
+ *
+ */
+export type TradeExecution = Prisma.TradeExecutionModel
+/**
  * Model StockCandle
  * 
  */

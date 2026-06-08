@@ -69,6 +69,7 @@ export const ModelName = {
   StockFinancialStatement: 'StockFinancialStatement',
   StockEarning: 'StockEarning',
   TradeOrder: 'TradeOrder',
+  TradeExecution: 'TradeExecution',
   StockCandle: 'StockCandle',
   OrderBookSnapshot: 'OrderBookSnapshot',
   OrderBookLevel: 'OrderBookLevel',
@@ -439,6 +440,22 @@ export const TradeOrderScalarFieldEnum = {
 } as const
 
 export type TradeOrderScalarFieldEnum = (typeof TradeOrderScalarFieldEnum)[keyof typeof TradeOrderScalarFieldEnum]
+
+
+export const TradeExecutionScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  ticker: 'ticker',
+  buyOrderId: 'buyOrderId',
+  sellOrderId: 'sellOrderId',
+  price: 'price',
+  quantity: 'quantity',
+  aggressorSide: 'aggressorSide',
+  executedAt: 'executedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeExecutionScalarFieldEnum = (typeof TradeExecutionScalarFieldEnum)[keyof typeof TradeExecutionScalarFieldEnum]
 
 
 export const StockCandleScalarFieldEnum = {

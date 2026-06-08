@@ -8,6 +8,7 @@ import IncomeAnalysis from "../../components/portfolio/income-analysis";
 import NoAccount from "../../components/portfolio/no-account";
 import PortfolioTab from "../../components/portfolio/portfolio-tab";
 import TransactionHistory from "../../components/portfolio/transaction-history";
+import { twMerge } from "tailwind-merge";
 
 export default function PortfolioPage() {
   const { data, isPending } = useGetMyInfo();
@@ -18,7 +19,13 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="col min-h-[calc(100dvh-72px)] p-15">
+    <div
+      className={twMerge(
+        "col min-h-[calc(100dvh-72px)] p-15",
+        selectedTab === "거래내역" &&
+          "h-[calc(100dvh-72px)] overflow-hidden",
+      )}
+    >
       <PortfolioTab />
 
       {!data.user.investmentType && <NoAccount />}

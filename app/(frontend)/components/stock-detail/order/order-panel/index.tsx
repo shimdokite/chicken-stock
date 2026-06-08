@@ -1,100 +1,172 @@
-// TODO: 추후 실제 데이터로 변경 예정
-import { Tab } from "../../../ui";
+"use client";
+
+import {
+  useStockOrderBookQuery,
+  useStockOrdersQuery,
+} from "../../../../apis/stocks/queries";
 import type { StockOnlyProps } from "../../../../types/stock/stock-detail";
-import { formatPrice } from "../../../../utils/stock/stock-detail";
+import { SegmentedControl, Tab } from "../../../ui";
+import NormalBuyOrder from "./normal-buy-order";
+import NormalSellOrder from "./normal-sell-order";
+import PendingOrders from "./pending-orders";
+import QuickOrder from "./quick-order";
+import { getApiErrorMessage } from "./utils";
+import OrderPanelState from "./order-panel-state";
 
-export default function OrderPanel({ stock }: StockOnlyProps) {
+export type MainOrderTab = "normal" | "quick";
+export type NormalOrderTab = "buy" | "sell" | "pending";
+
+export type SelectedOrderBookLimitPrice = {
+  price: number;
+  sequence: number;
+};
+
+type OrderPanelProps = StockOnlyProps & {
+  mainTab: MainOrderTab;
+  normalTab: NormalOrderTab;
+  selectedLimitPrice: SelectedOrderBookLimitPrice | null;
+  onMainTabChange: (tab: MainOrderTab) => void;
+  onNormalTabChange: (tab: NormalOrderTab) => void;
+};
+
+export default function OrderPanel({
+  mainTab,
+  normalTab,
+  onMainTabChange,
+  onNormalTabChange,
+  selectedLimitPrice,
+  stock,
+}: OrderPanelProps) {
+  const {
+    data: orderContext,
+    error,
+    isFetched,
+    isPending,
+  } = useStockOrdersQuery(stock.id);
+  const { data: orderBookSnapshot } = useStockOrderBookQuery(
+    stock.id,
+    stock.orderBookSnapshot,
+  );
+
+  const renderPanelContent = () => {
+    if (!orderContext && isPending && !isFetched) {
+      return <OrderPanelState message="주문 정보를 불러오는 중입니다." />;
+    }
+
+    if (!orderContext) {
+      return (
+        <OrderPanelState
+          message={getApiErrorMessage(
+            error,
+            "주문 정보를 불러오지 못했습니다.",
+          )}
+        />
+      );
+    }
+
+    if (mainTab === "quick") {
+      return (
+        <QuickOrder
+          key={`${stock.id}-quick`}
+          orderBookSnapshot={orderBookSnapshot}
+          orderContext={orderContext}
+          stock={stock}
+        />
+      );
+    }
+
+    if (normalTab === "sell") {
+      return (
+        <NormalSellOrder
+          key={`${stock.id}-sell-${selectedLimitPrice?.sequence ?? "initial"}`}
+          orderContext={orderContext}
+          selectedLimitPrice={selectedLimitPrice}
+          stock={stock}
+        />
+      );
+    }
+
+    if (normalTab === "pending") {
+      return (
+        <PendingOrders
+          key={`${stock.id}-pending`}
+          orderContext={orderContext}
+          stock={stock}
+        />
+      );
+    }
+
+    return (
+      <NormalBuyOrder
+        key={`${stock.id}-buy-${selectedLimitPrice?.sequence ?? "initial"}`}
+        orderBookSnapshot={orderBookSnapshot}
+        orderContext={orderContext}
+        selectedLimitPrice={selectedLimitPrice}
+        stock={stock}
+      />
+    );
+  };
+
   return (
-    <aside className="h-130 border-4 border-[#ff260d] bg-white p-6">
-      <Tab.Root defaultValue="normal" className="mb-5 gap-0 bg-transparent p-0">
-        <Tab.Item
-          value="normal"
-          className="rounded-none px-0 text-xl"
-          activeClassName="font-bold"
+    <section className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
+      <div className="shrink-0 px-5 pt-5">
+        <Tab.Root
+          className="gap-3 bg-transparent p-0 text-lg"
+          type="underline"
+          value={mainTab}
+          onValueChange={(value) => onMainTabChange(value as MainOrderTab)}
         >
-          일반주문
-        </Tab.Item>
-        <Tab.Item
-          value="quick"
-          className="rounded-none px-0 pl-1 text-xl"
-          activeClassName="font-bold"
-        >
-          간편주문
-        </Tab.Item>
-      </Tab.Root>
-
-      <div className="mb-3 flex h-9 items-center justify-between rounded-lg border-3 border-zinc-200 px-3 text-lg font-semibold text-zinc-950">
-        <span>주수입력</span>
-        <span className="text-zinc-300">- +</span>
-      </div>
-
-      <div className="mb-4 flex gap-2">
-        {["1주", "10주", "100주", "최대"].map((label) => (
-          <button
-            key={label}
-            className="h-9 flex-1 rounded-lg bg-zinc-300 text-base text-zinc-700"
-            type="button"
+          <Tab.Item
+            activeClassName="border-zinc-950 "
+            className="rounded-none px-0 pb-1"
+            value="normal"
           >
-            {label}
-          </button>
-        ))}
+            일반주문
+          </Tab.Item>
+          <Tab.Item
+            activeClassName="border-zinc-950 "
+            className="rounded-none px-0 pb-1"
+            value="quick"
+          >
+            간편주문
+          </Tab.Item>
+        </Tab.Root>
+
+        {mainTab === "normal" && (
+          <SegmentedControl
+            aria-label="일반 주문 유형"
+            className="mt-4 h-10 w-full rounded-lg p-1 text-lg"
+            value={normalTab}
+            onValueChange={(value) =>
+              onNormalTabChange(value as NormalOrderTab)
+            }
+          >
+            <SegmentedControl.Item
+              className="h-full flex-1 rounded-lg"
+              selected="text-red-500"
+              value="buy"
+            >
+              구매
+            </SegmentedControl.Item>
+            <SegmentedControl.Item
+              className="h-full flex-1 rounded-lg"
+              selected="text-sky-600"
+              value="sell"
+            >
+              판매
+            </SegmentedControl.Item>
+            <SegmentedControl.Item
+              className="h-full flex-1 rounded-lg"
+              selected="text-emerald-500"
+              value="pending"
+            >
+              대기
+            </SegmentedControl.Item>
+          </SegmentedControl>
+        )}
       </div>
 
-      <dl className="mb-5 grid grid-cols-2 gap-y-2 text-base">
-        <dt>판매가능</dt>
-        <dd className="text-right">0주</dd>
-        <dt>판매예상</dt>
-        <dd className="text-right">1주</dd>
-        <dt>구매가능</dt>
-        <dd className="text-right">
-          {formatPrice(stock.currentPrice * 10, stock.currencyCode)}
-        </dd>
-        <dt>구매예상</dt>
-        <dd className="text-right">
-          {formatPrice(stock.currentPrice, stock.currencyCode)}
-        </dd>
-      </dl>
-
-      <div className="mb-5 grid grid-cols-2 gap-2 text-base font-semibold">
-        <button
-          className="rounded-lg bg-sky-300 py-3 text-sky-700"
-          type="button"
-        >
-          현재가 판매
-        </button>
-        <button
-          className="rounded-lg bg-red-300 py-3 text-red-600"
-          type="button"
-        >
-          현재가 구매
-        </button>
-        <button
-          className="rounded-lg bg-sky-300 py-3 text-sky-700"
-          type="button"
-        >
-          시장가 판매
-        </button>
-        <button
-          className="rounded-lg bg-red-300 py-3 text-red-600"
-          type="button"
-        >
-          시장가 구매
-        </button>
-      </div>
-
-      <button
-        className="mb-6 w-full rounded-lg bg-zinc-300 py-3 text-lg font-semibold text-zinc-600"
-        type="button"
-      >
-        주문 1건 전체 취소
-      </button>
-
-      <dl className="grid grid-cols-2 gap-y-2 text-lg">
-        <dt>내 주식 평균</dt>
-        <dd className="text-right">{formatPrice(0, stock.currencyCode)}</dd>
-        <dt>현재 수익</dt>
-        <dd className="text-right">{formatPrice(0, stock.currencyCode)}</dd>
-      </dl>
-    </aside>
+      {renderPanelContent()}
+    </section>
   );
 }

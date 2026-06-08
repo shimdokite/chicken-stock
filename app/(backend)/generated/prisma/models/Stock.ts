@@ -530,6 +530,7 @@ export type StockWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Stock"> | Date | string
   portfolioItems?: Prisma.PortfolioItemListRelationFilter
   tradeOrders?: Prisma.TradeOrderListRelationFilter
+  tradeExecutions?: Prisma.TradeExecutionListRelationFilter
   transactions?: Prisma.PortfolioTransactionListRelationFilter
   dividendEvents?: Prisma.DividendEventListRelationFilter
   candles?: Prisma.StockCandleListRelationFilter
@@ -576,6 +577,7 @@ export type StockOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   portfolioItems?: Prisma.PortfolioItemOrderByRelationAggregateInput
   tradeOrders?: Prisma.TradeOrderOrderByRelationAggregateInput
+  tradeExecutions?: Prisma.TradeExecutionOrderByRelationAggregateInput
   transactions?: Prisma.PortfolioTransactionOrderByRelationAggregateInput
   dividendEvents?: Prisma.DividendEventOrderByRelationAggregateInput
   candles?: Prisma.StockCandleOrderByRelationAggregateInput
@@ -625,6 +627,7 @@ export type StockWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Stock"> | Date | string
   portfolioItems?: Prisma.PortfolioItemListRelationFilter
   tradeOrders?: Prisma.TradeOrderListRelationFilter
+  tradeExecutions?: Prisma.TradeExecutionListRelationFilter
   transactions?: Prisma.PortfolioTransactionListRelationFilter
   dividendEvents?: Prisma.DividendEventListRelationFilter
   candles?: Prisma.StockCandleListRelationFilter
@@ -753,6 +756,7 @@ export type StockCreateInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -799,6 +803,7 @@ export type StockUncheckedCreateInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -845,6 +850,7 @@ export type StockUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -891,6 +897,7 @@ export type StockUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -1292,6 +1299,20 @@ export type StockUpdateOneRequiredWithoutTradeOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StockUpdateToOneWithWhereWithoutTradeOrdersInput, Prisma.StockUpdateWithoutTradeOrdersInput>, Prisma.StockUncheckedUpdateWithoutTradeOrdersInput>
 }
 
+export type StockCreateNestedOneWithoutTradeExecutionsInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutTradeExecutionsInput, Prisma.StockUncheckedCreateWithoutTradeExecutionsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutTradeExecutionsInput
+  connect?: Prisma.StockWhereUniqueInput
+}
+
+export type StockUpdateOneRequiredWithoutTradeExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.StockCreateWithoutTradeExecutionsInput, Prisma.StockUncheckedCreateWithoutTradeExecutionsInput>
+  connectOrCreate?: Prisma.StockCreateOrConnectWithoutTradeExecutionsInput
+  upsert?: Prisma.StockUpsertWithoutTradeExecutionsInput
+  connect?: Prisma.StockWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockUpdateToOneWithWhereWithoutTradeExecutionsInput, Prisma.StockUpdateWithoutTradeExecutionsInput>, Prisma.StockUncheckedUpdateWithoutTradeExecutionsInput>
+}
+
 export type StockCreateNestedOneWithoutCandlesInput = {
   create?: Prisma.XOR<Prisma.StockCreateWithoutCandlesInput, Prisma.StockUncheckedCreateWithoutCandlesInput>
   connectOrCreate?: Prisma.StockCreateOrConnectWithoutCandlesInput
@@ -1357,6 +1378,7 @@ export type StockCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
@@ -1402,6 +1424,7 @@ export type StockUncheckedCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
@@ -1463,6 +1486,7 @@ export type StockUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
@@ -1508,6 +1532,7 @@ export type StockUncheckedUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
@@ -1552,6 +1577,7 @@ export type StockCreateWithoutPortfolioItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -1597,6 +1623,7 @@ export type StockUncheckedCreateWithoutPortfolioItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -1658,6 +1685,7 @@ export type StockUpdateWithoutPortfolioItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -1703,6 +1731,7 @@ export type StockUncheckedUpdateWithoutPortfolioItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -1749,6 +1778,7 @@ export type StockCreateWithoutDividendEventsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
@@ -1794,6 +1824,7 @@ export type StockUncheckedCreateWithoutDividendEventsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
@@ -1855,6 +1886,7 @@ export type StockUpdateWithoutDividendEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
@@ -1900,6 +1932,7 @@ export type StockUncheckedUpdateWithoutDividendEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
@@ -1945,6 +1978,7 @@ export type StockCreateWithoutFinancialMetricInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -1990,6 +2024,7 @@ export type StockUncheckedCreateWithoutFinancialMetricInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -2051,6 +2086,7 @@ export type StockUpdateWithoutFinancialMetricInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -2096,6 +2132,7 @@ export type StockUncheckedUpdateWithoutFinancialMetricInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -2141,6 +2178,7 @@ export type StockCreateWithoutFinancialStatementsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -2186,6 +2224,7 @@ export type StockUncheckedCreateWithoutFinancialStatementsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -2247,6 +2286,7 @@ export type StockUpdateWithoutFinancialStatementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -2292,6 +2332,7 @@ export type StockUncheckedUpdateWithoutFinancialStatementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -2337,6 +2378,7 @@ export type StockCreateWithoutEarningsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -2382,6 +2424,7 @@ export type StockUncheckedCreateWithoutEarningsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -2443,6 +2486,7 @@ export type StockUpdateWithoutEarningsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -2488,6 +2532,7 @@ export type StockUncheckedUpdateWithoutEarningsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -2532,6 +2577,7 @@ export type StockCreateWithoutTradeOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -2577,6 +2623,7 @@ export type StockUncheckedCreateWithoutTradeOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -2638,6 +2685,7 @@ export type StockUpdateWithoutTradeOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -2683,6 +2731,207 @@ export type StockUncheckedUpdateWithoutTradeOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUncheckedUpdateManyWithoutStockNestedInput
+}
+
+export type StockCreateWithoutTradeExecutionsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningCreateNestedManyWithoutStockInput
+}
+
+export type StockUncheckedCreateWithoutTradeExecutionsInput = {
+  id: number
+  ticker: string
+  name: string
+  imageUrl: string
+  sector: $Enums.StockSector
+  riskLevel: $Enums.StockRiskLevel
+  theme: $Enums.StockTheme
+  countryCode: string
+  currencyCode: $Enums.CurrencyCode
+  currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w: runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap: runtime.Decimal | runtime.DecimalJsLike | number | string
+  per: runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps: runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus: $Enums.StockMarketStatus
+  debtRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio: runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate: Date | string
+  estimatedOperatingProfit: string
+  estimatedRevenue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount: number
+  dividendPerShare: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
+  tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
+  dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
+  candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
+  financialMetric?: Prisma.StockFinancialMetricUncheckedCreateNestedOneWithoutStockInput
+  financialStatements?: Prisma.StockFinancialStatementUncheckedCreateNestedManyWithoutStockInput
+  earnings?: Prisma.StockEarningUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockCreateOrConnectWithoutTradeExecutionsInput = {
+  where: Prisma.StockWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockCreateWithoutTradeExecutionsInput, Prisma.StockUncheckedCreateWithoutTradeExecutionsInput>
+}
+
+export type StockUpsertWithoutTradeExecutionsInput = {
+  update: Prisma.XOR<Prisma.StockUpdateWithoutTradeExecutionsInput, Prisma.StockUncheckedUpdateWithoutTradeExecutionsInput>
+  create: Prisma.XOR<Prisma.StockCreateWithoutTradeExecutionsInput, Prisma.StockUncheckedCreateWithoutTradeExecutionsInput>
+  where?: Prisma.StockWhereInput
+}
+
+export type StockUpdateToOneWithWhereWithoutTradeExecutionsInput = {
+  where?: Prisma.StockWhereInput
+  data: Prisma.XOR<Prisma.StockUpdateWithoutTradeExecutionsInput, Prisma.StockUncheckedUpdateWithoutTradeExecutionsInput>
+}
+
+export type StockUpdateWithoutTradeExecutionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
+  dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
+  candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
+  orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
+  financialMetric?: Prisma.StockFinancialMetricUpdateOneWithoutStockNestedInput
+  financialStatements?: Prisma.StockFinancialStatementUpdateManyWithoutStockNestedInput
+  earnings?: Prisma.StockEarningUpdateManyWithoutStockNestedInput
+}
+
+export type StockUncheckedUpdateWithoutTradeExecutionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  ticker?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.EnumStockSectorFieldUpdateOperationsInput | $Enums.StockSector
+  riskLevel?: Prisma.EnumStockRiskLevelFieldUpdateOperationsInput | $Enums.StockRiskLevel
+  theme?: Prisma.EnumStockThemeFieldUpdateOperationsInput | $Enums.StockTheme
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  currencyCode?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  previousClose?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  changeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayHigh?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dayLow?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  low52w?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  volume?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tradingValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketCap?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  per?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  eps?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  marketStatus?: Prisma.EnumStockMarketStatusFieldUpdateOperationsInput | $Enums.StockMarketStatus
+  debtRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currentRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestCoverageRatio?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  announcementDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  estimatedOperatingProfit?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedRevenue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dividendPerShare?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dividendYield?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
+  tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -2729,6 +2978,7 @@ export type StockCreateWithoutCandlesInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotCreateNestedManyWithoutStockInput
@@ -2774,6 +3024,7 @@ export type StockUncheckedCreateWithoutCandlesInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedCreateNestedManyWithoutStockInput
@@ -2835,6 +3086,7 @@ export type StockUpdateWithoutCandlesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUpdateManyWithoutStockNestedInput
@@ -2880,6 +3132,7 @@ export type StockUncheckedUpdateWithoutCandlesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   orderBookSnapshots?: Prisma.OrderBookSnapshotUncheckedUpdateManyWithoutStockNestedInput
@@ -2925,6 +3178,7 @@ export type StockCreateWithoutOrderBookSnapshotsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleCreateNestedManyWithoutStockInput
@@ -2970,6 +3224,7 @@ export type StockUncheckedCreateWithoutOrderBookSnapshotsInput = {
   updatedAt?: Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedCreateNestedManyWithoutStockInput
   tradeOrders?: Prisma.TradeOrderUncheckedCreateNestedManyWithoutStockInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedCreateNestedManyWithoutStockInput
   transactions?: Prisma.PortfolioTransactionUncheckedCreateNestedManyWithoutStockInput
   dividendEvents?: Prisma.DividendEventUncheckedCreateNestedManyWithoutStockInput
   candles?: Prisma.StockCandleUncheckedCreateNestedManyWithoutStockInput
@@ -3031,6 +3286,7 @@ export type StockUpdateWithoutOrderBookSnapshotsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUpdateManyWithoutStockNestedInput
@@ -3076,6 +3332,7 @@ export type StockUncheckedUpdateWithoutOrderBookSnapshotsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   portfolioItems?: Prisma.PortfolioItemUncheckedUpdateManyWithoutStockNestedInput
   tradeOrders?: Prisma.TradeOrderUncheckedUpdateManyWithoutStockNestedInput
+  tradeExecutions?: Prisma.TradeExecutionUncheckedUpdateManyWithoutStockNestedInput
   transactions?: Prisma.PortfolioTransactionUncheckedUpdateManyWithoutStockNestedInput
   dividendEvents?: Prisma.DividendEventUncheckedUpdateManyWithoutStockNestedInput
   candles?: Prisma.StockCandleUncheckedUpdateManyWithoutStockNestedInput
@@ -3092,6 +3349,7 @@ export type StockUncheckedUpdateWithoutOrderBookSnapshotsInput = {
 export type StockCountOutputType = {
   portfolioItems: number
   tradeOrders: number
+  tradeExecutions: number
   transactions: number
   dividendEvents: number
   candles: number
@@ -3103,6 +3361,7 @@ export type StockCountOutputType = {
 export type StockCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   portfolioItems?: boolean | StockCountOutputTypeCountPortfolioItemsArgs
   tradeOrders?: boolean | StockCountOutputTypeCountTradeOrdersArgs
+  tradeExecutions?: boolean | StockCountOutputTypeCountTradeExecutionsArgs
   transactions?: boolean | StockCountOutputTypeCountTransactionsArgs
   dividendEvents?: boolean | StockCountOutputTypeCountDividendEventsArgs
   candles?: boolean | StockCountOutputTypeCountCandlesArgs
@@ -3133,6 +3392,13 @@ export type StockCountOutputTypeCountPortfolioItemsArgs<ExtArgs extends runtime.
  */
 export type StockCountOutputTypeCountTradeOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TradeOrderWhereInput
+}
+
+/**
+ * StockCountOutputType without action
+ */
+export type StockCountOutputTypeCountTradeExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeExecutionWhereInput
 }
 
 /**
@@ -3215,6 +3481,7 @@ export type StockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   portfolioItems?: boolean | Prisma.Stock$portfolioItemsArgs<ExtArgs>
   tradeOrders?: boolean | Prisma.Stock$tradeOrdersArgs<ExtArgs>
+  tradeExecutions?: boolean | Prisma.Stock$tradeExecutionsArgs<ExtArgs>
   transactions?: boolean | Prisma.Stock$transactionsArgs<ExtArgs>
   dividendEvents?: boolean | Prisma.Stock$dividendEventsArgs<ExtArgs>
   candles?: boolean | Prisma.Stock$candlesArgs<ExtArgs>
@@ -3340,6 +3607,7 @@ export type StockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type StockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   portfolioItems?: boolean | Prisma.Stock$portfolioItemsArgs<ExtArgs>
   tradeOrders?: boolean | Prisma.Stock$tradeOrdersArgs<ExtArgs>
+  tradeExecutions?: boolean | Prisma.Stock$tradeExecutionsArgs<ExtArgs>
   transactions?: boolean | Prisma.Stock$transactionsArgs<ExtArgs>
   dividendEvents?: boolean | Prisma.Stock$dividendEventsArgs<ExtArgs>
   candles?: boolean | Prisma.Stock$candlesArgs<ExtArgs>
@@ -3357,6 +3625,7 @@ export type $StockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     portfolioItems: Prisma.$PortfolioItemPayload<ExtArgs>[]
     tradeOrders: Prisma.$TradeOrderPayload<ExtArgs>[]
+    tradeExecutions: Prisma.$TradeExecutionPayload<ExtArgs>[]
     transactions: Prisma.$PortfolioTransactionPayload<ExtArgs>[]
     dividendEvents: Prisma.$DividendEventPayload<ExtArgs>[]
     candles: Prisma.$StockCandlePayload<ExtArgs>[]
@@ -3796,6 +4065,7 @@ export interface Prisma__StockClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   portfolioItems<T extends Prisma.Stock$portfolioItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$portfolioItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PortfolioItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tradeOrders<T extends Prisma.Stock$tradeOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$tradeOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeExecutions<T extends Prisma.Stock$tradeExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$tradeExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Stock$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PortfolioTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dividendEvents<T extends Prisma.Stock$dividendEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$dividendEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DividendEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   candles<T extends Prisma.Stock$candlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stock$candlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockCandlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4299,6 +4569,30 @@ export type Stock$tradeOrdersArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.TradeOrderScalarFieldEnum | Prisma.TradeOrderScalarFieldEnum[]
+}
+
+/**
+ * Stock.tradeExecutions
+ */
+export type Stock$tradeExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeExecution
+   */
+  select?: Prisma.TradeExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeExecution
+   */
+  omit?: Prisma.TradeExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeExecutionInclude<ExtArgs> | null
+  where?: Prisma.TradeExecutionWhereInput
+  orderBy?: Prisma.TradeExecutionOrderByWithRelationInput | Prisma.TradeExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.TradeExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeExecutionScalarFieldEnum | Prisma.TradeExecutionScalarFieldEnum[]
 }
 
 /**

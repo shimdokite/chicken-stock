@@ -410,6 +410,7 @@ export const ModelName = {
   StockFinancialStatement: 'StockFinancialStatement',
   StockEarning: 'StockEarning',
   TradeOrder: 'TradeOrder',
+  TradeExecution: 'TradeExecution',
   StockCandle: 'StockCandle',
   OrderBookSnapshot: 'OrderBookSnapshot',
   OrderBookLevel: 'OrderBookLevel',
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "refreshToken" | "article" | "quiz" | "userQuizSubmission" | "educationSummary" | "userEducationLevelProgress" | "userArticleCompletion" | "agent" | "agentStockSector" | "portfolio" | "portfolioTransaction" | "portfolioItem" | "dividendEvent" | "portfolioDividend" | "stock" | "stockFinancialMetric" | "stockFinancialStatement" | "stockEarning" | "tradeOrder" | "stockCandle" | "orderBookSnapshot" | "orderBookLevel" | "marketIndex" | "marketIndexCandle"
+    modelProps: "user" | "refreshToken" | "article" | "quiz" | "userQuizSubmission" | "educationSummary" | "userEducationLevelProgress" | "userArticleCompletion" | "agent" | "agentStockSector" | "portfolio" | "portfolioTransaction" | "portfolioItem" | "dividendEvent" | "portfolioDividend" | "stock" | "stockFinancialMetric" | "stockFinancialStatement" | "stockEarning" | "tradeOrder" | "tradeExecution" | "stockCandle" | "orderBookSnapshot" | "orderBookLevel" | "marketIndex" | "marketIndexCandle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1914,6 +1915,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TradeExecution: {
+      payload: Prisma.$TradeExecutionPayload<ExtArgs>
+      fields: Prisma.TradeExecutionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TradeExecutionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TradeExecutionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        findFirst: {
+          args: Prisma.TradeExecutionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TradeExecutionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        findMany: {
+          args: Prisma.TradeExecutionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>[]
+        }
+        create: {
+          args: Prisma.TradeExecutionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        createMany: {
+          args: Prisma.TradeExecutionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TradeExecutionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>[]
+        }
+        delete: {
+          args: Prisma.TradeExecutionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        update: {
+          args: Prisma.TradeExecutionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        deleteMany: {
+          args: Prisma.TradeExecutionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TradeExecutionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TradeExecutionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>[]
+        }
+        upsert: {
+          args: Prisma.TradeExecutionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeExecutionPayload>
+        }
+        aggregate: {
+          args: Prisma.TradeExecutionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTradeExecution>
+        }
+        groupBy: {
+          args: Prisma.TradeExecutionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeExecutionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TradeExecutionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeExecutionCountAggregateOutputType> | number
+        }
+      }
+    }
     StockCandle: {
       payload: Prisma.$StockCandlePayload<ExtArgs>
       fields: Prisma.StockCandleFieldRefs
@@ -2672,6 +2747,22 @@ export const TradeOrderScalarFieldEnum = {
 export type TradeOrderScalarFieldEnum = (typeof TradeOrderScalarFieldEnum)[keyof typeof TradeOrderScalarFieldEnum]
 
 
+export const TradeExecutionScalarFieldEnum = {
+  id: 'id',
+  stockId: 'stockId',
+  ticker: 'ticker',
+  buyOrderId: 'buyOrderId',
+  sellOrderId: 'sellOrderId',
+  price: 'price',
+  quantity: 'quantity',
+  aggressorSide: 'aggressorSide',
+  executedAt: 'executedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeExecutionScalarFieldEnum = (typeof TradeExecutionScalarFieldEnum)[keyof typeof TradeExecutionScalarFieldEnum]
+
+
 export const StockCandleScalarFieldEnum = {
   ticker: 'ticker',
   intervalCode: 'intervalCode',
@@ -3259,6 +3350,7 @@ export type GlobalOmitConfig = {
   stockFinancialStatement?: Prisma.StockFinancialStatementOmit
   stockEarning?: Prisma.StockEarningOmit
   tradeOrder?: Prisma.TradeOrderOmit
+  tradeExecution?: Prisma.TradeExecutionOmit
   stockCandle?: Prisma.StockCandleOmit
   orderBookSnapshot?: Prisma.OrderBookSnapshotOmit
   orderBookLevel?: Prisma.OrderBookLevelOmit
