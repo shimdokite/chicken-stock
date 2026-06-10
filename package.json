@@ -11,7 +11,10 @@
     "prisma:validate": "prisma validate --schema=\"app/(backend)/prisma/schema.prisma\"",
     "prisma:migrate": "prisma migrate dev --schema=\"app/(backend)/prisma/schema.prisma\"",
     "prisma:seed": "prisma db execute --schema=\"app/(backend)/prisma/schema.prisma\" --file=\"app/(backend)/prisma/seed.sql\"",
-    "prisma:studio": "prisma studio --schema=\"app/(backend)/prisma/schema.prisma\""
+    "prisma:studio": "prisma studio --schema=\"app/(backend)/prisma/schema.prisma\"",
+    "agent:trade": "curl -X POST http://localhost:3000/api/internal/agents/run-trade",
+    "agent:rule": "curl -X POST \"http://localhost:3000/api/internal/agents/run-trade?adk=false\"",
+    "agent:match": "curl -X POST http://localhost:3000/api/internal/agents/match-pending"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
