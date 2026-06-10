@@ -10,6 +10,9 @@ const agentTraceExcludes = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./app/(backend)/generated/prisma/**/*"],
+  },
   outputFileTracingExcludes: {
     "/api/internal/agents/run-trade": agentTraceExcludes,
     "/api/internal/agents/scheduler": agentTraceExcludes,
