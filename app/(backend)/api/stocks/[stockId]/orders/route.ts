@@ -22,6 +22,11 @@ import {
   matchStockOrder,
   StockOrderMatchingError,
 } from "@/app/(backend)/lib/stock-order-matching";
+import {
+  createStockOrderForUser,
+  serializeTradeOrder as serializeServiceTradeOrder,
+  StockOrderServiceError,
+} from "@/app/(backend)/lib/stock-order-service";
 import { prisma } from "@/app/(backend)/lib/prisma";
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
 import {
@@ -408,156 +413,31 @@ export async function POST(request: NextRequest, { params }: StockOrderParams) {
   }
 
   try {
-    const orderId = createOrderId();
-    const orderedAt = new Date();
-    const order = await runSerializableOrderTransaction(async (tx) => {
-      await lockStockForOrderProcessing(tx, parsedStockId);
-
-      const stock = await tx.stock.findUnique({
-        select: {
-          countryCode: true,
-          currencyCode: true,
-          currentPrice: true,
-          id: true,
-          imageUrl: true,
-          name: true,
-          ticker: true,
-        },
-        where: {
-          id: parsedStockId,
-        },
-      });
-
-      if (!stock) {
-        throw new StockOrderError("종목을 찾을 수 없습니다.", 404);
-      }
-
-      const portfolio = await getLockedPortfolioForUser(
-        tx,
-        userId,
-        parsedStockId,
-      );
-
-      if (!portfolio) {
-        throw new StockOrderError("계좌가 없습니다.", 404);
-      }
-
-      const pricePerShare =
-        (payload.orderPriceType === "LIMIT"
-          ? payload.pricePerShare
-          : stock.currentPrice.toDecimalPlaces(2)) ??
-        stock.currentPrice.toDecimalPlaces(2);
-      const orderAmount =
-        payload.type === TradeOrderType.BUY &&
-        payload.orderPriceType === "MARKET"
-          ? await getEstimatedMarketOrderAmount(tx, {
-              currentPrice: stock.currentPrice,
-              portfolioId: portfolio.id,
-              quantity: payload.quantity,
-              stockId: parsedStockId,
-              type: payload.type,
-            })
-          : pricePerShare.mul(payload.quantity).toDecimalPlaces(2);
-
-      if (payload.type === TradeOrderType.BUY) {
-        const pendingBuyOrders = await tx.tradeOrder.findMany({
-          where: {
-            currencyCode: stock.currencyCode,
-            portfolioId: portfolio.id,
-            status: TradeOrderStatus.PENDING,
-            type: TradeOrderType.BUY,
-          },
-        });
-        const availableBuyAmount = getNonNegativeDecimal(
-          getCashBalance(portfolio, stock.currencyCode).sub(
-            sumPendingBuyAmount(pendingBuyOrders),
-          ),
-        );
-
-        if (orderAmount.gt(availableBuyAmount)) {
-          throw new StockOrderError("구매 가능 금액이 부족합니다.", 400);
-        }
-      } else {
-        const holding = portfolio.items[0];
-
-        if (!holding || holding.quantity <= 0) {
-          throw new StockOrderError("판매할 주식이 없습니다.", 400);
-        }
-
-        const pendingSellOrders = await tx.tradeOrder.findMany({
-          where: {
-            portfolioId: portfolio.id,
-            status: TradeOrderStatus.PENDING,
-            stockId: parsedStockId,
-            type: TradeOrderType.SELL,
-          },
-        });
-        const pendingSellQuantity = pendingSellOrders.reduce(
-          (sum, order) => sum + order.remainingQuantity,
-          0,
-        );
-        const availableSellQuantity = holding.quantity - pendingSellQuantity;
-
-        if (payload.quantity > availableSellQuantity) {
-          throw new StockOrderError("판매 가능 수량이 부족합니다.", 400);
-        }
-      }
-
-      const createdOrder = await tx.tradeOrder.create({
-        data: {
-          currencyCode: stock.currencyCode,
-          executedAt: null,
-          executedPrice: null,
-          filledQuantity: 0,
-          orderId,
-          orderedAt,
-          portfolioId: portfolio.id,
-          pricePerShare,
-          quantity: payload.quantity,
-          remainingQuantity: payload.quantity,
-          status: TradeOrderStatus.PENDING,
-          stockId: parsedStockId,
-          ticker: stock.ticker,
-          type: payload.type,
-        },
-      });
-
-      return (
-        (await matchStockOrder(tx, {
-          executedAt: orderedAt,
-          orderId: createdOrder.orderId,
-          orderPriceType: payload.orderPriceType,
-          stock,
-        })) ?? createdOrder
-      );
+    const order = await createStockOrderForUser({
+      orderPriceType: payload.orderPriceType,
+      pricePerShare: payload.pricePerShare,
+      quantity: payload.quantity,
+      stockId: parsedStockId,
+      type: payload.type,
+      userId,
     });
-
-    const reason: StockSyncReason =
-      order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED";
-    const [sync] = await Promise.all([
-      getSafeStockMutationSync({
-        reason,
-        stockId: parsedStockId,
-        userId,
-      }),
-      publishOrderFilledEventsForOrder(orderId, { since: orderedAt }),
-    ]);
-
-    scheduleStockUpdated(parsedStockId, {
-      reason,
-      ticker: order.ticker,
+    const sync = await getSafeStockMutationSync({
+      reason: order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED",
+      stockId: parsedStockId,
+      userId,
     });
 
     return NextResponse.json({
       ok: true,
       data: {
-        order: serializeTradeOrder(order),
+        order: serializeServiceTradeOrder(order),
         sync,
       },
     });
   } catch (error) {
     if (
       error instanceof StockOrderError ||
+      error instanceof StockOrderServiceError ||
       error instanceof StockOrderMatchingError
     ) {
       return createStockOrderErrorResponse(error.message, error.status);
