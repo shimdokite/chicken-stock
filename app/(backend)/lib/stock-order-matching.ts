@@ -712,7 +712,7 @@ function getOppositeOrderType(type: TradeOrderType) {
 }
 
 function getTradeOrderTypeDbValue(type: TradeOrderType) {
-  return type === TradeOrderType.BUY ? "매수" : "매도";
+  return type === TradeOrderType.BUY ? "BUY" : "SELL";
 }
 
 async function getMatchCandidates(

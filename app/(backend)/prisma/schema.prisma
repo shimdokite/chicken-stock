@@ -37,8 +37,8 @@ enum UserType {
 }
 
 enum TradeOrderType {
-  BUY  @map("매수") // 매수
-  SELL @map("매도") // 매도
+  BUY // 매수
+  SELL // 매도
 
   @@map("Trade_order_type")
 }
@@ -52,8 +52,8 @@ enum TradeOrderStatus {
 }
 
 enum OrderBookSide {
-  ASK @map("매도") // 매도 호가
-  BID @map("매수") // 매수 호가
+  ASK // 매도 호가
+  BID // 매수 호가
 
   @@map("Order_book_side")
 }
