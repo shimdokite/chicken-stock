@@ -188,12 +188,26 @@ function getRankedLevels(activity: OrderBookActivity) {
   return [...asks, ...bids];
 }
 
+function serializeSnapshotLevels(snapshot: OrderBookSnapshotSource) {
+  return snapshot.levels.map((level) => ({
+    levelRank: level.levelRank,
+    orderCount: 0,
+    price: toNumber(level.price),
+    quantity: toNumber(level.quantity),
+    side: level.side,
+  }));
+}
+
 export function serializeOrderBookSnapshot(
   snapshot: OrderBookSnapshotSource,
   activity: OrderBookActivity = EMPTY_ORDER_BOOK_ACTIVITY,
   market?: OrderBookMarketSource,
 ): StockOrderBookSnapshotData {
-  const levels = getRankedLevels(activity);
+  const rankedActivityLevels = getRankedLevels(activity);
+  const levels =
+    rankedActivityLevels.length > 0
+      ? rankedActivityLevels
+      : serializeSnapshotLevels(snapshot);
   const totalAskSize = levels
     .filter((level) => level.side === "ASK")
     .reduce((sum, level) => sum + level.quantity, 0);

@@ -244,7 +244,7 @@ async function getStockShellSource(stockId: number) {
 
 function serializeStockDetailData(
   stock: NonNullable<Awaited<ReturnType<typeof getStockShellSource>>>,
-  orderBookActivity: Awaited<ReturnType<typeof getOrderBookActivity>>,
+  orderBookActivity: Awaited<ReturnType<typeof getOrderBookActivity>> | null,
   analyticsData: StockAnalyticsData,
 ): StockDetailData {
   const [orderBookSnapshot] = stock.orderBookSnapshots;
@@ -293,8 +293,12 @@ function serializeStockDetailData(
       }))
       .reverse(),
     orderBookSnapshot: orderBookSnapshot
-      ? serializeOrderBookSnapshot(orderBookSnapshot, orderBookActivity, stock)
-      : hasOrderBookActivity(orderBookActivity)
+      ? serializeOrderBookSnapshot(
+          orderBookSnapshot,
+          orderBookActivity ?? undefined,
+          stock,
+        )
+      : orderBookActivity && hasOrderBookActivity(orderBookActivity)
         ? serializeOrderBookActivitySnapshot(orderBookActivity, stock)
         : null,
     ...analyticsData,
@@ -312,16 +316,11 @@ export async function getStockPageShellData(
     return null;
   }
 
-  const orderBookStartedAt = performance.now();
-  const orderBookActivity = await getOrderBookActivity(stock.id);
-  logStockDetailTiming("shell.orderBookActivity", orderBookStartedAt, {
-    stockId,
-  });
   const valuationBaseDate = getLatestCandleBaseDate(stock.candles);
 
   return serializeStockDetailData(
     stock,
-    orderBookActivity,
+    null,
     getEmptyAnalyticsData(valuationBaseDate),
   );
 }
