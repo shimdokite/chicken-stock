@@ -2,12 +2,15 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import type { ToasterProps } from "sonner";
 
 const Toaster = dynamic(() => import("sonner").then((mod) => mod.Toaster), {
   ssr: false,
 });
 
-export default function ToastProvider() {
+type ToastProviderProps = Pick<ToasterProps, "position">;
+
+export default function ToastProvider({ position }: ToastProviderProps) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -29,5 +32,5 @@ export default function ToastProvider() {
     };
   }, []);
 
-  return isReady ? <Toaster /> : null;
+  return isReady ? <Toaster position={position} /> : null;
 }

@@ -109,7 +109,7 @@ export default function OrderPanel({
 
   return (
     <section className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
-      <div className="shrink-0 px-5 pt-5">
+      <div className="shrink-0 px-4 pt-3">
         <Tab.Root
           className="gap-3 bg-transparent p-0 text-lg"
           type="underline"

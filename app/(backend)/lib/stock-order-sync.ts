@@ -187,6 +187,8 @@ export async function getStockOrderContext(userId: bigint, stockId: number) {
     holding?.totalInvested ??
     averagePrice.mul(holdingQuantity).toDecimalPlaces(2);
   const currentProfit = currentAmount.sub(totalInvested).toDecimalPlaces(2);
+  const fee = holding?.fee ?? new Prisma.Decimal(0);
+  const saleTax = holding?.saleTax ?? new Prisma.Decimal(0);
 
   return {
     buyingPower: serializeDecimalNumber(buyingPower),
@@ -197,7 +199,9 @@ export async function getStockOrderContext(userId: bigint, stockId: number) {
       currentProfitRate: serializeDecimalNumber(
         getProfitRate(currentProfit, totalInvested),
       ),
+      fee: serializeDecimalNumber(fee),
       quantity: holdingQuantity,
+      saleTax: serializeDecimalNumber(saleTax),
       sellableQuantity,
       totalInvested: serializeDecimalNumber(totalInvested),
     },

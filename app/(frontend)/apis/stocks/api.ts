@@ -88,7 +88,9 @@ export type StockOrderContext = {
     currentAmount: number;
     currentProfit: number;
     currentProfitRate: number;
+    fee: number;
     quantity: number;
+    saleTax: number;
     sellableQuantity: number;
     totalInvested: number;
   };

@@ -126,7 +126,7 @@ function OrderBookPanel({
 
   return (
     <section className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
-      <p className="px-4 pt-3 text-lg">호가</p>
+      <p className="px-4 pt-3 text-lg font-medium">호가</p>
 
       <div className="grid min-h-0 flex-1 grid-cols-[34%_31%_35%] grid-rows-12">
         <OrderCountColumn

@@ -29,6 +29,8 @@ import {
   formatPlainPrice,
   formatPrice,
 } from "../../utils/stock/stock-detail";
+import MyStockPanel from "./analytics/my-stock-panel";
+import OrderHistoryPanel from "./analytics/order-history-panel";
 
 type StockDetailProps = StockOnlyProps & {
   activeTab: StockDetailTab;
@@ -263,20 +265,10 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
       {activeTab === "portfolio-info" && (
         <div className="grid grid-cols-[minmax(0,1fr)_20rem_20rem] gap-7">
           <InfoPanel stock={displayStock} />
-          <OrderBookPanel
-            initialOrderBookSnapshot={liveStock.orderBookSnapshot}
-            onPriceSelect={handleOrderBookPriceSelect}
-            selectedPrice={selectedDisplayPrice}
+          <MyStockPanel stock={displayStock} />
+          <OrderHistoryPanel
             sourceCurrencyCode={liveStock.currencyCode}
             stock={displayStock}
-          />
-          <OrderPanel
-            mainTab={orderPanelMainTab}
-            normalTab={orderPanelNormalTab}
-            selectedLimitPrice={selectedLimitPrice}
-            stock={liveStock}
-            onMainTabChange={setOrderPanelMainTab}
-            onNormalTabChange={setOrderPanelNormalTab}
           />
         </div>
       )}

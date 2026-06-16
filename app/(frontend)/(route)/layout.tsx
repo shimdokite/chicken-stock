@@ -5,6 +5,7 @@ import QueryProvider from "../components/providers/query-provider";
 import RealtimeBridge from "../components/providers/realtime-bridge";
 import ToastProvider from "../components/providers/toast-provider";
 import Header from "../components/header";
+import MiniPortfolio from "../components/mini-portfolio";
 
 const atoz = localFont({
   src: [
@@ -54,10 +55,13 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <QueryProvider>
           <RealtimeBridge />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 
           <Header />
           {children}
-          <ToastProvider />
+
+          <MiniPortfolio />
+          <ToastProvider position="top-right" />
         </QueryProvider>
       </body>
     </html>
