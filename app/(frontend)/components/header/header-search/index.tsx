@@ -117,7 +117,7 @@ export default function HeaderSearch() {
 
       <Popover.Content
         align="right"
-        className="h-42.5 w-[calc(100vw-2.5rem)] max-w-[650px] px-3 pt-2"
+        className="h-42.5 w-[calc(100vw-2.5rem)] max-w-162.5 px-3 pt-2"
       >
         <Input
           aria-label="최근 검색"

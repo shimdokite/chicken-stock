@@ -96,7 +96,7 @@ export default function EduProgress() {
         {bubbleText && (
           <div className="absolute top-[11%] left-[58%] h-20 w-20 md:h-28 md:w-32">
             <Image
-              src="/images/main/rounded-speech-bubble.png"
+              src="/images/main/rounded-speech-bubble.webp"
               alt=""
               fill
               sizes="192px"
