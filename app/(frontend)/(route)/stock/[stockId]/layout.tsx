@@ -99,7 +99,7 @@ export default async function StockDetailLayout({
     url,
     description,
     isPartOf: {
-      "@type": "WebApplication",
+      "@type": "WebSite",
       name: SITE_NAME,
       url: `${SITE_URL}/`,
     },

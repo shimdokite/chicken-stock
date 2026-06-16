@@ -23,7 +23,7 @@ const jsonLd = {
   description:
     "주식 기초 개념, 투자 지표, 시장 이해를 위한 학습 콘텐츠를 단계별로 확인할 수 있는 페이지입니다.",
   isPartOf: {
-    "@type": "WebApplication",
+    "@type": "WebSite",
     name: SITE_NAME,
     url: `${new URL(url).origin}/`,
   },

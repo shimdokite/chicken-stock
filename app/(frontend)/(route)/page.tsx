@@ -41,14 +41,12 @@ export const metadata: Metadata = {
   },
 };
 
-const webApplicationJsonLd = {
+const websiteJsonLd = {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
+  "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
   description: HOME_DESCRIPTION,
-  applicationCategory: "FinanceApplication",
-  operatingSystem: "Web",
 };
 
 export default function Home() {
@@ -57,7 +55,7 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webApplicationJsonLd),
+          __html: JSON.stringify(websiteJsonLd),
         }}
       />
 
