@@ -5,7 +5,7 @@ import { getCachedStockPageShellData } from "./page-data";
 
 const SITE_URL = "https://chicken-stock-app.vercel.app";
 const SITE_NAME = "Chicken Stock";
-const OG_IMAGE_PATH = "/og-image";
+const OG_IMAGE_PATH = "/og-image?v=20260616-logo";
 
 type StockDetailRouteProps = {
   params: Promise<{

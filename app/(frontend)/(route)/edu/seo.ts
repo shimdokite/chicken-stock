@@ -6,7 +6,7 @@ import { isPositiveIntegerString } from "../../utils/number";
 
 export const SITE_URL = "https://chicken-stock-app.vercel.app";
 export const SITE_NAME = "Chicken Stock";
-export const OG_IMAGE_PATH = "/og-image";
+export const OG_IMAGE_PATH = "/og-image?v=20260616-logo";
 
 export function createCanonicalUrl(pathname: string, query?: URLSearchParams) {
   const url = new URL(pathname, SITE_URL);

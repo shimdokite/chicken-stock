@@ -9,7 +9,7 @@ const SITE_NAME = "Chicken Stock";
 const HOME_TITLE = "Chicken Stock - 가상 주식 투자 학습 플랫폼";
 const HOME_DESCRIPTION =
   "Chicken Stock은 모의 투자, 투자 퀴즈, 학습 콘텐츠를 통해 주식 투자를 연습하고 경험할 수 있는 가상 주식 투자 플랫폼입니다.";
-const OG_IMAGE_PATH = "/og-image";
+const OG_IMAGE_PATH = "/og-image?v=20260616-logo";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
