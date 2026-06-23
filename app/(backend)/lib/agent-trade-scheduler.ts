@@ -27,7 +27,11 @@ async function runScheduledAgentTrade() {
   try {
     const job = await runAgentTradeJob({
       includeAdk: true,
+      maxExecutableIntents: 5,
+      openMarketsOnly: true,
+      recordSkippedIntents: false,
       source: "scheduler",
+      stockLimit: 30,
     });
 
     if (job.status === "SKIPPED") {
@@ -48,7 +52,7 @@ async function runScheduledAgentTrade() {
 export function startAgentTradeScheduler() {
   if (!isIntervalFallbackEnabled()) {
     console.info("Agent trade interval fallback is disabled; use external scheduler", {
-      targetPath: "/api/internal/agents/run-trade?source=scheduler",
+      targetPath: "/api/internal/agents/run-trade?source=scheduler&limit=5&stockLimit=30",
     });
     return;
   }
@@ -82,7 +86,7 @@ export function getAgentTradeSchedulerStatus() {
 
   return {
     externalScheduler: {
-      targetPath: "/api/internal/agents/run-trade?source=scheduler",
+      targetPath: "/api/internal/agents/run-trade?source=scheduler&limit=5&stockLimit=30",
     },
     intervalFallback: {
       enabled: isIntervalFallbackEnabled(),
