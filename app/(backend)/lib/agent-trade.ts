@@ -46,6 +46,8 @@ type AdkStockCandidate = {
 };
 export type AgentTradeRunOptions = {
   includeAdk?: boolean;
+  maxExecutableIntents?: number;
+  recordSkippedIntents?: boolean;
 };
 export type AgentTradeRunResult = {
   adkCandidateLimit: number;
@@ -54,6 +56,7 @@ export type AgentTradeRunResult = {
   adkSkippedReason?: "ADK_TIME_WINDOW_CLOSED" | "NO_MARKET_OPEN_CANDIDATES";
   executedCount: number;
   failedCount: number;
+  maxExecutableIntents: number;
   rejectedCount: number;
   ruleBasedDecisionCount: number;
   skippedCount: number;
@@ -89,6 +92,12 @@ function getIntegerEnv(name: string, fallback: number) {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function getPositiveInteger(value: number | undefined, fallback: number) {
+  return typeof value === "number" && Number.isInteger(value) && value > 0
+    ? value
+    : fallback;
 }
 
 function toNumber(value: { toString: () => string } | number | null | undefined) {
@@ -1076,12 +1085,15 @@ async function recordAdkFailures(
   }
 }
 
-function capExecutableIntents(intents: AgentTradeIntent[]) {
+function capExecutableIntents(
+  intents: AgentTradeIntent[],
+  maxExecutableIntents = MAX_EXECUTABLE_INTENTS_PER_RUN,
+) {
   const executableKeys = new Set(
     intents
       .filter((intent) => intent.side !== "HOLD")
       .sort((left, right) => (right.score ?? 0) - (left.score ?? 0))
-      .slice(0, MAX_EXECUTABLE_INTENTS_PER_RUN)
+      .slice(0, maxExecutableIntents)
       .map((intent) => getDecisionKey(intent)),
   );
 
@@ -1129,18 +1141,53 @@ async function mapWithConcurrency<T, R>(
 
 export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
   const includeAdk = options.includeAdk ?? true;
+  const maxExecutableIntents = getPositiveInteger(
+    options.maxExecutableIntents,
+    MAX_EXECUTABLE_INTENTS_PER_RUN,
+  );
+  const recordSkippedIntents = options.recordSkippedIntents ?? true;
+  const startedAt = Date.now();
+  let lastMark = startedAt;
+  const markDuration = (step: string, extra?: Record<string, unknown>) => {
+    const now = Date.now();
+
+    console.info("Agent trade step completed", {
+      ...extra,
+      elapsedMs: now - startedAt,
+      step,
+      stepMs: now - lastMark,
+    });
+    lastMark = now;
+  };
   const [agents, stocks] = await Promise.all([
     getActiveTradingAgents(),
     getTradableStocks(),
   ]);
+
+  markDuration("load-inputs", {
+    agentCount: agents.length,
+    stockCount: stocks.length,
+  });
+
   const ruleDecisions = agents.flatMap((agent) =>
     stocks
       .map((stock) => createRuleBasedDecision(agent, stock))
       .filter((decision): decision is RuleBasedDecision => decision !== null),
   );
+
+  markDuration("create-rule-decisions", {
+    ruleBasedDecisionCount: ruleDecisions.length,
+  });
+
   const adkRunnableRuleDecisions = includeAdk
     ? await getAdkRunnableRuleDecisions(ruleDecisions, stocks)
     : { ruleDecisions: [], skippedReason: undefined };
+
+  markDuration("filter-adk-candidates", {
+    adkRunnableDecisionCount: adkRunnableRuleDecisions.ruleDecisions.length,
+    adkSkippedReason: adkRunnableRuleDecisions.skippedReason,
+  });
+
   const adkCandidates = includeAdk
     ? selectAdkCandidates(adkRunnableRuleDecisions.ruleDecisions)
     : new Map();
@@ -1149,6 +1196,13 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
     ? await runAdkForCandidates(adkCandidates)
     : { failedKeys: new Set<string>(), intentsByKey: new Map<string, AgentTradeIntent>() };
   const adkCandidateKeys = getCandidateKeys(adkCandidates);
+
+  markDuration("run-adk", {
+    adkCandidateGroupCount: adkCandidates.size,
+    adkFailedCount: failedKeys.size,
+    adkIntentCount: intentsByKey.size,
+    shouldRunAdk,
+  });
 
   if (shouldRunAdk) {
     await recordAdkFailures(failedKeys, ruleDecisions);
@@ -1162,7 +1216,9 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
     }
 
     return decision;
-  }));
+  }), maxExecutableIntents);
+  const executableIntents = mergedIntents.filter((intent) => intent.side !== "HOLD");
+  const intentsToExecute = recordSkippedIntents ? mergedIntents : executableIntents;
   const result: AgentTradeRunResult = {
     adkCandidateLimit: ADK_CANDIDATE_LIMIT,
     adkEnabled: shouldRunAdk,
@@ -1170,13 +1226,20 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
     adkSkippedReason: adkRunnableRuleDecisions.skippedReason,
     executedCount: 0,
     failedCount: 0,
+    maxExecutableIntents,
     rejectedCount: 0,
     ruleBasedDecisionCount: ruleDecisions.length,
-    skippedCount: 0,
+    skippedCount: mergedIntents.length - intentsToExecute.length,
   };
 
+  markDuration("prepare-execution", {
+    executableIntentCount: executableIntents.length,
+    intentExecutionCount: intentsToExecute.length,
+    recordSkippedIntents,
+  });
+
   const statuses = await mapWithConcurrency(
-    mergedIntents,
+    intentsToExecute,
     EXECUTION_CONCURRENCY,
     executeIntent,
   );
@@ -1192,6 +1255,8 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
       result.skippedCount += 1;
     }
   }
+
+  markDuration("execute-intents", result);
 
   return result;
 }

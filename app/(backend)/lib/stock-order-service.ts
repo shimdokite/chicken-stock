@@ -472,12 +472,25 @@ export async function createStockOrderForUser({
 }
 
 export async function matchPendingStockOrders({
-  limit = 100,
+  limit = 10,
   stockId,
 }: {
   limit?: number;
   stockId?: number;
 } = {}) {
+  const startedAt = Date.now();
+  let lastMark = startedAt;
+  const markDuration = (step: string, extra?: Record<string, unknown>) => {
+    const now = Date.now();
+
+    console.info("Pending order matching step completed", {
+      ...extra,
+      elapsedMs: now - startedAt,
+      step,
+      stepMs: now - lastMark,
+    });
+    lastMark = now;
+  };
   const pendingOrders = await prisma.tradeOrder.findMany({
     include: {
       portfolio: {
@@ -501,7 +514,15 @@ export async function matchPendingStockOrders({
   let matchedCount = 0;
   let failedCount = 0;
 
+  markDuration("load-pending-orders", {
+    limit,
+    pendingOrderCount: pendingOrders.length,
+    stockId: stockId ?? null,
+  });
+
   for (const pendingOrder of pendingOrders) {
+    const orderStartedAt = Date.now();
+
     try {
       const matchedOrder = await runSerializableOrderTransaction(async (tx) => {
         await lockStockForOrderProcessing(tx, pendingOrder.stockId);
@@ -567,15 +588,32 @@ export async function matchPendingStockOrders({
           ticker: pendingOrder.ticker,
         });
       }
+
+      console.info("Pending order matching processed order", {
+        durationMs: Date.now() - orderStartedAt,
+        matched: Boolean(
+          matchedOrder &&
+            matchedOrder.filledQuantity > pendingOrder.filledQuantity,
+        ),
+        orderId: pendingOrder.orderId.toString(),
+        stockId: pendingOrder.stockId,
+      });
     } catch (error) {
       failedCount += 1;
       console.error("Pending order matching failed", {
+        durationMs: Date.now() - orderStartedAt,
         error,
         orderId: pendingOrder.orderId.toString(),
         stockId: pendingOrder.stockId,
       });
     }
   }
+
+  markDuration("process-pending-orders", {
+    failedCount,
+    matchedCount,
+    scannedCount: pendingOrders.length,
+  });
 
   return {
     failedCount,

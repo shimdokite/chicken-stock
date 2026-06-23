@@ -28,8 +28,8 @@ The scheduler only wakes the API routes. The application still enforces the ADK 
 
 ## Schedules
 
-- `chicken-stock-run-agent-trade`: every 10 minutes
-- `chicken-stock-match-pending`: every 10 minutes
+- `chicken-stock-run-agent-trade`: every 10 minutes, max 5 executable intents per run
+- `chicken-stock-match-pending`: every 10 minutes, default 10 pending orders per run
 
 To inspect jobs:
 

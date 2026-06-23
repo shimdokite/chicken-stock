@@ -24,6 +24,16 @@ function getJobSource(request: NextRequest) {
     : "manual";
 }
 
+function parsePositiveInteger(value: string | null) {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : undefined;
+}
+
 async function handleRunTradeRequest(
   request: NextRequest,
   source: "manual" | "scheduler",
@@ -41,6 +51,10 @@ async function handleRunTradeRequest(
   try {
     const job = await runAgentTradeJob({
       includeAdk: request.nextUrl.searchParams.get("adk") !== "false",
+      maxExecutableIntents:
+        parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ??
+        (source === "scheduler" ? 5 : undefined),
+      recordSkippedIntents: source !== "scheduler",
       source,
     });
 
