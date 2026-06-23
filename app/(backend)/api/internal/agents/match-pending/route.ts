@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { matchPendingStockOrders } from "@/app/(backend)/lib/stock-order-service";
 
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 function isAuthorized(request: NextRequest) {
   const tokens = [
@@ -39,11 +40,39 @@ async function handleMatchPendingRequest(request: NextRequest) {
     );
   }
 
-  try {
-    const result = await matchPendingStockOrders({
-      limit: parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ?? 100,
-      stockId: parsePositiveInteger(request.nextUrl.searchParams.get("stockId")),
+  const options = {
+    limit: parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ?? 10,
+    stockId: parsePositiveInteger(request.nextUrl.searchParams.get("stockId")),
+  };
+  const source = request.nextUrl.searchParams.get("source");
+
+  if (source === "scheduler") {
+    after(async () => {
+      try {
+        const result = await matchPendingStockOrders(options);
+
+        console.info("Scheduled pending order matching finished", result);
+      } catch (error) {
+        console.error("Scheduled pending order matching failed", error);
+      }
     });
+
+    return NextResponse.json(
+      {
+        data: {
+          accepted: true,
+          limit: options.limit,
+          source,
+          stockId: options.stockId ?? null,
+        },
+        ok: true,
+      },
+      { status: 202 },
+    );
+  }
+
+  try {
+    const result = await matchPendingStockOrders(options);
 
     return NextResponse.json({
       data: result,

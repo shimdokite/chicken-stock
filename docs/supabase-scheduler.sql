@@ -60,7 +60,7 @@ select cron.schedule(
       select decrypted_secret
       from vault.decrypted_secrets
       where name = 'chicken_stock_app_url'
-    ) || '/api/internal/agents/match-pending',
+    ) || '/api/internal/agents/match-pending?source=scheduler',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'Authorization', 'Bearer ' || (

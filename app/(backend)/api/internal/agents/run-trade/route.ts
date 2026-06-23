@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { runAgentTradeJob } from "@/app/(backend)/lib/agent-trade-runner";
 
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 function isAuthorized(request: NextRequest) {
   const tokens = [
@@ -48,15 +49,41 @@ async function handleRunTradeRequest(
     );
   }
 
-  try {
-    const job = await runAgentTradeJob({
-      includeAdk: request.nextUrl.searchParams.get("adk") !== "false",
-      maxExecutableIntents:
-        parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ??
-        (source === "scheduler" ? 5 : undefined),
-      recordSkippedIntents: source !== "scheduler",
-      source,
+  const jobOptions = {
+    includeAdk: request.nextUrl.searchParams.get("adk") !== "false",
+    maxExecutableIntents:
+      parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ??
+      (source === "scheduler" ? 5 : undefined),
+    recordSkippedIntents: source !== "scheduler",
+    source,
+  };
+
+  if (source === "scheduler") {
+    after(async () => {
+      try {
+        const job = await runAgentTradeJob(jobOptions);
+
+        console.info("Scheduled agent trade job finished", job);
+      } catch (error) {
+        console.error("Scheduled agent trade job failed", error);
+      }
     });
+
+    return NextResponse.json(
+      {
+        data: {
+          accepted: true,
+          maxExecutableIntents: jobOptions.maxExecutableIntents,
+          source,
+        },
+        ok: true,
+      },
+      { status: 202 },
+    );
+  }
+
+  try {
+    const job = await runAgentTradeJob(jobOptions);
 
     if (job.status === "SKIPPED") {
       return NextResponse.json({
