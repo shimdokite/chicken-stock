@@ -96,6 +96,10 @@ export async function runAgentTradeJob(
     const { runAgentTrade } = await import("@/app/(backend)/lib/agent-trade");
     const result = await runAgentTrade({
       includeAdk: options.includeAdk,
+      maxExecutableIntents: options.maxExecutableIntents,
+      openMarketsOnly: options.openMarketsOnly,
+      recordSkippedIntents: options.recordSkippedIntents,
+      stockLimit: options.stockLimit,
     });
 
     state.lastResult = result;

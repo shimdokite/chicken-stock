@@ -15,6 +15,7 @@ The scheduler only wakes the API routes. The application still enforces the ADK 
 
 - ADK decisions run only during the configured ADK window in `app/(backend)/lib/market-hours.ts`.
 - Rule-based execution is filtered by KR/US market-session status.
+- Scheduler-triggered trade runs prefilter stocks to currently open KR/US markets and cap the stock candidate count.
 - Pending order matching runs independently every 10 minutes.
 
 ## Setup
@@ -28,7 +29,7 @@ The scheduler only wakes the API routes. The application still enforces the ADK 
 
 ## Schedules
 
-- `chicken-stock-run-agent-trade`: every 10 minutes, max 5 executable intents per run
+- `chicken-stock-run-agent-trade`: every 10 minutes, max 5 executable intents and 30 open-market stocks per run
 - `chicken-stock-match-pending`: every 10 minutes, default 10 pending orders per run
 
 To inspect jobs:

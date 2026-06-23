@@ -54,8 +54,12 @@ async function handleRunTradeRequest(
     maxExecutableIntents:
       parsePositiveInteger(request.nextUrl.searchParams.get("limit")) ??
       (source === "scheduler" ? 5 : undefined),
+    openMarketsOnly: source === "scheduler",
     recordSkippedIntents: source !== "scheduler",
     source,
+    stockLimit:
+      parsePositiveInteger(request.nextUrl.searchParams.get("stockLimit")) ??
+      (source === "scheduler" ? 30 : undefined),
   };
 
   if (source === "scheduler") {
@@ -74,7 +78,9 @@ async function handleRunTradeRequest(
         data: {
           accepted: true,
           maxExecutableIntents: jobOptions.maxExecutableIntents,
+          openMarketsOnly: jobOptions.openMarketsOnly,
           source,
+          stockLimit: jobOptions.stockLimit,
         },
         ok: true,
       },

@@ -16,6 +16,7 @@ import { prisma } from "@/app/(backend)/lib/prisma";
 import {
   getAdkRunWindowStatus,
   getMarketSessionStatus,
+  type MarketSessionCountryCode,
 } from "@/app/(backend)/lib/market-hours";
 import {
   createStockOrderForUser,
@@ -47,7 +48,9 @@ type AdkStockCandidate = {
 export type AgentTradeRunOptions = {
   includeAdk?: boolean;
   maxExecutableIntents?: number;
+  openMarketsOnly?: boolean;
   recordSkippedIntents?: boolean;
+  stockLimit?: number;
 };
 export type AgentTradeRunResult = {
   adkCandidateLimit: number;
@@ -57,9 +60,12 @@ export type AgentTradeRunResult = {
   executedCount: number;
   failedCount: number;
   maxExecutableIntents: number;
+  openMarketCountryCodes?: MarketSessionCountryCode[];
   rejectedCount: number;
   ruleBasedDecisionCount: number;
   skippedCount: number;
+  stockCount: number;
+  stockLimit?: number;
 };
 
 const TRADING_AGENT_TYPES = new Set<string>([
@@ -83,6 +89,7 @@ const ADK_CANDIDATE_LIMIT = clamp(
   15,
 );
 const ADK_WORKER_PATH = "adk-worker/main.py";
+const MARKET_SESSION_COUNTRY_CODES: MarketSessionCountryCode[] = ["KR", "US"];
 
 function getIntegerEnv(name: string, fallback: number) {
   const value = Number(process.env[name]);
@@ -499,7 +506,30 @@ async function getActiveTradingAgents() {
   });
 }
 
-async function getTradableStocks() {
+async function getOpenMarketCountryCodes() {
+  const statuses = await Promise.all(
+    MARKET_SESSION_COUNTRY_CODES.map(async (countryCode) => ({
+      countryCode,
+      status: await getMarketSessionStatus(countryCode),
+    })),
+  );
+
+  return statuses
+    .filter(({ status }) => status?.isOpen === true)
+    .map(({ countryCode }) => countryCode);
+}
+
+async function getTradableStocks({
+  countryCodes,
+  limit,
+}: {
+  countryCodes?: MarketSessionCountryCode[];
+  limit?: number;
+} = {}) {
+  if (countryCodes?.length === 0) {
+    return [];
+  }
+
   return prisma.stock.findMany({
     include: {
       candles: {
@@ -524,7 +554,12 @@ async function getTradableStocks() {
       },
       financialMetric: true,
     },
+    orderBy: {
+      id: "asc",
+    },
+    ...(limit ? { take: limit } : {}),
     where: {
+      ...(countryCodes ? { countryCode: { in: countryCodes } } : {}),
       currentPrice: {
         gt: 0,
       },
@@ -1146,6 +1181,10 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
     MAX_EXECUTABLE_INTENTS_PER_RUN,
   );
   const recordSkippedIntents = options.recordSkippedIntents ?? true;
+  const stockLimit = options.stockLimit;
+  const openMarketCountryCodes = options.openMarketsOnly
+    ? await getOpenMarketCountryCodes()
+    : undefined;
   const startedAt = Date.now();
   let lastMark = startedAt;
   const markDuration = (step: string, extra?: Record<string, unknown>) => {
@@ -1161,12 +1200,17 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
   };
   const [agents, stocks] = await Promise.all([
     getActiveTradingAgents(),
-    getTradableStocks(),
+    getTradableStocks({
+      countryCodes: openMarketCountryCodes,
+      limit: stockLimit,
+    }),
   ]);
 
   markDuration("load-inputs", {
     agentCount: agents.length,
+    openMarketCountryCodes,
     stockCount: stocks.length,
+    stockLimit,
   });
 
   const ruleDecisions = agents.flatMap((agent) =>
@@ -1227,9 +1271,12 @@ export async function runAgentTrade(options: AgentTradeRunOptions = {}) {
     executedCount: 0,
     failedCount: 0,
     maxExecutableIntents,
+    openMarketCountryCodes,
     rejectedCount: 0,
     ruleBasedDecisionCount: ruleDecisions.length,
     skippedCount: mergedIntents.length - intentsToExecute.length,
+    stockCount: stocks.length,
+    stockLimit,
   };
 
   markDuration("prepare-execution", {
