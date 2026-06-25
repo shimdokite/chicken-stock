@@ -26,6 +26,7 @@ import {
 } from "@/app/(backend)/lib/stock-order-sync";
 
 export type StockOrderPriceType = "LIMIT" | "MARKET";
+export type StockOrderRealtimeSyncMode = "full" | "lightweight";
 
 type TransactionClient = Prisma.TransactionClient;
 
@@ -36,6 +37,7 @@ export type CreateStockOrderInput = {
   quantity: number;
   shouldMatch?: boolean;
   stockId: number;
+  realtimeSyncMode?: StockOrderRealtimeSyncMode;
   type: TradeOrderType;
   userId: bigint;
 };
@@ -427,6 +429,7 @@ export async function createStockOrderForUser({
   orderPriceType,
   pricePerShare: inputPricePerShare = null,
   quantity,
+  realtimeSyncMode = "full",
   shouldMatch = true,
   stockId,
   type,
@@ -598,15 +601,21 @@ export async function createStockOrderForUser({
       order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED";
 
     await Promise.all([
-      getSafeStockMutationSync({
-        reason,
-        stockId,
-        userId,
+      realtimeSyncMode === "full"
+        ? getSafeStockMutationSync({
+            reason,
+            stockId,
+            userId,
+          })
+        : Promise.resolve(null),
+      publishOrderFilledEventsForOrder(orderId, {
+        includeSync: realtimeSyncMode === "full",
+        since: orderedAt,
       }),
-      publishOrderFilledEventsForOrder(orderId, { since: orderedAt }),
     ]);
 
     scheduleStockUpdated(stockId, {
+      includeSync: realtimeSyncMode === "full",
       reason,
       ticker: order.ticker,
     });
@@ -706,17 +715,12 @@ export async function matchPendingStockOrders({
 
       if (matchedOrder && matchedOrder.filledQuantity > pendingOrder.filledQuantity) {
         matchedCount += 1;
-        await Promise.all([
-          getSafeStockMutationSync({
-            reason: "TRADE_EXECUTED",
-            stockId: pendingOrder.stockId,
-            userId: pendingOrder.portfolioUserId,
-          }),
-          publishOrderFilledEventsForOrder(pendingOrder.orderId, {
-            since: pendingOrder.orderedAt,
-          }),
-        ]);
+        await publishOrderFilledEventsForOrder(pendingOrder.orderId, {
+          includeSync: false,
+          since: pendingOrder.orderedAt,
+        });
         scheduleStockUpdated(pendingOrder.stockId, {
+          includeSync: false,
           reason: "TRADE_EXECUTED",
           ticker: pendingOrder.ticker,
         });

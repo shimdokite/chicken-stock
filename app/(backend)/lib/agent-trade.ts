@@ -898,6 +898,7 @@ async function executeIntent(intent: AgentTradeIntent) {
       orderPriceType: "LIMIT",
       pricePerShare,
       quantity: intent.quantity,
+      realtimeSyncMode: "lightweight",
       stockId: intent.stockId,
       type: intent.side === "BUY" ? TradeOrderType.BUY : TradeOrderType.SELL,
       userId: BigInt(intent.agentUserId),

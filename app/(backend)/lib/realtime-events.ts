@@ -45,7 +45,9 @@ export type StockUpdatedPayload = StockMarketSyncPayload & {
 type ScheduledStockUpdatedPayload = Omit<
   StockUpdatedPayload,
   "candles" | "orderBookSnapshot"
->;
+> & {
+  includeSync?: boolean;
+};
 
 type UserOrderFilledEvent = {
   payload: UserOrderFilledPayload;
@@ -187,11 +189,15 @@ function mergeStockUpdatedPayload(
   payload: Omit<ScheduledStockUpdatedPayload, "stockId">,
 ) {
   const previous = stockUpdatedPayloads.get(stockId);
+  const includeSync = previous
+    ? previous.includeSync !== false || payload.includeSync !== false
+    : payload.includeSync !== false;
 
   stockUpdatedPayloads.set(stockId, {
     ...previous,
     ...payload,
     changedAt: new Date().toISOString(),
+    includeSync,
     reason:
       previous?.reason === "TRADE_EXECUTED" || payload.reason === "TRADE_EXECUTED"
         ? "TRADE_EXECUTED"
@@ -210,14 +216,23 @@ async function publishScheduledStockUpdated(stockId: number) {
     return;
   }
 
-  const sync = await getSafeStockMarketSync(stockId, payload.reason);
+  const broadcastPayload = { ...payload };
+  delete broadcastPayload.includeSync;
+  const sync =
+    payload.includeSync === false
+      ? {
+          candles: null,
+          orderBookSnapshot: null,
+          reason: payload.reason,
+        }
+      : await getSafeStockMarketSync(stockId, payload.reason);
 
   lastStockUpdatedAt.set(stockId, Date.now());
   await publishBroadcast(
     getStockRealtimeChannelName(stockId),
     "stock_updated",
     {
-      ...payload,
+      ...broadcastPayload,
       ...sync,
       stockId,
     },
@@ -363,6 +378,7 @@ export async function getOrderFilledRealtimeEvents(
 export async function publishOrderFilledEventsForOrder(
   orderId: bigint,
   options?: {
+    includeSync?: boolean;
     since?: Date;
   },
 ) {
@@ -371,10 +387,13 @@ export async function publishOrderFilledEventsForOrder(
 
     await Promise.all(
       events.map(async (event) => {
-        const sync = await getSafeStockMutationSync(
-          event.userId,
-          event.payload.stockId,
-        );
+        const sync =
+          options?.includeSync === false
+            ? null
+            : await getSafeStockMutationSync(
+                event.userId,
+                event.payload.stockId,
+              );
 
         return publishUserOrderFilled(event.userId, {
           ...event.payload,
