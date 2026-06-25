@@ -14,13 +14,15 @@ const runTradeTraceExcludes = [
   "./adk-worker/**/__pycache__/**/*",
   "./adk-worker/**/*.pyc",
 ];
+const prismaTraceIncludes = [
+  "./app/(backend)/generated/prisma/**/*",
+  "./node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node",
+];
 
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
-    "/api/**/*": [
-      "./app/(backend)/generated/prisma/**/*",
-      "./node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node",
-    ],
+    "/*": prismaTraceIncludes,
+    "/api/**/*": prismaTraceIncludes,
     "/api/internal/agents/run-trade": [
       "./adk-worker/main.py",
       "./adk-worker/adk_worker/__init__.py",
@@ -35,8 +37,7 @@ const nextConfig: NextConfig = {
       "./adk-worker/adk_worker/schema.py",
       "./adk-worker/.python_packages/**/*",
       "./adk-worker/requirements.txt",
-      "./app/(backend)/generated/prisma/**/*",
-      "./node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node",
+      ...prismaTraceIncludes,
     ],
   },
   outputFileTracingExcludes: {
