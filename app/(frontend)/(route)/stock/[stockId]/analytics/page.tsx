@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCachedStockPageShellData } from "../page-data";
+import { getStockDetailData } from "../page-data";
 import StockDetail from "@/app/(frontend)/components/stock-detail";
 
 export const revalidate = 10;
@@ -18,7 +18,7 @@ export default async function StockAnalyticsPage({
 
   if (!Number.isInteger(parsedStockId) || parsedStockId <= 0) notFound();
 
-  const stock = await getCachedStockPageShellData(parsedStockId);
+  const stock = await getStockDetailData(parsedStockId);
 
   if (!stock) notFound();
 

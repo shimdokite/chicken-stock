@@ -7,9 +7,12 @@ import {
   fetchStockSearchResults,
   fetchStocks,
 } from "./api";
-import type { StockCandleInterval } from "./api";
+import type { StockCandleInterval, StocksPage } from "./api";
 import type { ChartCandleData } from "../../components/stock-detail/order/chart-panel/types";
-import type { StockOrderBookSnapshotData } from "../../types/stock/stock-detail";
+import type {
+  StockAnalyticsData,
+  StockOrderBookSnapshotData,
+} from "../../types/stock/stock-detail";
 
 export const stockQueryKeys = {
   lists: () => ["stocks"] as const,
@@ -28,12 +31,23 @@ const STOCK_CANDLES_REFETCH_INTERVAL_MS = 10_000;
 const STOCK_ORDER_BOOK_REFETCH_INTERVAL_MS = 5_000;
 const STOCK_ORDERS_REFETCH_INTERVAL_MS = 10_000;
 
-export function useStocksInfiniteQuery(market: string, ranking: string) {
+export function useStocksInfiniteQuery(
+  market: string,
+  ranking: string,
+  initialData?: StocksPage,
+) {
   return useInfiniteQuery({
     queryKey: stockQueryKeys.list(market, ranking),
     queryFn: ({ pageParam }) => fetchStocks(market, ranking, pageParam),
     initialPageParam: 1,
+    initialData: initialData
+      ? {
+          pageParams: [1],
+          pages: [initialData],
+        }
+      : undefined,
     getNextPageParam: (lastPage) => lastPage.nextPage,
+    staleTime: 10_000,
   });
 }
 
@@ -62,11 +76,15 @@ export function useStockCandlesQuery(
   });
 }
 
-export function useStockAnalyticsQuery(stockId: number) {
+export function useStockAnalyticsQuery(
+  stockId: number,
+  initialData?: StockAnalyticsData,
+) {
   return useQuery({
     queryKey: stockQueryKeys.analytics(stockId),
     queryFn: () => fetchStockAnalytics(stockId),
     enabled: Number.isInteger(stockId) && stockId > 0,
+    initialData,
     staleTime: 60_000,
   });
 }

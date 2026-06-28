@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useStockOrderBookQuery } from "../../apis/stocks/queries";
@@ -84,6 +84,7 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
   const [selectedLimitPrice, setSelectedLimitPrice] =
     useState<SelectedOrderBookLimitPrice | null>(null);
   const isOrderTab = activeTab === "chart-orderbook";
+  const analyticsPath = `/stock/${stock.id}/analytics`;
   const { data: liveOrderBookSnapshot } = useStockOrderBookQuery(
     stock.id,
     stock.orderBookSnapshot,
@@ -138,6 +139,18 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
     ],
   );
 
+  useEffect(() => {
+    if (!isOrderTab) {
+      return;
+    }
+
+    router.prefetch(analyticsPath);
+  }, [analyticsPath, isOrderTab, router]);
+
+  const prefetchAnalyticsPage = useCallback(() => {
+    router.prefetch(analyticsPath);
+  }, [analyticsPath, router]);
+
   const handleTabChange = useCallback(
     (nextTab: string) => {
       if (nextTab === "chart-orderbook") {
@@ -146,10 +159,10 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
       }
 
       if (nextTab === "portfolio-info") {
-        router.push(`/stock/${liveStock.id}/analytics`);
+        router.push(analyticsPath);
       }
     },
-    [liveStock.id, router],
+    [analyticsPath, liveStock.id, router],
   );
 
   const selectedDisplayPrice = selectedLimitPrice
@@ -258,6 +271,12 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
             value={tab.value}
             className="rounded-none px-2 py-1"
             activeClassName="bg-zinc-200"
+            onFocus={
+              tab.value === "portfolio-info" ? prefetchAnalyticsPage : undefined
+            }
+            onMouseEnter={
+              tab.value === "portfolio-info" ? prefetchAnalyticsPage : undefined
+            }
           >
             {tab.label}
           </Tab.Item>

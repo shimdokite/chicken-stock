@@ -4,14 +4,27 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useStocksInfiniteQuery } from "../../../apis/stocks/queries";
 import StockListControls from "./stock-list-controls";
 import StockListTable from "./stock-list-table";
+import type { StocksPage } from "../../../apis/stocks/api";
 
-export default function StockList() {
+type StockListProps = {
+  initialStocksPage?: StocksPage;
+};
+
+export default function StockList({ initialStocksPage }: StockListProps) {
   const [selectedMarket, setSelectedMarket] = useState("all");
   const [selectedRanking, setSelectedRanking] = useState("tradingAmount");
   const [selectedPeriod, setSelectedPeriod] = useState("live");
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const queryInitialData =
+    selectedMarket === "all" && selectedRanking === "tradingAmount"
+      ? initialStocksPage
+      : undefined;
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useStocksInfiniteQuery(selectedMarket, selectedRanking);
+    useStocksInfiniteQuery(
+      selectedMarket,
+      selectedRanking,
+      queryInitialData,
+    );
 
   const stocks = useMemo(
     () => data?.pages.flatMap((page) => page.stocks) ?? [],

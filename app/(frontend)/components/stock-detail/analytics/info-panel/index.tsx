@@ -8,13 +8,24 @@ import FinancialSection from "./financial-section";
 import ValuationSection from "./valuation-section";
 import { sectionLabels } from "./helpers";
 import type { InfoSection } from "./types";
-import type { StockOnlyProps } from "../../../../types/stock/stock-detail";
+import type {
+  StockAnalyticsData,
+  StockOnlyProps,
+} from "../../../../types/stock/stock-detail";
 
 const sections: InfoSection[] = ["financial", "earnings", "valuation"];
 
 export default function InfoPanel({ stock }: StockOnlyProps) {
+  const initialAnalyticsData: StockAnalyticsData = {
+    earnings: stock.earnings,
+    financialMetric: stock.financialMetric,
+    financialStatements: stock.financialStatements,
+    themeFinancialMetric: stock.themeFinancialMetric,
+    valuationMetric: stock.valuationMetric,
+  };
   const { data: analyticsData, error, isPending } = useStockAnalyticsQuery(
     stock.id,
+    initialAnalyticsData,
   );
   const [activeSection, setActiveSection] = useState<InfoSection>("financial");
   const scrollContainerRef = useRef<HTMLDivElement>(null);

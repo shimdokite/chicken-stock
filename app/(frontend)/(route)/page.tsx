@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 
 import { getCachedMarketIndexSummaries } from "../../(backend)/lib/market-indices";
+import {
+  DEFAULT_STOCKS_PAGE,
+  STOCKS_PAGE_SIZE,
+  getCachedStocksPage,
+} from "../../(backend)/lib/stocks";
 import EduProgress from "../components/main/edu-progress";
 import IndexList from "../components/main/index_list";
 import StockList from "../components/main/stock_list";
@@ -51,7 +56,15 @@ const websiteJsonLd = {
 };
 
 export default async function Home() {
-  const initialIndices = await getCachedMarketIndexSummaries();
+  const [initialIndices, initialStocksPage] = await Promise.all([
+    getCachedMarketIndexSummaries(),
+    getCachedStocksPage({
+      limit: STOCKS_PAGE_SIZE,
+      market: "all",
+      page: DEFAULT_STOCKS_PAGE,
+      ranking: "tradingAmount",
+    }),
+  ]);
 
   return (
     <main className="mx-10 py-8">
@@ -67,7 +80,7 @@ export default async function Home() {
         <IndexList initialIndices={initialIndices} />
       </div>
 
-      <StockList />
+      <StockList initialStocksPage={initialStocksPage} />
     </main>
   );
 }
