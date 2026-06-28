@@ -15,14 +15,25 @@ import type {
 
 const sections: InfoSection[] = ["financial", "earnings", "valuation"];
 
+function hasStockAnalyticsData(stock: StockOnlyProps["stock"]) {
+  return (
+    stock.financialStatements.length > 0 ||
+    stock.earnings.length > 0 ||
+    stock.financialMetric !== null
+  );
+}
+
 export default function InfoPanel({ stock }: StockOnlyProps) {
-  const initialAnalyticsData: StockAnalyticsData = {
-    earnings: stock.earnings,
-    financialMetric: stock.financialMetric,
-    financialStatements: stock.financialStatements,
-    themeFinancialMetric: stock.themeFinancialMetric,
-    valuationMetric: stock.valuationMetric,
-  };
+  const initialAnalyticsData: StockAnalyticsData | undefined =
+    hasStockAnalyticsData(stock)
+      ? {
+          earnings: stock.earnings,
+          financialMetric: stock.financialMetric,
+          financialStatements: stock.financialStatements,
+          themeFinancialMetric: stock.themeFinancialMetric,
+          valuationMetric: stock.valuationMetric,
+        }
+      : undefined;
   const { data: analyticsData, error, isPending } = useStockAnalyticsQuery(
     stock.id,
     initialAnalyticsData,
@@ -88,10 +99,7 @@ export default function InfoPanel({ stock }: StockOnlyProps) {
     );
   }, []);
   const displayStock = analyticsData ? { ...stock, ...analyticsData } : stock;
-  const hasAnalyticsData =
-    displayStock.financialStatements.length > 0 ||
-    displayStock.earnings.length > 0 ||
-    displayStock.financialMetric !== null;
+  const hasAnalyticsData = hasStockAnalyticsData(displayStock);
 
   const panelContent = (() => {
     if (!hasAnalyticsData && isPending) {
