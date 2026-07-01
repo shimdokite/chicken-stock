@@ -40,7 +40,6 @@ const InfoPanel = dynamic(() => import("./analytics/info-panel"), {
       label="주요 정보를 불러오는 중입니다."
     />
   ),
-  ssr: false,
 });
 
 const ChartPanel = dynamic(() => import("./order/chart-panel"), {
