@@ -69,6 +69,8 @@ export default function NormalBuyOrder({
   );
   const [quantityInput, setQuantityInput] = useState("");
 
+  const isMarketOpen = orderContext.marketSession?.isOpen === true;
+  const orderTypeLabel = isMarketOpen ? "정규장 주문" : "정규장 주문 예약";
   const price =
     orderPriceType === "MARKET"
       ? stock.currentPrice
@@ -81,15 +83,21 @@ export default function NormalBuyOrder({
     levels: orderBookSnapshot?.levels,
   });
   const maxQuantity =
-    orderPriceType === "MARKET" ? maxMarketQuantity : maxLimitQuantity;
+    orderPriceType === "MARKET"
+      ? isMarketOpen
+        ? maxMarketQuantity
+        : maxLimitQuantity
+      : maxLimitQuantity;
   const orderAmount =
     orderPriceType === "MARKET"
-      ? getMarketOrderAmountEstimate({
-          currentPrice: stock.currentPrice,
-          levels: orderBookSnapshot?.levels,
-          quantity,
-          type: "BUY",
-        })
+      ? isMarketOpen
+        ? getMarketOrderAmountEstimate({
+            currentPrice: stock.currentPrice,
+            levels: orderBookSnapshot?.levels,
+            quantity,
+            type: "BUY",
+          })
+        : stock.currentPrice * quantity
       : price * quantity;
   const currentInvested =
     orderContext.holding.averagePrice * orderContext.holding.quantity;
@@ -144,9 +152,11 @@ export default function NormalBuyOrder({
         onSuccess: () => {
           setQuantityInput("");
           void showSuccessToast(
-            orderPriceType === "MARKET"
-              ? "구매 주문이 체결됐습니다."
-              : "구매 주문이 등록됐습니다.",
+            !isMarketOpen
+              ? "구매 주문이 예약됐습니다."
+              : orderPriceType === "MARKET"
+                ? "구매 주문이 체결됐습니다."
+                : "구매 주문이 등록됐습니다.",
           );
         },
       },
@@ -160,7 +170,7 @@ export default function NormalBuyOrder({
           <div className="grid grid-cols-[5.75rem_minmax(0,1fr)] items-center gap-3 text-lg">
             <span className="font-semibold">주문 유형</span>
             <div className="flex h-8 items-center rounded-lg border-2 border-zinc-200 px-3 text-base font-semibold">
-              정규장 주문 예약
+              {orderTypeLabel}
             </div>
           </div>
 
@@ -322,7 +332,11 @@ export default function NormalBuyOrder({
         type="button"
         onClick={handleSubmit}
       >
-        {createOrder.isPending ? "처리 중" : "구매하기"}
+        {createOrder.isPending
+          ? "처리 중"
+          : isMarketOpen
+            ? "구매하기"
+            : "예약 구매하기"}
       </button>
     </div>
   );

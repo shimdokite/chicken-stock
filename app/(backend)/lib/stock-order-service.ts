@@ -20,13 +20,11 @@ import {
   StockOrderConcurrencyError,
   StockOrderMatchingError,
 } from "@/app/(backend)/lib/stock-order-matching";
-import {
-  getStockMutationSync,
-  type StockSyncReason,
-} from "@/app/(backend)/lib/stock-order-sync";
+import type { StockSyncReason } from "@/app/(backend)/lib/stock-order-sync";
 
 export type StockOrderPriceType = "LIMIT" | "MARKET";
 export type StockOrderRealtimeSyncMode = "full" | "lightweight";
+export type StockOrderRealtimeDelivery = "inline" | "manual";
 
 type TransactionClient = Prisma.TransactionClient;
 
@@ -37,6 +35,7 @@ export type CreateStockOrderInput = {
   quantity: number;
   shouldMatch?: boolean;
   stockId: number;
+  realtimeDelivery?: StockOrderRealtimeDelivery;
   realtimeSyncMode?: StockOrderRealtimeSyncMode;
   type: TradeOrderType;
   userId: bigint;
@@ -113,7 +112,11 @@ function getPositiveIntegerEnv(name: string, fallback: number) {
 async function runSerializableOrderTransaction<T>(
   operation: (tx: TransactionClient) => Promise<T>,
 ) {
-  for (let attempt = 1; attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS; attempt += 1) {
+  for (
+    let attempt = 1;
+    attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS;
+    attempt += 1
+  ) {
     try {
       return await prisma.$transaction(operation, {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
@@ -182,6 +185,19 @@ function getNonNegativeDecimal(value: Prisma.Decimal) {
   return value.lt(0) ? new Prisma.Decimal(0) : value.toDecimalPlaces(2);
 }
 
+async function getStockMarketSessionStatus(stockId: number, date: Date) {
+  const stock = await prisma.stock.findUnique({
+    select: {
+      countryCode: true,
+    },
+    where: {
+      id: stockId,
+    },
+  });
+
+  return stock ? getMarketSessionStatus(stock.countryCode, date) : null;
+}
+
 function createOrderId() {
   return BigInt(Date.now()) * BigInt(100000) + BigInt(randomInt(100000));
 }
@@ -232,6 +248,7 @@ function serializeDecimalNumber(value: { toString: () => string }) {
 export function serializeTradeOrder(order: {
   orderId: bigint;
   type: TradeOrderType;
+  orderPriceType: StockOrderPriceType;
   quantity: number;
   pricePerShare: Prisma.Decimal;
   status: TradeOrderStatus;
@@ -253,6 +270,7 @@ export function serializeTradeOrder(order: {
       : null,
     filledQuantity: order.filledQuantity,
     orderId: order.orderId.toString(),
+    orderPriceType: order.orderPriceType,
     orderedAt: serializeDate(order.orderedAt),
     pricePerShare: serializeDecimalNumber(order.pricePerShare),
     quantity: order.quantity,
@@ -261,29 +279,6 @@ export function serializeTradeOrder(order: {
     ticker: order.ticker,
     type: order.type,
   };
-}
-
-async function getSafeStockMutationSync({
-  reason,
-  stockId,
-  userId,
-}: {
-  reason: StockSyncReason;
-  stockId: number;
-  userId: bigint;
-}) {
-  try {
-    return await getStockMutationSync({ reason, stockId, userId });
-  } catch (error) {
-    console.error("Stock order sync snapshot failed", {
-      error,
-      reason,
-      stockId,
-      userId: userId.toString(),
-    });
-
-    return null;
-  }
 }
 
 function toStockOrderServiceError(error: unknown) {
@@ -295,7 +290,9 @@ function toStockOrderServiceError(error: unknown) {
     return new StockOrderServiceError(
       error.message,
       error.status,
-      error.status === 409 ? "ORDER_CONCURRENCY_CONFLICT" : "ORDER_MATCH_FAILED",
+      error.status === 409
+        ? "ORDER_CONCURRENCY_CONFLICT"
+        : "ORDER_MATCH_FAILED",
     );
   }
 
@@ -314,6 +311,7 @@ async function getPendingStockOrders({
       agentDecisionLogId: bigint | null;
       filledQuantity: number;
       orderId: bigint;
+      orderPriceType: StockOrderPriceType;
       orderedAt: Date;
       portfolioUserId: bigint;
       remainingQuantity: number;
@@ -325,6 +323,7 @@ async function getPendingStockOrders({
       SELECT
         "Trade_order"."filled_quantity" AS "filledQuantity",
         "Trade_order"."order_id" AS "orderId",
+        "Trade_order"."order_price_type" AS "orderPriceType",
         "Trade_order"."ordered_at" AS "orderedAt",
         "Trade_order"."portfolio_id" AS "portfolioId",
         "Trade_order"."price_per_share" AS "pricePerShare",
@@ -337,6 +336,12 @@ async function getPendingStockOrders({
         CASE
           WHEN "Agent_decision_log"."id" IS NOT NULL
             AND (
+              ("Trade_order"."type" = 'BUY'::"Trade_order_type"
+                AND "Trade_order"."order_price_type" = 'MARKET'::"Trade_order_price_type")
+              OR
+              ("Trade_order"."type" = 'SELL'::"Trade_order_type"
+                AND "Trade_order"."order_price_type" = 'MARKET'::"Trade_order_price_type")
+              OR
               ("Trade_order"."type" = 'BUY'::"Trade_order_type"
                 AND "Trade_order"."price_per_share" >= "Stock"."current_price")
               OR
@@ -354,11 +359,17 @@ async function getPendingStockOrders({
               AND (
                 ("Trade_order"."type" = 'BUY'::"Trade_order_type"
                   AND "Opposite_order"."type" = 'SELL'::"Trade_order_type"
-                  AND "Opposite_order"."price_per_share" <= "Trade_order"."price_per_share")
+                  AND (
+                    "Trade_order"."order_price_type" = 'MARKET'::"Trade_order_price_type"
+                    OR "Opposite_order"."price_per_share" <= "Trade_order"."price_per_share"
+                  ))
                 OR
                 ("Trade_order"."type" = 'SELL'::"Trade_order_type"
                   AND "Opposite_order"."type" = 'BUY'::"Trade_order_type"
-                  AND "Opposite_order"."price_per_share" >= "Trade_order"."price_per_share")
+                  AND (
+                    "Trade_order"."order_price_type" = 'MARKET'::"Trade_order_price_type"
+                    OR "Opposite_order"."price_per_share" >= "Trade_order"."price_per_share"
+                  ))
               )
           )
           THEN 1
@@ -385,6 +396,7 @@ async function getPendingStockOrders({
       "agentDecisionLogId",
       "filledQuantity",
       "orderId",
+      "orderPriceType",
       "orderedAt",
       "portfolioUserId",
       "remainingQuantity",
@@ -399,7 +411,9 @@ async function getPendingStockOrders({
 async function filterOpenMarketPendingOrders<T extends { stockId: number }>(
   pendingOrders: T[],
 ) {
-  const stockIds = Array.from(new Set(pendingOrders.map((order) => order.stockId)));
+  const stockIds = Array.from(
+    new Set(pendingOrders.map((order) => order.stockId)),
+  );
   const stocks = await prisma.stock.findMany({
     select: {
       countryCode: true,
@@ -424,11 +438,44 @@ async function filterOpenMarketPendingOrders<T extends { stockId: number }>(
   return pendingOrders.filter((order) => openStockIds.has(order.stockId));
 }
 
+export async function publishStockOrderRealtimeUpdate({
+  order,
+  realtimeSyncMode = "full",
+  since,
+}: {
+  order: {
+    filledQuantity: number;
+    orderId: bigint;
+    stockId: number;
+    ticker: string;
+  };
+  realtimeSyncMode?: StockOrderRealtimeSyncMode;
+  since?: Date;
+}) {
+  const reason: StockSyncReason =
+    order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED";
+  const includeSync = realtimeSyncMode === "full";
+
+  await publishOrderFilledEventsForOrder(order.orderId, {
+    includeSync,
+    since,
+  });
+
+  scheduleStockUpdated(order.stockId, {
+    includeSync,
+    reason,
+    ticker: order.ticker,
+  });
+
+  return reason;
+}
+
 export async function createStockOrderForUser({
   allowExternalLiquidity = false,
   orderPriceType,
   pricePerShare: inputPricePerShare = null,
   quantity,
+  realtimeDelivery = "inline",
   realtimeSyncMode = "full",
   shouldMatch = true,
   stockId,
@@ -446,6 +493,9 @@ export async function createStockOrderForUser({
   try {
     const orderId = createOrderId();
     const orderedAt = new Date();
+    const marketSession = await getStockMarketSessionStatus(stockId, orderedAt);
+    const shouldMatchImmediately =
+      shouldMatch && marketSession?.isOpen === true;
     const order = await runSerializableOrderTransaction(async (tx) => {
       await lockStockForOrderProcessing(tx, stockId);
 
@@ -497,7 +547,9 @@ export async function createStockOrderForUser({
           : stock.currentPrice.toDecimalPlaces(2)) ??
         stock.currentPrice.toDecimalPlaces(2);
       const orderAmount =
-        type === TradeOrderType.BUY && orderPriceType === "MARKET"
+        type === TradeOrderType.BUY &&
+        orderPriceType === "MARKET" &&
+        shouldMatchImmediately
           ? await getEstimatedMarketOrderAmount(tx, {
               currentPrice: stock.currentPrice,
               portfolioId: portfolio.id,
@@ -570,6 +622,7 @@ export async function createStockOrderForUser({
           executedPrice: null,
           filledQuantity: 0,
           orderId,
+          orderPriceType,
           orderedAt,
           portfolioId: portfolio.id,
           pricePerShare,
@@ -582,7 +635,7 @@ export async function createStockOrderForUser({
         },
       });
 
-      if (!shouldMatch) {
+      if (!shouldMatchImmediately) {
         return createdOrder;
       }
 
@@ -597,28 +650,13 @@ export async function createStockOrderForUser({
       );
     });
 
-    const reason: StockSyncReason =
-      order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED";
-
-    await Promise.all([
-      realtimeSyncMode === "full"
-        ? getSafeStockMutationSync({
-            reason,
-            stockId,
-            userId,
-          })
-        : Promise.resolve(null),
-      publishOrderFilledEventsForOrder(orderId, {
-        includeSync: realtimeSyncMode === "full",
+    if (realtimeDelivery === "inline") {
+      await publishStockOrderRealtimeUpdate({
+        order,
+        realtimeSyncMode,
         since: orderedAt,
-      }),
-    ]);
-
-    scheduleStockUpdated(stockId, {
-      includeSync: realtimeSyncMode === "full",
-      reason,
-      ticker: order.ticker,
-    });
+      });
+    }
 
     return order;
   } catch (error) {
@@ -650,7 +688,9 @@ export async function matchPendingStockOrders({
     limit,
     stockId,
   });
-  const pendingOrders = await filterOpenMarketPendingOrders(pendingOrderCandidates);
+  const pendingOrders = await filterOpenMarketPendingOrders(
+    pendingOrderCandidates,
+  );
   let matchedCount = 0;
   let failedCount = 0;
 
@@ -708,12 +748,15 @@ export async function matchPendingStockOrders({
         return matchStockOrder(tx, {
           allowExternalLiquidity: pendingOrder.agentDecisionLogId !== null,
           orderId: pendingOrder.orderId,
-          orderPriceType: "LIMIT",
+          orderPriceType: pendingOrder.orderPriceType,
           stock,
         });
       });
 
-      if (matchedOrder && matchedOrder.filledQuantity > pendingOrder.filledQuantity) {
+      if (
+        matchedOrder &&
+        matchedOrder.filledQuantity > pendingOrder.filledQuantity
+      ) {
         matchedCount += 1;
         await publishOrderFilledEventsForOrder(pendingOrder.orderId, {
           includeSync: false,
@@ -730,7 +773,7 @@ export async function matchPendingStockOrders({
         durationMs: Date.now() - orderStartedAt,
         matched: Boolean(
           matchedOrder &&
-            matchedOrder.filledQuantity > pendingOrder.filledQuantity,
+          matchedOrder.filledQuantity > pendingOrder.filledQuantity,
         ),
         orderId: pendingOrder.orderId.toString(),
         priority: pendingOrder.agentDecisionLogId ? "AGENT" : "REGULAR",

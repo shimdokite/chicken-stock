@@ -60,6 +60,8 @@ export default function NormalSellOrder({
     getInitialPriceInput(stock, selectedLimitPrice),
   );
   const [quantityInput, setQuantityInput] = useState("");
+  const isMarketOpen = orderContext.marketSession?.isOpen === true;
+  const orderTypeLabel = isMarketOpen ? "정규장 주문" : "정규장 주문 예약";
 
   if (orderContext.holding.quantity <= 0) {
     return (
@@ -138,9 +140,11 @@ export default function NormalSellOrder({
         onSuccess: () => {
           setQuantityInput("");
           void showSuccessToast(
-            orderPriceType === "MARKET"
-              ? "판매 주문이 체결됐습니다."
-              : "판매 주문이 등록됐습니다.",
+            !isMarketOpen
+              ? "판매 주문이 예약됐습니다."
+              : orderPriceType === "MARKET"
+                ? "판매 주문이 체결됐습니다."
+                : "판매 주문이 등록됐습니다.",
           );
         },
       },
@@ -154,7 +158,7 @@ export default function NormalSellOrder({
           <div className="grid grid-cols-[5.75rem_minmax(0,1fr)] items-center gap-3 text-lg">
             <span className="font-semibold">주문 유형</span>
             <div className="flex h-8 items-center rounded-lg border-2 border-zinc-200 px-3 text-base font-semibold">
-              정규장 주문 예약
+              {orderTypeLabel}
             </div>
           </div>
 
@@ -318,7 +322,11 @@ export default function NormalSellOrder({
         type="button"
         onClick={handleSubmit}
       >
-        {createOrder.isPending ? "처리 중" : "판매하기"}
+        {createOrder.isPending
+          ? "처리 중"
+          : isMarketOpen
+            ? "판매하기"
+            : "예약 판매하기"}
       </button>
     </div>
   );

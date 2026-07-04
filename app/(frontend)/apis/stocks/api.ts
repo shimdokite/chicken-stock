@@ -94,6 +94,7 @@ export type StockPendingOrder = {
   executedPrice: number | null;
   filledQuantity: number;
   orderId: string;
+  orderPriceType: StockOrderPriceType;
   orderedAt: string;
   pricePerShare: number;
   quantity: number;
@@ -118,6 +119,18 @@ export type StockOrderContext = {
     sellableQuantity: number;
     totalInvested: number;
   };
+  marketSession: {
+    checkedAt: string;
+    countryCode: "KR" | "US";
+    isOpen: boolean;
+    reason:
+      | "MARKET_OPEN"
+      | "MARKET_SESSION_OVERRIDE"
+      | "WEEKEND"
+      | "MARKET_HOLIDAY"
+      | "OUTSIDE_REGULAR_HOURS";
+    timeZone: string;
+  } | null;
   pendingOrderCount: number;
   pendingOrders: StockPendingOrder[];
   stock: {

@@ -29,6 +29,27 @@ end $$;
 
 do $$
 begin
+  perform cron.unschedule('chicken-stock-match-pending-kr-open');
+exception
+  when others then null;
+end $$;
+
+do $$
+begin
+  perform cron.unschedule('chicken-stock-match-pending-us-open-dst');
+exception
+  when others then null;
+end $$;
+
+do $$
+begin
+  perform cron.unschedule('chicken-stock-match-pending-us-open-standard');
+exception
+  when others then null;
+end $$;
+
+do $$
+begin
   perform cron.unschedule('chicken-stock-ensure-daily-candles');
 exception
   when others then null;
@@ -101,6 +122,90 @@ select cron.schedule(
       )
     ),
     body := jsonb_build_object('scheduler', 'supabase-pg-cron'),
+    timeout_milliseconds := 30000
+  );
+  $$
+);
+
+select cron.schedule(
+  'chicken-stock-match-pending-kr-open',
+  '0 0 * * 1-5',
+  $$
+  select net.http_post(
+    url := (
+      select decrypted_secret
+      from vault.decrypted_secrets
+      where name = 'chicken_stock_app_url'
+    ) || '/api/internal/agents/match-pending?source=scheduler&limit=100&marketOpenCountry=KR',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret
+        from vault.decrypted_secrets
+        where name = 'chicken_stock_cron_secret'
+      )
+    ),
+    body := jsonb_build_object(
+      'market', 'KR',
+      'scheduler', 'supabase-pg-cron',
+      'trigger', 'market-open'
+    ),
+    timeout_milliseconds := 30000
+  );
+  $$
+);
+
+select cron.schedule(
+  'chicken-stock-match-pending-us-open-dst',
+  '30 13 * * 1-5',
+  $$
+  select net.http_post(
+    url := (
+      select decrypted_secret
+      from vault.decrypted_secrets
+      where name = 'chicken_stock_app_url'
+    ) || '/api/internal/agents/match-pending?source=scheduler&limit=100&marketOpenCountry=US',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret
+        from vault.decrypted_secrets
+        where name = 'chicken_stock_cron_secret'
+      )
+    ),
+    body := jsonb_build_object(
+      'market', 'US',
+      'scheduler', 'supabase-pg-cron',
+      'trigger', 'market-open-dst'
+    ),
+    timeout_milliseconds := 30000
+  );
+  $$
+);
+
+select cron.schedule(
+  'chicken-stock-match-pending-us-open-standard',
+  '30 14 * * 1-5',
+  $$
+  select net.http_post(
+    url := (
+      select decrypted_secret
+      from vault.decrypted_secrets
+      where name = 'chicken_stock_app_url'
+    ) || '/api/internal/agents/match-pending?source=scheduler&limit=100&marketOpenCountry=US',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret
+        from vault.decrypted_secrets
+        where name = 'chicken_stock_cron_secret'
+      )
+    ),
+    body := jsonb_build_object(
+      'market', 'US',
+      'scheduler', 'supabase-pg-cron',
+      'trigger', 'market-open-standard'
+    ),
     timeout_milliseconds := 30000
   );
   $$

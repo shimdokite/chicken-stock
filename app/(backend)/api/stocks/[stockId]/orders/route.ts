@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   verifyAuthToken,
@@ -20,6 +20,7 @@ import {
 } from "@/app/(backend)/lib/stock-order-matching";
 import {
   createStockOrderForUser,
+  publishStockOrderRealtimeUpdate,
   serializeTradeOrder as serializeServiceTradeOrder,
   StockOrderServiceError,
 } from "@/app/(backend)/lib/stock-order-service";
@@ -331,6 +332,7 @@ export async function POST(request: NextRequest, { params }: StockOrderParams) {
       orderPriceType: payload.orderPriceType,
       pricePerShare: payload.pricePerShare,
       quantity: payload.quantity,
+      realtimeDelivery: "manual",
       stockId: parsedStockId,
       type: payload.type,
       userId,
@@ -339,6 +341,21 @@ export async function POST(request: NextRequest, { params }: StockOrderParams) {
       reason: order.filledQuantity > 0 ? "TRADE_EXECUTED" : "ORDER_CHANGED",
       stockId: parsedStockId,
       userId,
+    });
+
+    after(async () => {
+      try {
+        await publishStockOrderRealtimeUpdate({
+          order,
+          since: order.orderedAt,
+        });
+      } catch (error) {
+        console.error("Stock order realtime publish failed", {
+          error,
+          orderId: order.orderId.toString(),
+          stockId: parsedStockId,
+        });
+      }
     });
 
     return NextResponse.json({

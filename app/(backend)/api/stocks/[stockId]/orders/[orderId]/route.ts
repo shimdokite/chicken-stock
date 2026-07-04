@@ -19,6 +19,7 @@ import {
   getStockMutationSync,
   type StockSyncReason,
 } from "@/app/(backend)/lib/stock-order-sync";
+import { getMarketSessionStatus } from "@/app/(backend)/lib/market-hours";
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
 import {
   CurrencyCode,
@@ -96,7 +97,11 @@ function wait(ms: number) {
 async function runSerializableOrderTransaction<T>(
   operation: (tx: TransactionClient) => Promise<T>,
 ) {
-  for (let attempt = 1; attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS; attempt += 1) {
+  for (
+    let attempt = 1;
+    attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS;
+    attempt += 1
+  ) {
     try {
       return await prisma.$transaction(operation, {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
@@ -243,6 +248,19 @@ function getNonNegativeDecimal(value: Prisma.Decimal) {
   return value.lt(0) ? new Prisma.Decimal(0) : value.toDecimalPlaces(2);
 }
 
+async function getStockMarketSessionStatus(stockId: number, date: Date) {
+  const stock = await prisma.stock.findUnique({
+    select: {
+      countryCode: true,
+    },
+    where: {
+      id: stockId,
+    },
+  });
+
+  return stock ? getMarketSessionStatus(stock.countryCode, date) : null;
+}
+
 async function getLockedPortfolioForUser(
   tx: TransactionClient,
   userId: bigint,
@@ -281,6 +299,7 @@ async function getLockedPortfolioForUser(
 function serializeTradeOrder(order: {
   orderId: bigint;
   type: TradeOrderType;
+  orderPriceType: "LIMIT" | "MARKET";
   quantity: number;
   pricePerShare: Prisma.Decimal;
   status: TradeOrderStatus;
@@ -302,6 +321,7 @@ function serializeTradeOrder(order: {
       : null,
     filledQuantity: order.filledQuantity,
     orderId: order.orderId.toString(),
+    orderPriceType: order.orderPriceType,
     orderedAt: serializeDate(order.orderedAt),
     pricePerShare: serializeDecimalNumber(order.pricePerShare),
     quantity: order.quantity,
@@ -364,6 +384,11 @@ export async function PATCH(
 
   try {
     const operationStartedAt = new Date();
+    const marketSession = await getStockMarketSessionStatus(
+      parsedStockId,
+      operationStartedAt,
+    );
+    const shouldMatchImmediately = marketSession?.isOpen === true;
     const order = await runSerializableOrderTransaction(async (tx) => {
       await lockStockForOrderProcessing(tx, parsedStockId);
 
@@ -464,6 +489,7 @@ export async function PATCH(
 
       const updatedOrder = await tx.tradeOrder.update({
         data: {
+          orderPriceType: "LIMIT",
           pricePerShare: payload.pricePerShare,
           quantity: currentOrder.filledQuantity + payload.quantity,
           remainingQuantity: payload.quantity,
@@ -472,6 +498,10 @@ export async function PATCH(
           orderId: parsedOrderId,
         },
       });
+
+      if (!shouldMatchImmediately) {
+        return updatedOrder;
+      }
 
       return (
         (await matchStockOrder(tx, {

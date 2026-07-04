@@ -28,6 +28,7 @@ type MatchingOrder = {
   stockId: number;
   ticker: string;
   type: TradeOrderType;
+  orderPriceType: StockOrderPriceType;
   quantity: number;
   pricePerShare: Prisma.Decimal;
   status: TradeOrderStatus;
@@ -737,6 +738,7 @@ async function getMatchCandidates(
       "stock_id" AS "stockId",
       "ticker",
       "type",
+      "order_price_type" AS "orderPriceType",
       "quantity",
       "price_per_share" AS "pricePerShare",
       "status",

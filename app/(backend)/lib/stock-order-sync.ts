@@ -1,6 +1,7 @@
 import "server-only";
 
 import { getUsdKrwExchangeRate } from "@/app/(backend)/lib/market-indices";
+import { getMarketSessionStatus } from "@/app/(backend)/lib/market-hours";
 import { getTotalAvailableOrderAmountKrw } from "@/app/(backend)/lib/portfolio-balance";
 import { getLatestOrderBookSnapshot } from "@/app/(backend)/lib/stock-order-book";
 import {
@@ -82,6 +83,7 @@ function getProfitRate(profit: Prisma.Decimal, invested: Prisma.Decimal) {
 function serializeTradeOrder(order: {
   orderId: bigint;
   type: TradeOrderType;
+  orderPriceType: "LIMIT" | "MARKET";
   quantity: number;
   pricePerShare: Prisma.Decimal;
   status: TradeOrderStatus;
@@ -103,6 +105,7 @@ function serializeTradeOrder(order: {
       : null,
     filledQuantity: order.filledQuantity,
     orderId: order.orderId.toString(),
+    orderPriceType: order.orderPriceType,
     orderedAt: serializeDate(order.orderedAt),
     pricePerShare: serializeDecimalNumber(order.pricePerShare),
     quantity: order.quantity,
@@ -116,6 +119,7 @@ function serializeTradeOrder(order: {
 export async function getStockOrderContext(userId: bigint, stockId: number) {
   const stock = await prisma.stock.findUnique({
     select: {
+      countryCode: true,
       currencyCode: true,
       currentPrice: true,
       id: true,
@@ -149,27 +153,29 @@ export async function getStockOrderContext(userId: bigint, stockId: number) {
     throw new StockOrderContextError("계좌가 없습니다.", 404);
   }
 
-  const [pendingOrders, pendingBuyOrders, usdKrwExchangeRate] = await Promise.all([
-    prisma.tradeOrder.findMany({
-      orderBy: {
-        orderedAt: "desc",
-      },
-      where: {
-        portfolioId: portfolio.id,
-        status: TradeOrderStatus.PENDING,
-        stockId,
-      },
-    }),
-    prisma.tradeOrder.findMany({
-      where: {
-        currencyCode: stock.currencyCode,
-        portfolioId: portfolio.id,
-        status: TradeOrderStatus.PENDING,
-        type: TradeOrderType.BUY,
-      },
-    }),
-    getUsdKrwExchangeRate(),
-  ]);
+  const [pendingOrders, pendingBuyOrders, usdKrwExchangeRate, marketSession] =
+    await Promise.all([
+      prisma.tradeOrder.findMany({
+        orderBy: {
+          orderedAt: "desc",
+        },
+        where: {
+          portfolioId: portfolio.id,
+          status: TradeOrderStatus.PENDING,
+          stockId,
+        },
+      }),
+      prisma.tradeOrder.findMany({
+        where: {
+          currencyCode: stock.currencyCode,
+          portfolioId: portfolio.id,
+          status: TradeOrderStatus.PENDING,
+          type: TradeOrderType.BUY,
+        },
+      }),
+      getUsdKrwExchangeRate(),
+      getMarketSessionStatus(stock.countryCode),
+    ]);
   const holding = portfolio.items[0] ?? null;
   const pendingSellQuantity = pendingOrders
     .filter((order) => order.type === TradeOrderType.SELL)
@@ -213,6 +219,7 @@ export async function getStockOrderContext(userId: bigint, stockId: number) {
       stockId,
       stockName: stock.name,
     })),
+    marketSession,
     stock: {
       currencyCode: stock.currencyCode,
       currentPrice: serializeDecimalNumber(stock.currentPrice),

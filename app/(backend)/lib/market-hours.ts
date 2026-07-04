@@ -29,10 +29,7 @@ type MarketSessionStatus = {
 type AdkRunWindowStatus = {
   checkedAt: string;
   isOpen: boolean;
-  reason:
-    | "ADK_WINDOW_OPEN"
-    | "ADK_WINDOW_OVERRIDE"
-    | "OUTSIDE_ADK_WINDOW";
+  reason: "ADK_WINDOW_OPEN" | "ADK_WINDOW_OVERRIDE" | "OUTSIDE_ADK_WINDOW";
   timeZone: "Asia/Seoul";
 };
 
@@ -105,7 +102,9 @@ function isWeekend(weekday: string) {
   return weekday === "Sat" || weekday === "Sun";
 }
 
-function getCheckedDateKey(parts: Pick<ZonedDateTimeParts, "day" | "month" | "year">) {
+function getCheckedDateKey(
+  parts: Pick<ZonedDateTimeParts, "day" | "month" | "year">,
+) {
   return [
     String(parts.year).padStart(4, "0"),
     String(parts.month).padStart(2, "0"),
@@ -177,8 +176,7 @@ export function getAdkRunWindowStatus(date = new Date()): AdkRunWindowStatus {
     ADK_RUN_WINDOW.closeHour,
     ADK_RUN_WINDOW.closeMinute,
   );
-  const isOpen =
-    currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+  const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes;
 
   return {
     checkedAt,
@@ -186,6 +184,34 @@ export function getAdkRunWindowStatus(date = new Date()): AdkRunWindowStatus {
     reason: isOpen ? "ADK_WINDOW_OPEN" : "OUTSIDE_ADK_WINDOW",
     timeZone: ADK_RUN_WINDOW.timeZone,
   };
+}
+
+export async function isMarketSessionOpenWakeupWindow(
+  countryCode: string,
+  date = new Date(),
+  windowMinutes = 5,
+) {
+  if (countryCode !== "KR" && countryCode !== "US") {
+    return false;
+  }
+
+  const session = MARKET_SESSIONS[countryCode];
+  const parts = getZonedDateTimeParts(date, session.timeZone);
+  const currentMinutes = toMinutes(parts.hour, parts.minute);
+  const openMinutes = toMinutes(session.openHour, session.openMinute);
+  const normalizedWindowMinutes = Math.min(
+    Math.max(Math.floor(windowMinutes), 1),
+    60,
+  );
+  const isInOpenWindow =
+    currentMinutes >= openMinutes &&
+    currentMinutes < openMinutes + normalizedWindowMinutes;
+
+  if (!isInOpenWindow) {
+    return false;
+  }
+
+  return (await getMarketSessionStatus(countryCode, date))?.isOpen === true;
 }
 
 export async function getMarketSessionStatus(
@@ -246,8 +272,7 @@ export async function getMarketSessionStatus(
   const closeMinutes =
     parseTimeToMinutes(marketHoliday?.closeTime ?? null) ??
     toMinutes(session.closeHour, session.closeMinute);
-  const isOpen =
-    currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+  const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes;
 
   return {
     checkedAt,

@@ -51,6 +51,13 @@ enum TradeOrderStatus {
   @@map("Trade_order_status")
 }
 
+enum TradeOrderPriceType {
+  LIMIT // 지정가
+  MARKET // 시장가
+
+  @@map("Trade_order_price_type")
+}
+
 enum OrderBookSide {
   ASK // 매도 호가
   BID // 매수 호가
@@ -564,6 +571,7 @@ model TradeOrder {
   stockId           Int                    @map("stock_id")
   ticker            String                 @db.VarChar(255)
   type              TradeOrderType
+  orderPriceType    TradeOrderPriceType    @default(LIMIT) @map("order_price_type")
   quantity          Int
   pricePerShare     Decimal                @map("price_per_share")
   status            TradeOrderStatus

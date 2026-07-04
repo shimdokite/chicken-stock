@@ -49,6 +49,7 @@ export default function QuickOrder({
   const cancelAllOrders = useCancelAllStockOrders(stock.id);
   const [quantityInput, setQuantityInput] = useState("");
 
+  const isMarketOpen = orderContext.marketSession?.isOpen === true;
   const quantity = parseQuantityInput(quantityInput);
   const maxLimitBuyQuantity = getMaxBuyQuantity(
     orderContext.buyingPower,
@@ -59,20 +60,35 @@ export default function QuickOrder({
     currentPrice: stock.currentPrice,
     levels: orderBookSnapshot?.levels,
   });
+  const effectiveMaxMarketBuyQuantity = isMarketOpen
+    ? maxMarketBuyQuantity
+    : maxLimitBuyQuantity;
   const maxSellQuantity = orderContext.holding.sellableQuantity;
   const maxQuickQuantity = Math.max(
     maxLimitBuyQuantity,
-    maxMarketBuyQuantity,
+    effectiveMaxMarketBuyQuantity,
     maxSellQuantity,
   );
   const limitBuyAmount = stock.currentPrice * quantity;
-  const marketBuyAmount = getMarketOrderAmountEstimate({
-    currentPrice: stock.currentPrice,
-    levels: orderBookSnapshot?.levels,
-    quantity,
-    type: "BUY",
-  });
+  const marketBuyAmount = isMarketOpen
+    ? getMarketOrderAmountEstimate({
+        currentPrice: stock.currentPrice,
+        levels: orderBookSnapshot?.levels,
+        quantity,
+        type: "BUY",
+      })
+    : limitBuyAmount;
   const sellAmount = stock.currentPrice * quantity;
+  const getOrderButtonLabel = (
+    priceLabel: string,
+    type: StockTradeOrderType,
+  ) => {
+    const actionLabel = type === "BUY" ? "구매" : "판매";
+
+    return isMarketOpen
+      ? `${priceLabel} ${actionLabel}`
+      : `${priceLabel} 예약${actionLabel}`;
+  };
 
   const setClampedQuantity = (nextQuantity: number) => {
     if (nextQuantity <= 0 || maxQuickQuantity <= 0) {
@@ -90,7 +106,7 @@ export default function QuickOrder({
     const maxQuantity =
       type === "BUY"
         ? orderPriceType === "MARKET"
-          ? maxMarketBuyQuantity
+          ? effectiveMaxMarketBuyQuantity
           : maxLimitBuyQuantity
         : maxSellQuantity;
 
@@ -125,9 +141,11 @@ export default function QuickOrder({
         onSuccess: () => {
           setQuantityInput("");
           void showSuccessToast(
-            orderPriceType === "MARKET"
-              ? "주문이 체결됐습니다."
-              : "대기 주문이 등록됐습니다.",
+            !isMarketOpen
+              ? "주문이 예약됐습니다."
+              : orderPriceType === "MARKET"
+                ? "주문이 체결됐습니다."
+                : "대기 주문이 등록됐습니다.",
           );
         },
       },
@@ -248,7 +266,7 @@ export default function QuickOrder({
           type="button"
           onClick={() => submitOrder("SELL", "LIMIT")}
         >
-          현재가 판매
+          {getOrderButtonLabel("현재가", "SELL")}
         </button>
         <button
           className="h-12 rounded-xl bg-red-300 text-red-600 disabled:opacity-40"
@@ -260,7 +278,7 @@ export default function QuickOrder({
           type="button"
           onClick={() => submitOrder("BUY", "LIMIT")}
         >
-          현재가 구매
+          {getOrderButtonLabel("현재가", "BUY")}
         </button>
         <button
           className="h-12 rounded-xl bg-sky-300 text-sky-700 disabled:opacity-40"
@@ -268,19 +286,19 @@ export default function QuickOrder({
           type="button"
           onClick={() => submitOrder("SELL", "MARKET")}
         >
-          시장가 판매
+          {getOrderButtonLabel("시장가", "SELL")}
         </button>
         <button
           className="h-12 rounded-xl bg-red-300 text-red-600 disabled:opacity-40"
           disabled={
             createOrder.isPending ||
             quantity <= 0 ||
-            quantity > maxMarketBuyQuantity
+            quantity > effectiveMaxMarketBuyQuantity
           }
           type="button"
           onClick={() => submitOrder("BUY", "MARKET")}
         >
-          시장가 구매
+          {getOrderButtonLabel("시장가", "BUY")}
         </button>
       </div>
 

@@ -14,7 +14,14 @@ import {
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
 import type { TradeOrderType } from "@/app/(backend)/generated/prisma/enums";
 
-const STOCK_UPDATED_THROTTLE_MS = 1_500;
+const TRADE_EXECUTED_STOCK_UPDATED_THROTTLE_MS = getNonNegativeIntegerEnv(
+  "TRADE_EXECUTED_STOCK_UPDATED_THROTTLE_MS",
+  1_500,
+);
+const ORDER_CHANGED_STOCK_UPDATED_THROTTLE_MS = getNonNegativeIntegerEnv(
+  "ORDER_CHANGED_STOCK_UPDATED_THROTTLE_MS",
+  300,
+);
 
 type BroadcastPayload = Record<string, unknown>;
 type StockMarketSyncPayload = Awaited<ReturnType<typeof getStockMarketSync>>;
@@ -83,6 +90,18 @@ function getSupabaseServerClient() {
   });
 
   return serverSupabaseClient;
+}
+
+function getNonNegativeIntegerEnv(name: string, fallback: number) {
+  const value = Number(process.env[name]);
+
+  return Number.isInteger(value) && value >= 0 ? value : fallback;
+}
+
+function getStockUpdatedThrottleMs(reason: StockSyncReason) {
+  return reason === "ORDER_CHANGED"
+    ? ORDER_CHANGED_STOCK_UPDATED_THROTTLE_MS
+    : TRADE_EXECUTED_STOCK_UPDATED_THROTTLE_MS;
 }
 
 async function publishBroadcast(
@@ -245,16 +264,23 @@ export function scheduleStockUpdated(
 ) {
   mergeStockUpdatedPayload(stockId, payload);
 
-  if (stockUpdatedTimers.has(stockId)) {
+  const previousTimer = stockUpdatedTimers.get(stockId);
+
+  if (previousTimer) {
+    clearTimeout(previousTimer);
+    stockUpdatedTimers.delete(stockId);
+  }
+
+  const scheduledPayload = stockUpdatedPayloads.get(stockId);
+
+  if (!scheduledPayload) {
     return;
   }
 
   const now = Date.now();
   const lastPublishedAt = lastStockUpdatedAt.get(stockId) ?? 0;
-  const delay = Math.max(
-    STOCK_UPDATED_THROTTLE_MS - (now - lastPublishedAt),
-    0,
-  );
+  const throttleMs = getStockUpdatedThrottleMs(scheduledPayload.reason);
+  const delay = Math.max(throttleMs - (now - lastPublishedAt), 0);
 
   if (delay === 0) {
     void publishScheduledStockUpdated(stockId);
