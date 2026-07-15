@@ -96,7 +96,12 @@ export function useChartPanel({ stock }: StockOnlyProps) {
   const { data: rawChartCandles = [] } = useStockCandlesQuery(
     stock.id,
     selectedInterval,
-    initialChartCandles,
+    {
+      initialData:
+        selectedInterval === "DAY" ? initialDailyChartCandles : undefined,
+      placeholderData:
+        selectedInterval === "DAY" ? undefined : initialChartCandles,
+    },
   );
 
   const chartCandles = useMemo(() => {

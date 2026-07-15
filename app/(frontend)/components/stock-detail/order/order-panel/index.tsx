@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetMyInfo } from "../../../../apis/auth/queries";
 import {
   useStockOrderBookQuery,
   useStockOrdersQuery,
@@ -38,17 +39,43 @@ export default function OrderPanel({
   stock,
 }: OrderPanelProps) {
   const {
+    data: myInfo,
+    error: myInfoError,
+    isPending: isMyInfoPending,
+  } = useGetMyInfo();
+  const isLoggedIn = myInfo?.isLoggedIn === true;
+  const {
     data: orderContext,
     error,
     isFetched,
     isPending,
-  } = useStockOrdersQuery(stock.id);
+  } = useStockOrdersQuery(stock.id, { enabled: isLoggedIn });
   const { data: orderBookSnapshot } = useStockOrderBookQuery(
     stock.id,
     stock.orderBookSnapshot,
+    { refetchInterval: false },
   );
 
   const renderPanelContent = () => {
+    if (isMyInfoPending) {
+      return <OrderPanelState message="주문 정보를 불러오는 중입니다." />;
+    }
+
+    if (!myInfo) {
+      return (
+        <OrderPanelState
+          message={getApiErrorMessage(
+            myInfoError,
+            "로그인 정보를 확인하지 못했습니다.",
+          )}
+        />
+      );
+    }
+
+    if (!myInfo.isLoggedIn) {
+      return <OrderPanelState message="로그인 후 주문할 수 있습니다." />;
+    }
+
     if (!orderContext && isPending && !isFetched) {
       return <OrderPanelState message="주문 정보를 불러오는 중입니다." />;
     }

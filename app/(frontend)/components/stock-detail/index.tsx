@@ -7,17 +7,18 @@ import { useStockOrderBookQuery } from "../../apis/stocks/queries";
 import StockLogo from "./stock-logo";
 import StockDetailPanelSkeleton from "./panel-skeleton";
 import { useStockRealtime } from "../../hooks/use-stock-realtime";
-import type {
-  MainOrderTab,
-  NormalOrderTab,
-  SelectedOrderBookLimitPrice,
+import OrderPanel, {
+  type MainOrderTab,
+  type NormalOrderTab,
+  type SelectedOrderBookLimitPrice,
 } from "./order/order-panel";
-import { SegmentedControl, Tab } from "../ui";
+import OrderBookPanel from "./order/order-book-panel";
 import type {
   StockCurrencyCode,
   StockDetailTab,
   StockOnlyProps,
 } from "../../types/stock/stock-detail";
+import { SegmentedControl, Tab } from "../ui";
 import {
   convertCurrencyValue,
   convertStockCurrency,
@@ -53,20 +54,6 @@ const ChartPanel = dynamic(() => import("./order/chart-panel"), {
   ssr: false,
 });
 
-const OrderBookPanel = dynamic(() => import("./order/order-book-panel"), {
-  loading: () => (
-    <StockDetailPanelSkeleton label="호가를 불러오는 중입니다." />
-  ),
-  ssr: false,
-});
-
-const OrderPanel = dynamic(() => import("./order/order-panel"), {
-  loading: () => (
-    <StockDetailPanelSkeleton label="주문 정보를 불러오는 중입니다." />
-  ),
-  ssr: false,
-});
-
 const sideTabs: { label: string; value: StockDetailTab }[] = [
   { label: "차트 / 호가", value: "chart-orderbook" },
   { label: "내 주식 / 종목 정보", value: "portfolio-info" },
@@ -74,7 +61,7 @@ const sideTabs: { label: string; value: StockDetailTab }[] = [
 
 export default function StockDetail({ stock, activeTab }: StockDetailProps) {
   const router = useRouter();
-  useStockRealtime(stock.id);
+  const isStockRealtimeConnected = useStockRealtime(stock.id);
   const [selectedCurrencyCode, setSelectedCurrencyCode] =
     useState<StockCurrencyCode>(stock.currencyCode);
   const [orderPanelMainTab, setOrderPanelMainTab] =
@@ -88,7 +75,10 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
   const { data: liveOrderBookSnapshot } = useStockOrderBookQuery(
     stock.id,
     stock.orderBookSnapshot,
-    { enabled: isOrderTab },
+    {
+      enabled: isOrderTab,
+      refetchInterval: isStockRealtimeConnected ? false : undefined,
+    },
   );
 
   const liveStock = useMemo(() => {

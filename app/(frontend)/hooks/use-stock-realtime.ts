@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { portfolioQueryKeys } from "@/app/(frontend)/apis/portfolio/queries";
@@ -356,6 +356,9 @@ export function useUserRealtime(userOrderChannel: string | null | undefined) {
 
 export function useStockRealtime(stockId: number | null | undefined) {
   const queryClient = useQueryClient();
+  const [subscribedStockId, setSubscribedStockId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!Number.isInteger(stockId) || !stockId || stockId <= 0) {
@@ -397,7 +400,13 @@ export function useStockRealtime(stockId: number | null | undefined) {
             invalidateStockMarketQueries(queryClient, stockId, reason);
           }
         })
-        .subscribe();
+        .subscribe((status) => {
+          if (didCancel) {
+            return;
+          }
+
+          setSubscribedStockId(status === "SUBSCRIBED" ? stockId : null);
+        });
 
       if (didCancel) {
         void supabase.removeChannel(channel);
@@ -415,4 +424,6 @@ export function useStockRealtime(stockId: number | null | undefined) {
       removeChannel?.();
     };
   }, [queryClient, stockId]);
+
+  return subscribedStockId !== null && subscribedStockId === stockId;
 }

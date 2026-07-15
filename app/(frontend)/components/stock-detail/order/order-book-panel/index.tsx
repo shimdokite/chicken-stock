@@ -46,6 +46,7 @@ function OrderBookPanel({
   const { data, isError, isLoading } = useStockOrderBookQuery(
     stock.id,
     initialOrderBookSnapshot,
+    { refetchInterval: false },
   );
 
   const orderBookSnapshot =

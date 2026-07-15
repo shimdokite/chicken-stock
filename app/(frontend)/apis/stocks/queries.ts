@@ -31,6 +31,20 @@ const STOCK_CANDLES_REFETCH_INTERVAL_MS = 10_000;
 const STOCK_ORDER_BOOK_REFETCH_INTERVAL_MS = 5_000;
 const STOCK_ORDERS_REFETCH_INTERVAL_MS = 10_000;
 
+type StockCandlesQueryOptions = {
+  initialData?: ChartCandleData[];
+  placeholderData?: ChartCandleData[];
+};
+
+type StockOrderBookQueryOptions = {
+  enabled?: boolean;
+  refetchInterval?: number | false;
+};
+
+type StockOrdersQueryOptions = {
+  enabled?: boolean;
+};
+
 export function useStocksInfiniteQuery(
   market: string,
   ranking: string,
@@ -65,14 +79,16 @@ export function useStockSearchQuery(query: string, enabled = true) {
 export function useStockCandlesQuery(
   stockId: number,
   interval: StockCandleInterval,
-  placeholderData?: ChartCandleData[],
+  options?: StockCandlesQueryOptions,
 ) {
   return useQuery({
     queryKey: stockQueryKeys.candles(stockId, interval),
     queryFn: () => fetchStockCandles(stockId, interval),
     enabled: Number.isInteger(stockId) && stockId > 0,
-    placeholderData,
+    initialData: options?.initialData,
+    placeholderData: options?.placeholderData,
     refetchInterval: STOCK_CANDLES_REFETCH_INTERVAL_MS,
+    staleTime: STOCK_CANDLES_REFETCH_INTERVAL_MS,
   });
 }
 
@@ -92,7 +108,7 @@ export function useStockAnalyticsQuery(
 export function useStockOrderBookQuery(
   stockId: number,
   initialData?: StockOrderBookSnapshotData | null,
-  options?: { enabled?: boolean },
+  options?: StockOrderBookQueryOptions,
 ) {
   const enabled = options?.enabled ?? true;
 
@@ -101,16 +117,22 @@ export function useStockOrderBookQuery(
     queryFn: () => fetchStockOrderBook(stockId),
     enabled: enabled && Number.isInteger(stockId) && stockId > 0,
     initialData,
-    refetchInterval: STOCK_ORDER_BOOK_REFETCH_INTERVAL_MS,
+    refetchInterval:
+      options?.refetchInterval ?? STOCK_ORDER_BOOK_REFETCH_INTERVAL_MS,
     staleTime: 5_000,
   });
 }
 
-export function useStockOrdersQuery(stockId: number) {
+export function useStockOrdersQuery(
+  stockId: number,
+  options?: StockOrdersQueryOptions,
+) {
+  const enabled = options?.enabled ?? true;
+
   return useQuery({
     queryKey: stockQueryKeys.orders(stockId),
     queryFn: () => fetchStockOrders(stockId),
-    enabled: Number.isInteger(stockId) && stockId > 0,
+    enabled: enabled && Number.isInteger(stockId) && stockId > 0,
     refetchInterval: STOCK_ORDERS_REFETCH_INTERVAL_MS,
   });
 }
