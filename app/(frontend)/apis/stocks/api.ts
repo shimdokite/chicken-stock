@@ -1,4 +1,5 @@
 import { requests } from "../request";
+import { createStockOrderHeaders } from "./create-order-headers";
 import type {
   StockData,
   StockMarket,
@@ -308,10 +309,14 @@ export async function fetchStockOrders(stockId: number) {
 export async function createStockOrder(
   stockId: number,
   payload: CreateStockOrderRequest,
+  idempotencyKey: string,
 ) {
   const { data } = await requests.post<StockOrderMutationResponse>(
     `/api/stocks/${stockId}/orders`,
     payload,
+    {
+      headers: createStockOrderHeaders(idempotencyKey),
+    },
   );
 
   if (!data.ok) {

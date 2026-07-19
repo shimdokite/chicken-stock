@@ -19,6 +19,7 @@ import {
   getStockMutationSync,
   type StockSyncReason,
 } from "@/app/(backend)/lib/stock-order-sync";
+import { isRetryableOrderTransactionError as hasRetryableOrderTransactionCode } from "@/app/(backend)/lib/stock-order-transaction";
 import { getMarketSessionStatus } from "@/app/(backend)/lib/market-hours";
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
 import {
@@ -64,30 +65,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function getErrorCode(error: unknown) {
-  if (!isRecord(error)) {
-    return null;
-  }
-
-  if (typeof error.code === "string") {
-    return error.code;
-  }
-
-  if (isRecord(error.meta) && typeof error.meta.code === "string") {
-    return error.meta.code;
-  }
-
-  return null;
-}
-
 function isRetryableOrderTransactionError(error: unknown) {
   if (error instanceof StockOrderConcurrencyError) {
     return true;
   }
 
-  const code = getErrorCode(error);
-
-  return code === "P2034" || code === "40001" || code === "40P01";
+  return hasRetryableOrderTransactionCode(error);
 }
 
 function wait(ms: number) {

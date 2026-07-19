@@ -140,6 +140,7 @@ export default function NormalBuyOrder({
 
     createOrder.mutate(
       {
+        idempotencyKey: crypto.randomUUID(),
         payload,
         stockId: stock.id,
       },

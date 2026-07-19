@@ -21,6 +21,7 @@ import type {
 } from "../../types/stock/stock-detail";
 
 type CreateStockOrderVariables = {
+  idempotencyKey: string;
   payload: CreateStockOrderRequest;
   stockId: number;
 };
@@ -427,8 +428,12 @@ export function useCreateStockOrder() {
   const applyStockOrderMutationResult = useApplyStockOrderMutationResult();
 
   return useMutation({
-    mutationFn: ({ payload, stockId }: CreateStockOrderVariables) =>
-      createStockOrder(stockId, payload),
+    mutationFn: ({
+      idempotencyKey,
+      payload,
+      stockId,
+    }: CreateStockOrderVariables) =>
+      createStockOrder(stockId, payload, idempotencyKey),
     onMutate: async ({
       payload,
       stockId,
@@ -442,10 +447,9 @@ export function useCreateStockOrder() {
         }),
       ]);
 
-      const previousOrderContext =
-        queryClient.getQueryData<StockOrderContext>(
-          stockQueryKeys.orders(stockId),
-        );
+      const previousOrderContext = queryClient.getQueryData<StockOrderContext>(
+        stockQueryKeys.orders(stockId),
+      );
       const previousOrderBookSnapshot =
         queryClient.getQueryData<StockOrderBookSnapshotData | null>(
           stockQueryKeys.orderBook(stockId),

@@ -129,6 +129,7 @@ export default function QuickOrder({
 
     createOrder.mutate(
       {
+        idempotencyKey: crypto.randomUUID(),
         payload,
         stockId: stock.id,
       },

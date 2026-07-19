@@ -566,32 +566,35 @@ model StockEarning {
 }
 
 model TradeOrder {
-  orderId           BigInt                 @id @map("order_id")
-  portfolioId       BigInt                 @map("portfolio_id")
-  stockId           Int                    @map("stock_id")
-  ticker            String                 @db.VarChar(255)
-  type              TradeOrderType
-  orderPriceType    TradeOrderPriceType    @default(LIMIT) @map("order_price_type")
-  quantity          Int
-  pricePerShare     Decimal                @map("price_per_share")
-  status            TradeOrderStatus
-  orderedAt         DateTime               @map("ordered_at")
-  filledQuantity    Int                    @map("filled_quantity")
-  remainingQuantity Int                    @map("remaining_quantity")
-  executedPrice     Decimal?               @map("executed_price")
-  executedAt        DateTime?              @map("executed_at")
-  canceledAt        DateTime?              @map("canceled_at")
-  rejectReason      String?                @map("reject_reason") @db.VarChar(255)
-  currencyCode      CurrencyCode           @map("currency_code")
-  createdAt         DateTime               @default(now()) @map("created_at")
-  updatedAt         DateTime               @updatedAt @map("updated_at")
-  portfolio         Portfolio              @relation(fields: [portfolioId], references: [id])
-  stock             Stock                  @relation(fields: [stockId], references: [id])
-  transactions      PortfolioTransaction[]
-  buyExecutions     TradeExecution[]       @relation("BuyTradeExecutions")
-  sellExecutions    TradeExecution[]       @relation("SellTradeExecutions")
-  agentDecisionLogs AgentDecisionLog[]
+  orderId                BigInt                 @id @map("order_id")
+  portfolioId            BigInt                 @map("portfolio_id")
+  stockId                Int                    @map("stock_id")
+  ticker                 String                 @db.VarChar(255)
+  type                   TradeOrderType
+  orderPriceType         TradeOrderPriceType    @default(LIMIT) @map("order_price_type")
+  quantity               Int
+  pricePerShare          Decimal                @map("price_per_share")
+  status                 TradeOrderStatus
+  orderedAt              DateTime               @map("ordered_at")
+  filledQuantity         Int                    @map("filled_quantity")
+  remainingQuantity      Int                    @map("remaining_quantity")
+  executedPrice          Decimal?               @map("executed_price")
+  executedAt             DateTime?              @map("executed_at")
+  canceledAt             DateTime?              @map("canceled_at")
+  rejectReason           String?                @map("reject_reason") @db.VarChar(255)
+  idempotencyKey         String?                @map("idempotency_key") @db.VarChar(128)
+  idempotencyRequestHash String?                @map("idempotency_request_hash") @db.Char(64)
+  currencyCode           CurrencyCode           @map("currency_code")
+  createdAt              DateTime               @default(now()) @map("created_at")
+  updatedAt              DateTime               @updatedAt @map("updated_at")
+  portfolio              Portfolio              @relation(fields: [portfolioId], references: [id])
+  stock                  Stock                  @relation(fields: [stockId], references: [id])
+  transactions           PortfolioTransaction[]
+  buyExecutions          TradeExecution[]       @relation("BuyTradeExecutions")
+  sellExecutions         TradeExecution[]       @relation("SellTradeExecutions")
+  agentDecisionLogs      AgentDecisionLog[]
 
+  @@unique([portfolioId, idempotencyKey], map: "Trade_order_portfolio_id_idempotency_key_key")
   @@index([portfolioId, stockId, status, orderedAt])
   @@index([stockId, status, remainingQuantity])
   @@index([stockId, status, type, pricePerShare])

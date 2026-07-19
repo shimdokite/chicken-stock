@@ -21,6 +21,7 @@ import {
   StockOrderMatchingError,
 } from "@/app/(backend)/lib/stock-order-matching";
 import type { StockSyncReason } from "@/app/(backend)/lib/stock-order-sync";
+import { isRetryableOrderTransactionError as hasRetryableOrderTransactionCode } from "@/app/(backend)/lib/stock-order-transaction";
 
 export type StockOrderPriceType = "LIMIT" | "MARKET";
 export type StockOrderRealtimeSyncMode = "full" | "lightweight";
@@ -30,6 +31,10 @@ type TransactionClient = Prisma.TransactionClient;
 
 export type CreateStockOrderInput = {
   allowExternalLiquidity?: boolean;
+  idempotency?: {
+    key: string;
+    requestHash: string;
+  };
   orderPriceType: StockOrderPriceType;
   pricePerShare?: Prisma.Decimal | null;
   quantity: number;
@@ -69,34 +74,12 @@ const ORDER_TRANSACTION_TIMEOUT_MS = getPositiveIntegerEnv(
   20_000,
 );
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function getErrorCode(error: unknown) {
-  if (!isRecord(error)) {
-    return null;
-  }
-
-  if (typeof error.code === "string") {
-    return error.code;
-  }
-
-  if (isRecord(error.meta) && typeof error.meta.code === "string") {
-    return error.meta.code;
-  }
-
-  return null;
-}
-
 function isRetryableOrderTransactionError(error: unknown) {
   if (error instanceof StockOrderConcurrencyError) {
     return true;
   }
 
-  const code = getErrorCode(error);
-
-  return code === "P2034" || code === "40001" || code === "40P01";
+  return hasRetryableOrderTransactionCode(error);
 }
 
 function wait(ms: number) {
@@ -472,6 +455,7 @@ export async function publishStockOrderRealtimeUpdate({
 
 export async function createStockOrderForUser({
   allowExternalLiquidity = false,
+  idempotency,
   orderPriceType,
   pricePerShare: inputPricePerShare = null,
   quantity,
@@ -496,161 +480,201 @@ export async function createStockOrderForUser({
     const marketSession = await getStockMarketSessionStatus(stockId, orderedAt);
     const shouldMatchImmediately =
       shouldMatch && marketSession?.isOpen === true;
-    const order = await runSerializableOrderTransaction(async (tx) => {
-      await lockStockForOrderProcessing(tx, stockId);
+    const transactionResult = await runSerializableOrderTransaction(
+      async (tx) => {
+        await lockStockForOrderProcessing(tx, stockId);
 
-      const stock = await tx.stock.findUnique({
-        select: {
-          countryCode: true,
-          currencyCode: true,
-          currentPrice: true,
-          id: true,
-          imageUrl: true,
-          marketStatus: true,
-          name: true,
-          ticker: true,
-        },
-        where: {
-          id: stockId,
-        },
-      });
-
-      if (!stock) {
-        throw new StockOrderServiceError(
-          "종목을 찾을 수 없습니다.",
-          404,
-          "INVALID_STOCK",
-        );
-      }
-
-      if (stock.marketStatus !== StockMarketStatus.LISTED) {
-        throw new StockOrderServiceError(
-          "거래 가능한 종목이 아닙니다.",
-          400,
-          "INVALID_STOCK",
-        );
-      }
-
-      const portfolio = await getLockedPortfolioForUser(tx, userId, stockId);
-
-      if (!portfolio) {
-        throw new StockOrderServiceError(
-          "계좌가 없습니다.",
-          404,
-          "PORTFOLIO_NOT_FOUND",
-        );
-      }
-
-      const pricePerShare =
-        (orderPriceType === "LIMIT"
-          ? inputPricePerShare
-          : stock.currentPrice.toDecimalPlaces(2)) ??
-        stock.currentPrice.toDecimalPlaces(2);
-      const orderAmount =
-        type === TradeOrderType.BUY &&
-        orderPriceType === "MARKET" &&
-        shouldMatchImmediately
-          ? await getEstimatedMarketOrderAmount(tx, {
-              currentPrice: stock.currentPrice,
-              portfolioId: portfolio.id,
-              quantity,
-              stockId,
-              type,
-            })
-          : pricePerShare.mul(quantity).toDecimalPlaces(2);
-
-      if (type === TradeOrderType.BUY) {
-        const pendingBuyOrders = await tx.tradeOrder.findMany({
+        const stock = await tx.stock.findUnique({
+          select: {
+            countryCode: true,
+            currencyCode: true,
+            currentPrice: true,
+            id: true,
+            imageUrl: true,
+            marketStatus: true,
+            name: true,
+            ticker: true,
+          },
           where: {
-            currencyCode: stock.currencyCode,
-            portfolioId: portfolio.id,
-            status: TradeOrderStatus.PENDING,
-            type: TradeOrderType.BUY,
+            id: stockId,
           },
         });
-        const availableBuyAmount = getNonNegativeDecimal(
-          getCashBalance(portfolio, stock.currencyCode).sub(
-            sumPendingBuyAmount(pendingBuyOrders),
-          ),
-        );
 
-        if (orderAmount.gt(availableBuyAmount)) {
+        if (!stock) {
           throw new StockOrderServiceError(
-            "구매 가능 금액이 부족합니다.",
-            400,
-            "INSUFFICIENT_CASH",
-          );
-        }
-      } else {
-        const holding = portfolio.items[0];
-
-        if (!holding || holding.quantity <= 0) {
-          throw new StockOrderServiceError(
-            "판매할 주식이 없습니다.",
-            400,
-            "INSUFFICIENT_POSITION",
+            "종목을 찾을 수 없습니다.",
+            404,
+            "INVALID_STOCK",
           );
         }
 
-        const pendingSellOrders = await tx.tradeOrder.findMany({
-          where: {
+        const portfolio = await getLockedPortfolioForUser(tx, userId, stockId);
+
+        if (!portfolio) {
+          throw new StockOrderServiceError(
+            "계좌가 없습니다.",
+            404,
+            "PORTFOLIO_NOT_FOUND",
+          );
+        }
+
+        if (idempotency) {
+          const existingOrder = await tx.tradeOrder.findUnique({
+            where: {
+              portfolioId_idempotencyKey: {
+                idempotencyKey: idempotency.key,
+                portfolioId: portfolio.id,
+              },
+            },
+          });
+
+          if (existingOrder) {
+            if (
+              existingOrder.idempotencyRequestHash !== idempotency.requestHash
+            ) {
+              throw new StockOrderServiceError(
+                "동일한 Idempotency-Key를 다른 주문에 사용할 수 없습니다.",
+                409,
+                "IDEMPOTENCY_KEY_CONFLICT",
+              );
+            }
+
+            return {
+              idempotencyReplayed: true,
+              order: existingOrder,
+            };
+          }
+        }
+
+        if (stock.marketStatus !== StockMarketStatus.LISTED) {
+          throw new StockOrderServiceError(
+            "거래 가능한 종목이 아닙니다.",
+            400,
+            "INVALID_STOCK",
+          );
+        }
+
+        const pricePerShare =
+          (orderPriceType === "LIMIT"
+            ? inputPricePerShare
+            : stock.currentPrice.toDecimalPlaces(2)) ??
+          stock.currentPrice.toDecimalPlaces(2);
+        const orderAmount =
+          type === TradeOrderType.BUY &&
+          orderPriceType === "MARKET" &&
+          shouldMatchImmediately
+            ? await getEstimatedMarketOrderAmount(tx, {
+                currentPrice: stock.currentPrice,
+                portfolioId: portfolio.id,
+                quantity,
+                stockId,
+                type,
+              })
+            : pricePerShare.mul(quantity).toDecimalPlaces(2);
+
+        if (type === TradeOrderType.BUY) {
+          const pendingBuyOrders = await tx.tradeOrder.findMany({
+            where: {
+              currencyCode: stock.currencyCode,
+              portfolioId: portfolio.id,
+              status: TradeOrderStatus.PENDING,
+              type: TradeOrderType.BUY,
+            },
+          });
+          const availableBuyAmount = getNonNegativeDecimal(
+            getCashBalance(portfolio, stock.currencyCode).sub(
+              sumPendingBuyAmount(pendingBuyOrders),
+            ),
+          );
+
+          if (orderAmount.gt(availableBuyAmount)) {
+            throw new StockOrderServiceError(
+              "구매 가능 금액이 부족합니다.",
+              400,
+              "INSUFFICIENT_CASH",
+            );
+          }
+        } else {
+          const holding = portfolio.items[0];
+
+          if (!holding || holding.quantity <= 0) {
+            throw new StockOrderServiceError(
+              "판매할 주식이 없습니다.",
+              400,
+              "INSUFFICIENT_POSITION",
+            );
+          }
+
+          const pendingSellOrders = await tx.tradeOrder.findMany({
+            where: {
+              portfolioId: portfolio.id,
+              status: TradeOrderStatus.PENDING,
+              stockId,
+              type: TradeOrderType.SELL,
+            },
+          });
+          const pendingSellQuantity = pendingSellOrders.reduce(
+            (sum, order) => sum + order.remainingQuantity,
+            0,
+          );
+          const availableSellQuantity = holding.quantity - pendingSellQuantity;
+
+          if (quantity > availableSellQuantity) {
+            throw new StockOrderServiceError(
+              "판매 가능 수량이 부족합니다.",
+              400,
+              "INSUFFICIENT_POSITION",
+            );
+          }
+        }
+
+        const createdOrder = await tx.tradeOrder.create({
+          data: {
+            currencyCode: stock.currencyCode,
+            executedAt: null,
+            executedPrice: null,
+            filledQuantity: 0,
+            idempotencyKey: idempotency?.key ?? null,
+            idempotencyRequestHash: idempotency?.requestHash ?? null,
+            orderId,
+            orderPriceType,
+            orderedAt,
             portfolioId: portfolio.id,
+            pricePerShare,
+            quantity,
+            remainingQuantity: quantity,
             status: TradeOrderStatus.PENDING,
             stockId,
-            type: TradeOrderType.SELL,
+            ticker: stock.ticker,
+            type,
           },
         });
-        const pendingSellQuantity = pendingSellOrders.reduce(
-          (sum, order) => sum + order.remainingQuantity,
-          0,
-        );
-        const availableSellQuantity = holding.quantity - pendingSellQuantity;
 
-        if (quantity > availableSellQuantity) {
-          throw new StockOrderServiceError(
-            "판매 가능 수량이 부족합니다.",
-            400,
-            "INSUFFICIENT_POSITION",
-          );
+        if (!shouldMatchImmediately) {
+          return {
+            idempotencyReplayed: false,
+            order: createdOrder,
+          };
         }
-      }
 
-      const createdOrder = await tx.tradeOrder.create({
-        data: {
-          currencyCode: stock.currencyCode,
-          executedAt: null,
-          executedPrice: null,
-          filledQuantity: 0,
-          orderId,
-          orderPriceType,
-          orderedAt,
-          portfolioId: portfolio.id,
-          pricePerShare,
-          quantity,
-          remainingQuantity: quantity,
-          status: TradeOrderStatus.PENDING,
-          stockId,
-          ticker: stock.ticker,
-          type,
-        },
-      });
+        const matchedOrder =
+          (await matchStockOrder(tx, {
+            allowExternalLiquidity,
+            executedAt: orderedAt,
+            orderId: createdOrder.orderId,
+            orderPriceType,
+            stock,
+          })) ?? createdOrder;
 
-      if (!shouldMatchImmediately) {
-        return createdOrder;
-      }
+        return {
+          idempotencyReplayed: false,
+          order: matchedOrder,
+        };
+      },
+    );
+    const { idempotencyReplayed, order } = transactionResult;
 
-      return (
-        (await matchStockOrder(tx, {
-          allowExternalLiquidity,
-          executedAt: orderedAt,
-          orderId: createdOrder.orderId,
-          orderPriceType,
-          stock,
-        })) ?? createdOrder
-      );
-    });
-
-    if (realtimeDelivery === "inline") {
+    if (realtimeDelivery === "inline" && !idempotencyReplayed) {
       await publishStockOrderRealtimeUpdate({
         order,
         realtimeSyncMode,
@@ -658,7 +682,10 @@ export async function createStockOrderForUser({
       });
     }
 
-    return order;
+    return {
+      ...order,
+      idempotencyReplayed,
+    };
   } catch (error) {
     throw toStockOrderServiceError(error);
   }

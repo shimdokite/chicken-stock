@@ -3,9 +3,7 @@ import {
   ACCESS_TOKEN_COOKIE_NAME,
   verifyAuthToken,
 } from "@/app/(backend)/lib/auth";
-import {
-  scheduleStockUpdated,
-} from "@/app/(backend)/lib/realtime-events";
+import { scheduleStockUpdated } from "@/app/(backend)/lib/realtime-events";
 import {
   getStockMutationSync,
   getStockOrderContext,
@@ -24,8 +22,13 @@ import {
   serializeTradeOrder as serializeServiceTradeOrder,
   StockOrderServiceError,
 } from "@/app/(backend)/lib/stock-order-service";
+import {
+  createStockOrderRequestHash,
+  parseIdempotencyKey,
+} from "@/app/(backend)/lib/stock-order-idempotency";
 import { prisma } from "@/app/(backend)/lib/prisma";
 import { Prisma } from "@/app/(backend)/generated/prisma/client";
+import { isRetryableOrderTransactionError as hasRetryableOrderTransactionCode } from "@/app/(backend)/lib/stock-order-transaction";
 import {
   TradeOrderStatus,
   TradeOrderType,
@@ -70,30 +73,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function getErrorCode(error: unknown) {
-  if (!isRecord(error)) {
-    return null;
-  }
-
-  if (typeof error.code === "string") {
-    return error.code;
-  }
-
-  if (isRecord(error.meta) && typeof error.meta.code === "string") {
-    return error.meta.code;
-  }
-
-  return null;
-}
-
 function isRetryableOrderTransactionError(error: unknown) {
   if (error instanceof StockOrderConcurrencyError) {
     return true;
   }
 
-  const code = getErrorCode(error);
-
-  return code === "P2034" || code === "40001" || code === "40P01";
+  return hasRetryableOrderTransactionCode(error);
 }
 
 function wait(ms: number) {
@@ -103,7 +88,11 @@ function wait(ms: number) {
 async function runSerializableOrderTransaction<T>(
   operation: (tx: TransactionClient) => Promise<T>,
 ) {
-  for (let attempt = 1; attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS; attempt += 1) {
+  for (
+    let attempt = 1;
+    attempt <= ORDER_TRANSACTION_MAX_ATTEMPTS;
+    attempt += 1
+  ) {
     try {
       return await prisma.$transaction(operation, {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
@@ -327,8 +316,30 @@ export async function POST(request: NextRequest, { params }: StockOrderParams) {
     return createStockOrderErrorResponse("유효한 주문 정보가 필요합니다.", 400);
   }
 
+  const idempotencyKey = parseIdempotencyKey(
+    request.headers.get("Idempotency-Key"),
+  );
+
+  if (!idempotencyKey) {
+    return createStockOrderErrorResponse(
+      "유효한 Idempotency-Key가 필요합니다.",
+      400,
+    );
+  }
+
+  const requestHash = createStockOrderRequestHash({
+    ...payload,
+    pricePerShare: payload.pricePerShare,
+    stockId: parsedStockId,
+    userId,
+  });
+
   try {
     const order = await createStockOrderForUser({
+      idempotency: {
+        key: idempotencyKey,
+        requestHash,
+      },
       orderPriceType: payload.orderPriceType,
       pricePerShare: payload.pricePerShare,
       quantity: payload.quantity,
@@ -343,28 +354,36 @@ export async function POST(request: NextRequest, { params }: StockOrderParams) {
       userId,
     });
 
-    after(async () => {
-      try {
-        await publishStockOrderRealtimeUpdate({
-          order,
-          since: order.orderedAt,
-        });
-      } catch (error) {
-        console.error("Stock order realtime publish failed", {
-          error,
-          orderId: order.orderId.toString(),
-          stockId: parsedStockId,
-        });
-      }
-    });
+    if (!order.idempotencyReplayed) {
+      after(async () => {
+        try {
+          await publishStockOrderRealtimeUpdate({
+            order,
+            since: order.orderedAt,
+          });
+        } catch (error) {
+          console.error("Stock order realtime publish failed", {
+            error,
+            orderId: order.orderId.toString(),
+            stockId: parsedStockId,
+          });
+        }
+      });
+    }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       ok: true,
       data: {
         order: serializeServiceTradeOrder(order),
         sync,
       },
     });
+
+    if (order.idempotencyReplayed) {
+      response.headers.set("Idempotency-Replayed", "true");
+    }
+
+    return response;
   } catch (error) {
     if (
       error instanceof StockOrderError ||
