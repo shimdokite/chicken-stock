@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
+import { Prisma } from "../generated/prisma/client";
 import {
+  USD_KRW_EXCHANGE_RATE,
   convertCurrencyValue,
   type CurrencyCode,
 } from "../../(frontend)/utils/currency";
@@ -21,6 +23,17 @@ export type StockRankingKey = "tradingAmount" | "tradingVolume";
 
 type DecimalLike = {
   toNumber: () => number;
+};
+
+type RankedStockRow = {
+  id: number;
+  name: string;
+  countryCode: string;
+  currencyCode: CurrencyCode;
+  currentPrice: DecimalLike;
+  changeRate: DecimalLike;
+  tradingValue: DecimalLike;
+  volume: DecimalLike;
 };
 
 export function parseStockMarketFilter(value: string | null) {
@@ -89,23 +102,33 @@ function getLogoLabel(name: string) {
   return name.trim().charAt(0).toUpperCase();
 }
 
-function getRankingValue(
-  stock: {
-    tradingValue: DecimalLike;
-    volume: DecimalLike;
-    currencyCode: CurrencyCode;
-  },
-  ranking: StockRankingKey,
-) {
-  if (ranking === "tradingVolume") {
-    return toNumber(stock.volume);
+function getMarketCondition(market: StockMarketFilter) {
+  if (market === "domestic") {
+    return Prisma.sql`AND "country_code" = ${"KR"}`;
   }
 
-  return convertCurrencyValue(
-    toNumber(stock.tradingValue),
-    stock.currencyCode,
-    "KRW",
-  );
+  if (market === "global") {
+    return Prisma.sql`AND "country_code" <> ${"KR"}`;
+  }
+
+  return Prisma.empty;
+}
+
+function getRankingExpression(ranking: StockRankingKey) {
+  if (ranking === "tradingVolume") {
+    return Prisma.sql`"volume"::double precision`;
+  }
+
+  return Prisma.sql`
+    CASE
+      WHEN "currency_code" = ${"USD"}::"Currency_code"
+        THEN FLOOR(
+          "trading_value"::double precision *
+          ${USD_KRW_EXCHANGE_RATE}::double precision + 0.5
+        )
+      ELSE "trading_value"::double precision
+    END
+  `;
 }
 
 type GetStocksPageParams = {
@@ -133,37 +156,26 @@ export async function getStocksPage({
     };
   }
 
-  const stocks = await prisma.stock.findMany({
-    where: {
-      marketStatus: "LISTED",
-      ...(market === "all"
-        ? {}
-        : {
-            countryCode: market === "domestic" ? "KR" : { not: "KR" },
-          }),
-    },
-    select: {
-      id: true,
-      name: true,
-      countryCode: true,
-      currencyCode: true,
-      currentPrice: true,
-      changeRate: true,
-      tradingValue: true,
-      volume: true,
-    },
-  });
+  const stocks = await prisma.$queryRaw<RankedStockRow[]>(Prisma.sql`
+    SELECT "id",
+           "name",
+           "country_code" AS "countryCode",
+           "currency_code" AS "currencyCode",
+           "current_price" AS "currentPrice",
+           "change_rate" AS "changeRate",
+           "trading_value" AS "tradingValue",
+           "volume"
+    FROM "public"."Stock"
+    WHERE "market_status" = ${"LISTED"}::"Stock_market_status"
+    ${getMarketCondition(market)}
+    ORDER BY ${getRankingExpression(ranking)} DESC, "id" ASC
+    OFFSET ${skip}
+    LIMIT ${pageSize + 1}
+  `);
 
-  const sortedStocks = stocks
-    .toSorted(
-      (a, b) => getRankingValue(b, ranking) - getRankingValue(a, ranking),
-    )
-    .slice(0, MAX_STOCKS_COUNT + 1);
-
-  const pageStocks = sortedStocks.slice(skip, skip + pageSize + 1);
   const hasNextPage =
-    pageStocks.length > pageSize && skip + pageSize < MAX_STOCKS_COUNT;
-  const visibleStocks = pageStocks.slice(0, pageSize);
+    stocks.length > pageSize && skip + pageSize < MAX_STOCKS_COUNT;
+  const visibleStocks = stocks.slice(0, pageSize);
 
   const data: StockData[] = visibleStocks.map((stock, index) => {
     const changeRate = toNumber(stock.changeRate);
