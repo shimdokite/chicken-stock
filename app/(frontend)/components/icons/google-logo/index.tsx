@@ -4,7 +4,7 @@ type GoogleLogoProps = {
   size?: number | string;
 };
 
-export default function GoogleLogo({ size = 45 }: GoogleLogoProps) {
+export default function GoogleLogo({ size = 28 }: GoogleLogoProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
