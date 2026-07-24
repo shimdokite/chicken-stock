@@ -8,7 +8,7 @@ export default function HeaderAuthStatus() {
   const { data, isPending } = useGetMyInfo();
 
   if (isPending) {
-    return <div className="h-[50px] w-[50px] rounded-full bg-(--cs-color-gray-200)/40" />;
+    return <div className="size-10 rounded-full bg-(--cs-color-gray-200)/40" />;
   }
 
   if (!data?.isLoggedIn) {

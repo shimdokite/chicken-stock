@@ -173,10 +173,10 @@ export default function NormalSellOrder({
                 setOrderPriceType(value.toUpperCase() as StockOrderPriceType)
               }
             >
-              <SegmentedControl.Item className="h-7 flex-1" value="limit">
+              <SegmentedControl.Item className="h-6 flex-1" value="limit">
                 지정가
               </SegmentedControl.Item>
-              <SegmentedControl.Item className="h-7 flex-1" value="market">
+              <SegmentedControl.Item className="h-6 flex-1" value="market">
                 시장가
               </SegmentedControl.Item>
             </SegmentedControl>
@@ -186,7 +186,7 @@ export default function NormalSellOrder({
             <span />
             <div className="flex items-center gap-2">
               <input
-                className="h-8 min-w-0 flex-1 rounded-lg border-2 border-zinc-200 px-2 text-right text-base font-semibold outline-none focus:border-sky-300"
+                className="h-8 min-w-0 flex-1 rounded-lg border-2 border-zinc-200 px-2 text-right text-base font-semibold outline-none"
                 disabled={orderPriceType === "MARKET"}
                 inputMode="decimal"
                 value={
@@ -225,7 +225,7 @@ export default function NormalSellOrder({
             <span className="font-semibold">수량</span>
             <div className="flex items-center gap-2">
               <input
-                className="h-8 min-w-0 flex-1 rounded-lg border-2 border-zinc-200 px-2 text-right text-base font-semibold outline-none focus:border-sky-300"
+                className="h-8 min-w-0 flex-1 rounded-lg border-2 border-zinc-200 px-2 text-right text-base font-semibold outline-none"
                 inputMode="numeric"
                 placeholder={
                   maxQuantity > 0 ? `최대 ${maxQuantity}주 가능` : ""

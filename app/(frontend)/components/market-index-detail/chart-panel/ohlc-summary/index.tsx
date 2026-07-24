@@ -12,7 +12,7 @@ export function MarketIndexOhlcSummary({
   items,
 }: MarketIndexOhlcSummaryProps) {
   return (
-    <dl className="mb-2 flex flex-wrap gap-x-2 gap-y-1 text-[11px] whitespace-nowrap text-zinc-950">
+    <dl className="mb-2 flex flex-wrap gap-x-2 gap-y-1 text-xs whitespace-nowrap text-zinc-950">
       {items.map((item) => {
         const rateColorClassName =
           item.rate > 0

@@ -183,7 +183,7 @@ export default function PendingOrders({
                 <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
                   <input
                     aria-label="수정 수량"
-                    className="h-8 min-w-0 rounded-lg border-2 border-zinc-200 px-2 text-right text-base outline-none focus:border-sky-300"
+                    className="h-8 min-w-0 rounded-lg border-2 border-zinc-200 px-2 text-right text-base outline-none"
                     inputMode="numeric"
                     value={editQuantityInput}
                     onChange={(event) =>
@@ -192,7 +192,7 @@ export default function PendingOrders({
                   />
                   <input
                     aria-label="수정 주문가"
-                    className="h-8 min-w-0 rounded-lg border-2 border-zinc-200 px-2 text-right text-base outline-none focus:border-sky-300"
+                    className="h-8 min-w-0 rounded-lg border-2 border-zinc-200 px-2 text-right text-base outline-none"
                     inputMode="decimal"
                     value={editPriceInput}
                     onChange={(event) => setEditPriceInput(event.target.value)}

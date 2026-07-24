@@ -91,13 +91,17 @@ export default function CreateAccountModal() {
       setIsOpen={handleOpenChange}
       closeOnOverlayClick={false}
     >
-      <Modal.Trigger className="cursor-pointer rounded-[10px] bg-(--cs-color-gray-200)/40 px-3.5 py-2.5 text-xl font-semibold">
+      <Modal.Trigger className="min-h-11 cursor-pointer rounded-lg bg-(--cs-brand-700) px-5 text-base font-semibold text-white hover:bg-(--cs-brand-800)">
         계좌 개설하기
       </Modal.Trigger>
 
       <Modal.Overlay>
         <Modal.Content className="col min-h-[565px] w-full max-w-[650px] justify-between">
-          <h1 className="text-2xl">{STEPS[step].title}</h1>
+          <div className="border-b border-(--cs-border-subtle) pr-10 pb-4">
+            <h1 className="text-2xl font-bold text-(--cs-text-strong)">
+              {STEPS[step].title}
+            </h1>
+          </div>
 
           {stepComponent}
         </Modal.Content>

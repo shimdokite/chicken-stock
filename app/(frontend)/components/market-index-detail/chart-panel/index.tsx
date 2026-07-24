@@ -5,7 +5,6 @@ import type {
   MarketIndexCandleData,
   MarketIndexDetailData,
 } from "../../../types/market-index";
-import MarketDataStatus from "../../market-data-status";
 import { ChartOverlayLabels } from "../../stock-detail/order/chart-panel/chart-overlay-labels";
 import { RangeToolbar } from "../../stock-detail/order/chart-panel/range-toolbar";
 import type { ChartCandleData } from "../../stock-detail/order/chart-panel/types";
@@ -172,15 +171,12 @@ export default function MarketIndexChartPanel({
 
   if (chartResult.status === "error") {
     return (
-      <section className="flex h-130 min-w-0 items-center justify-center rounded-3xl bg-white px-7 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
-        <MarketDataStatus result={chartResult} />
-      </section>
+      <section className="h-130 min-w-0 rounded-2xl bg-white px-5 py-5 md:px-7 md:py-6" />
     );
   }
 
   return (
-    <section className="flex h-130 min-w-0 flex-col rounded-3xl bg-white px-7 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
-      <MarketDataStatus result={chartResult} />
+    <section className="flex h-130 min-w-0 flex-col rounded-2xl bg-white px-5 py-5 md:px-7 md:py-6">
       <RangeToolbar
         selectedRange={selectedRange}
         onRangeChange={handleRangeChange}

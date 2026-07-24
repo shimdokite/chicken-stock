@@ -17,7 +17,7 @@ export interface AvatarProps {
 }
 
 const avatarClassName: Record<AvatarType, string> = {
-  header: "h-[50px] w-[50px] rounded-full",
+  header: "size-10 rounded-full",
   main: "h-[30px] w-[30px] rounded-full",
   "portfolio-mini-circle": "h-[40px] w-[40px] rounded-full",
   "portfolio-mini-square": "h-[80px] w-[80px]",

@@ -27,7 +27,7 @@ export default function StockLogo({ stock }: StockOnlyProps) {
       {shouldTryImage && imageUrl && (
         <Image
           alt={`${stock.name} 로고`}
-          className={`absolute inset-0 size-full bg-white object-contain transition-opacity ${
+          className={`absolute inset-0 size-full bg-(--cs-surface-raised) object-contain transition-opacity ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           }`}
           fill

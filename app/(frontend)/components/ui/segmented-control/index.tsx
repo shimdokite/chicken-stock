@@ -53,9 +53,10 @@ type SegmentedControlComponent = ((
 };
 
 const selectedVariants: Record<SegmentedStyle, string> = {
-  panel: "bg-white text-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.12)]",
+  panel:
+    "bg-(--cs-surface-raised) text-(--cs-brand-800) shadow-(--cs-shadow-sm)",
   invertedPanel:
-    "bg-zinc-200 text-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.12)]",
+    "bg-(--cs-brand-100) text-(--cs-brand-800) shadow-(--cs-shadow-sm)",
   text: "text-white",
 };
 
@@ -140,8 +141,10 @@ function SegmentedControlRoot({
     <div
       aria-label={ariaLabel}
       className={twMerge(
-        "inline-flex h-8 items-center rounded-md p-0.5 text-sm font-semibold text-zinc-950",
-        style === "invertedPanel" ? "bg-white" : "bg-zinc-200",
+        "inline-flex h-10 items-center rounded-lg border border-(--cs-border-subtle) p-0.5 text-sm font-semibold text-(--cs-text-strong)",
+        style === "invertedPanel"
+          ? "bg-(--cs-surface-raised)"
+          : "bg-(--cs-surface-strong)",
         className,
       )}
       role="radiogroup"
@@ -173,10 +176,10 @@ function SegmentedControlItem({
     <label
       htmlFor={id}
       className={twMerge(
-        "relative inline-flex h-7 min-w-12 cursor-pointer items-center justify-center rounded px-3 transition",
+        "relative inline-flex h-8 min-w-12 cursor-pointer items-center justify-center rounded-md px-3 transition",
         selected
           ? selectedVariants[style]
-          : "text-zinc-500 hover:text-zinc-800",
+          : "text-(--cs-text-muted) hover:text-(--cs-text-strong)",
         disabled ? "cursor-not-allowed opacity-45" : undefined,
         className,
         selected ? selectedClassName : undefined,

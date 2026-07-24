@@ -6,8 +6,6 @@ import {
   formatTransactionAmount,
   getLogoText,
   getTransactionDetailRows,
-  getTransactionLabel,
-  getTransactionToneClassName,
 } from "../utils";
 
 interface TransactionDetailProps {
@@ -19,7 +17,6 @@ export default function TransactionDetail({
   item,
   transaction,
 }: TransactionDetailProps) {
-  const label = getTransactionLabel(transaction.transactionType);
   const detailRows = getTransactionDetailRows(transaction);
 
   return (
@@ -30,17 +27,8 @@ export default function TransactionDetail({
           <p className="text-2xl">{formatTransactionAmount(transaction)}</p>
         </div>
 
-        <div className="col items-end gap-4">
-          <div className="row center h-20 w-20 bg-[#1628a0] px-2 text-center text-xs font-bold text-white">
-            {getLogoText(item, transaction.companyName)}
-          </div>
-          <p
-            className={`text-sm ${getTransactionToneClassName(
-              transaction.transactionType,
-            )}`}
-          >
-            {label}
-          </p>
+        <div className="row center h-20 w-20 shrink-0 bg-[#1628a0] px-2 text-center text-xs font-bold text-white">
+          {getLogoText(item, transaction.companyName)}
         </div>
       </div>
 

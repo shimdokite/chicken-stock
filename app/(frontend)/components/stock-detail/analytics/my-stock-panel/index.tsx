@@ -179,7 +179,7 @@ function MyStockPanel({ stock }: StockOnlyProps) {
   return (
     <section
       aria-label={`${stock.name} 내 주식`}
-      className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white pt-4 text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]"
+      className="cs-data-panel flex h-130 flex-col overflow-hidden pt-4 text-sm leading-tight text-(--cs-text-strong) tabular-nums"
     >
       <p className="px-4 text-lg font-medium">내 주식</p>
       {panelContent}

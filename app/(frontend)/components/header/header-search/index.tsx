@@ -258,24 +258,23 @@ export default function HeaderSearch() {
       open={searchOpen}
       onOpenChange={setSearchOpen}
     >
-      <Popover.Trigger className="relative inline-flex h-7 w-56 items-center border-b border-zinc-500 bg-transparent pr-0 pl-7 text-left text-sm text-zinc-400 transition outline-none focus:border-zinc-950">
+      <Popover.Trigger className="relative hidden h-10 w-48 items-center rounded-xl border border-(--cs-border-subtle) bg-(--cs-surface-base) pr-3 pl-9 text-left text-sm text-(--cs-text-muted) transition hover:border-(--cs-border-strong) md:inline-flex lg:w-64">
         <SearchIcon className="absolute left-1 size-5" />
         <span className="truncate">종목, 티커를 검색해보세요.</span>
       </Popover.Trigger>
 
       <Popover.Content
         align="right"
-        className="w-[calc(100vw-2.5rem)] max-w-162.5 p-3"
+        className="w-[calc(100vw-2.5rem)] max-w-162.5 rounded-xl border-(--cs-border-subtle) bg-(--cs-surface-raised) p-4 shadow-(--cs-shadow-lg)"
       >
         <Input
           aria-label="종목 검색"
-          inputClassName="bg-zinc-300 placeholder:text-zinc-400"
+          inputClassName="bg-(--cs-surface-base) placeholder:text-(--cs-text-muted)"
           size="sm"
           leftAddon={<SearchIcon className="size-4" />}
           placeholder="검색어를 입력해주세요"
           variant="pill"
           autoFocus={searchOpen}
-          focusable={false}
           value={searchValue}
           aria-activedescendant={activeSearchResultId}
           aria-autocomplete="list"
@@ -295,13 +294,13 @@ export default function HeaderSearch() {
               className="flex max-h-72 flex-col overflow-y-auto"
             >
               {isSearching || isSubmitting ? (
-                <p className="py-4 text-sm text-zinc-400">
+                <p className="py-4 text-sm text-(--cs-text-muted)">
                   종목을 검색하는 중입니다.
                 </p>
               ) : null}
 
               {!isSearching && !isSubmitting && searchedStocks.length === 0 ? (
-                <p className="py-4 text-sm text-zinc-400">
+                <p className="py-4 text-sm text-(--cs-text-muted)">
                   일치하는 종목이 없습니다.
                 </p>
               ) : null}
@@ -318,23 +317,23 @@ export default function HeaderSearch() {
                       type="button"
                       role="option"
                       aria-selected={isActive}
-                      className={`flex cursor-pointer items-center gap-3 rounded px-2 py-2 text-left transition hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 ${
-                        isActive ? "bg-zinc-100" : ""
+                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 text-left transition hover:bg-(--cs-brand-50) ${
+                        isActive ? "bg-(--cs-brand-100)" : ""
                       }`}
                       onMouseEnter={() => setActiveSearchResultIndex(index)}
                       onClick={() => navigateToStock(stock, trimmedSearchValue)}
                     >
                       <span
-                        className="flex size-8 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 text-sm font-bold text-zinc-700"
+                        className="flex size-8 shrink-0 items-center justify-center rounded-full border border-(--cs-border-subtle) bg-(--cs-surface-tint) text-sm font-bold text-(--cs-brand-800)"
                         aria-hidden="true"
                       >
                         {stock.logoLabel}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-zinc-950">
+                        <span className="block truncate text-sm font-semibold text-(--cs-text-strong)">
                           {stock.name}
                         </span>
-                        <span className="block truncate text-xs text-zinc-500">
+                        <span className="block truncate text-xs text-(--cs-text-muted)">
                           {stock.ticker} · {getMarketLabel(stock.market)}
                         </span>
                       </span>
@@ -351,7 +350,7 @@ export default function HeaderSearch() {
                 {recentSearches.map((search) => (
                   <span
                     key={search}
-                    className="inline-flex items-center rounded bg-zinc-200 text-xs font-semibold text-zinc-500"
+                    className="inline-flex items-center rounded-lg bg-(--cs-brand-100) text-xs font-semibold text-(--cs-brand-800)"
                   >
                     <button
                       type="button"
@@ -366,7 +365,7 @@ export default function HeaderSearch() {
                     <button
                       type="button"
                       aria-label={`${search} 최근 검색어 삭제`}
-                      className="flex size-5 cursor-pointer items-center justify-center rounded-r transition hover:bg-zinc-300"
+                      className="flex size-5 cursor-pointer items-center justify-center rounded-r-lg transition hover:bg-(--cs-brand-300)"
                       onClick={() => removeRecentSearch(search)}
                     >
                       <IconX aria-hidden="true" className="size-3" stroke={2} />
@@ -375,7 +374,7 @@ export default function HeaderSearch() {
                 ))}
               </div>
             ) : (
-              <p className="py-4 text-sm text-zinc-400">
+              <p className="py-4 text-sm text-(--cs-text-muted)">
                 최근 검색어가 없습니다.
               </p>
             )}

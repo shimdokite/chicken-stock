@@ -4,7 +4,7 @@ import IncomeFilter from "./income-filter";
 import IncomeSummary from "./income-summary";
 import MonthSelector from "./month-selector";
 import SaleIncomeTable from "./sale-income-table";
-import SaleProfitTotal from "./sale-profit-total";
+// import SaleProfitTotal from "./sale-profit-total";
 import {
   getCurrentIncomeMonth,
   getIncomeAnalysis,
@@ -38,7 +38,7 @@ export default function IncomeAnalysis() {
   );
 
   return (
-    <div className="col gap-10 pt-14">
+    <div className="col gap-5">
       <MonthSelector
         selectedMonth={selectedMonth}
         onSelectMonth={setSelectedMonth}
@@ -50,7 +50,7 @@ export default function IncomeAnalysis() {
 
       <IncomeSummary summary={analysis.summary} />
 
-      <section className="col gap-5">
+      <section className="w-full rounded-2xl bg-white px-6 text-(--cs-text-strong) md:px-8">
         <IncomeFilter
           selectedView={selectedView}
           setSelectedView={setSelectedView}
@@ -59,7 +59,7 @@ export default function IncomeAnalysis() {
         <SaleIncomeTable rows={analysis.saleIncomeRows} />
       </section>
 
-      <SaleProfitTotal totalSaleProfit={analysis.summary.saleProfit} />
+      {/* <SaleProfitTotal totalSaleProfit={analysis.summary.saleProfit} /> */}
     </div>
   );
 }

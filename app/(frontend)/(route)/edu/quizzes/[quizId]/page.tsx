@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { IconChevronLeft } from "@tabler/icons-react";
 import { getCachedEducationArticle } from "@/app/(backend)/lib/education";
 import { getArticleQuizzes } from "@/app/(backend)/lib/quizzes";
 import AuthRequiredRedirect from "@/app/(frontend)/components/auth-guard/auth-required-redirect";
@@ -44,18 +42,7 @@ async function getQuizArticleContext(quizId: string, level?: string) {
     article = await getCachedEducationArticle(articleId, Number(levelParam));
   }
 
-  let articleHref: { pathname: string; query: { level: string } } | string =
-    `/edu/articles/${articleId}`;
-
-  if (levelParam) {
-    articleHref = {
-      pathname: `/edu/articles/${articleId}`,
-      query: { level: levelParam },
-    };
-  }
-
   return {
-    articleHref,
     articleId,
     label: {
       level: article?.educationSummary.stage ?? levelParam ?? "-",
@@ -91,7 +78,7 @@ export default async function QuizPage({
   }
 
   const currentUserId = String(currentUser.id);
-  const { articleHref, articleId, label } = articleContext;
+  const { articleId, label } = articleContext;
   const initialQuizzes: QuizContentData[] = await getArticleQuizzes(
     articleId,
     currentUser.id,
@@ -114,7 +101,7 @@ export default async function QuizPage({
   };
 
   return (
-    <main className="relative min-h-screen bg-white px-16 py-16 text-black">
+    <main className="min-h-[calc(100dvh-74px)] bg-[#f8f8f9] px-5 pt-8 pb-8 text-black md:px-8 md:pt-12 md:pb-12 lg:pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -122,24 +109,20 @@ export default async function QuizPage({
         }}
       />
 
-      <Link
-        aria-label="뒤로가기"
-        className="absolute top-20 left-6 flex size-16 items-center justify-center text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:outline-none md:top-24 md:left-20"
-        href={articleHref}
-      >
-        <IconChevronLeft aria-hidden="true" className="size-16" stroke={1.8} />
-      </Link>
+      <div className="mx-auto w-full max-w-4xl">
+        <section className="rounded-2xl bg-white p-5 md:p-8 lg:p-10">
+          <p className="inline-flex rounded-full bg-amber-100 px-3 py-1.5 text-sm font-semibold text-amber-900 md:text-base">
+            Level {label.level} | {label.id}. {label.title}
+          </p>
 
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-16">
-        <p className="w-fit bg-amber-300 px-2 py-1 text-left text-xl font-bold text-zinc-950">
-          Level {label.level} | {label.id}. {label.title}
-        </p>
-
-        <QuizContainer
-          articleId={articleId}
-          initialQuizzes={initialQuizzes}
-          userId={currentUserId}
-        />
+          <div className="mt-6 md:mt-8">
+            <QuizContainer
+              articleId={articleId}
+              initialQuizzes={initialQuizzes}
+              userId={currentUserId}
+            />
+          </div>
+        </section>
       </div>
     </main>
   );

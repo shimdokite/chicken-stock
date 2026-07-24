@@ -174,7 +174,7 @@ export default function QuickOrder({
         <div className="mt-5">
           <div className="flex items-center gap-2">
             <input
-              className="h-10 min-w-0 flex-1 rounded-xl border-2 border-zinc-200 px-3 text-lg font-semibold outline-none focus:border-sky-300"
+              className="h-10 min-w-0 flex-1 rounded-xl border-2 border-zinc-200 px-3 text-lg font-semibold outline-none"
               inputMode="numeric"
               placeholder="주수입력"
               value={quantityInput}

@@ -205,7 +205,7 @@ function OrderHistoryPanel({
   return (
     <section
       aria-label={`${stock.name} 주문내역`}
-      className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]"
+      className="cs-data-panel flex h-130 flex-col overflow-hidden text-sm leading-tight text-(--cs-text-strong) tabular-nums"
     >
       <div className="shrink-0 px-4 pt-4">
         <p className="text-lg font-medium">주문내역</p>

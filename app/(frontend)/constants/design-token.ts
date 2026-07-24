@@ -1,4 +1,29 @@
 export const colorToken = {
+  brand: {
+    50: "#FAFAFA",
+    100: "#F4F4F5",
+    300: "#D4D4D8",
+    500: "#52525B",
+    600: "#3F3F46",
+    700: "#27272A",
+    800: "#18181B",
+  },
+  surface: {
+    canvas: "#FFFFFF",
+    base: "#FAFAFA",
+    raised: "#FFFFFF",
+    tint: "#F7F7F7",
+    strong: "#EEEEEE",
+  },
+  text: {
+    strong: "#18181B",
+    default: "#3F3F46",
+    muted: "#71717A",
+  },
+  border: {
+    subtle: "#E4E4E7",
+    strong: "#D4D4D8",
+  },
   blue: {
     100: "#C6D2FF",
     200: "#9BCBDE",

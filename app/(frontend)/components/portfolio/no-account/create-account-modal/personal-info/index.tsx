@@ -63,15 +63,15 @@ export default function PersonalInfo() {
 
   return (
     <>
-      <div className="col center gap-10">
-        <div className="row w-70 items-center justify-between whitespace-nowrap">
-          <label className="text-xl" htmlFor="user-name">
+      <div className="col center w-full gap-5">
+        <div className="grid w-full max-w-sm gap-2 sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-center">
+          <label className="text-base" htmlFor="user-name">
             이름
           </label>
           <Input
             id="user-name"
-            className="w-[185px]"
-            inputClassName="text-center text-xl text-black placeholder:text-zinc-400"
+            className="w-full"
+            inputClassName="text-base text-black placeholder:text-zinc-400 sm:text-lg"
             value={createAccountInfo.name}
             onChange={handleNameChange}
             placeholder="김현수"
@@ -80,14 +80,14 @@ export default function PersonalInfo() {
           />
         </div>
 
-        <div className="row w-70 items-center justify-between whitespace-nowrap">
-          <label className="text-xl" htmlFor="user-phone">
+        <div className="grid w-full max-w-sm gap-2 sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-center">
+          <label className="text-base" htmlFor="user-phone">
             연락처
           </label>
           <Input
             id="user-phone"
-            className="w-[185px]"
-            inputClassName="text-center text-xl text-black placeholder:text-zinc-400"
+            className="w-full"
+            inputClassName="text-base text-black placeholder:text-zinc-400 sm:text-lg"
             inputMode="numeric"
             maxLength={13}
             autoComplete="tel"
@@ -101,7 +101,11 @@ export default function PersonalInfo() {
       </div>
 
       <div className="row justify-end gap-3">
-        <Button variant="step-controls" onClick={handleNextButtonClick}>
+        <Button
+          className="h-11 min-h-11 w-auto min-w-24 max-w-none flex-none rounded-lg px-5 text-base"
+          variant="step-controls"
+          onClick={handleNextButtonClick}
+        >
           다음
         </Button>
       </div>

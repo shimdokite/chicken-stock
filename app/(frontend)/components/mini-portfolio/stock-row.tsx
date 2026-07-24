@@ -48,7 +48,7 @@ export default function StockRow({
       <Link
         href={`/stock/${item.stockId}/order`}
         prefetch={false}
-        className="row items-center justify-between gap-3 rounded-(--cs-radius-md) transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+        className="row items-center justify-between gap-3 rounded-(--cs-radius-md) py-1 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
       >
         <div className="row min-w-0 items-center gap-2">
           <StockLogo item={item} />
@@ -69,7 +69,7 @@ export default function StockRow({
           </p>
           <p
             className={twMerge(
-              "text-[11px] leading-4",
+              "text-xs leading-4",
               getProfitClassName(profit),
             )}
           >

@@ -29,16 +29,23 @@ export default function InvestmentTypeResult() {
   return (
     <>
       <div className="col center flex-1 gap-6">
-        <p className="text-xl">{userName}님의 투자성향은</p>
-        <p className="text-[48px] leading-none">{investmentTypeLabel}</p>
+        <p className="text-base md:text-lg">{userName}님의 투자성향은</p>
+        <p className="text-3xl leading-none font-bold md:text-4xl">
+          {investmentTypeLabel}
+        </p>
       </div>
 
       <div className="row justify-end gap-3">
-        <Button variant="step-controls" onClick={() => setStep(step - 1)}>
+        <Button
+          className="h-11 min-h-11 w-auto min-w-24 max-w-none flex-none rounded-lg px-5 text-base"
+          variant="step-controls"
+          onClick={() => setStep(step - 1)}
+        >
           이전
         </Button>
 
         <Button
+          className="h-11 min-h-11 w-auto min-w-24 max-w-none flex-none rounded-lg px-5 text-base"
           disabled={!investmentType}
           variant="step-controls"
           onClick={handleNextClick}

@@ -1,6 +1,6 @@
+import SegmentedControl from "@/app/(frontend)/components/ui/segmented-control";
 import { TRANSACTION_HISTORY_FILTERS } from "@/app/(frontend)/constants/portfolio";
-import { TransactionHistoryFilter } from "@/app/(frontend)/types/portfolio";
-import { twMerge } from "tailwind-merge";
+import type { TransactionHistoryFilter } from "@/app/(frontend)/types/portfolio";
 
 interface TransactionFilterProps {
   selectedFilter: TransactionHistoryFilter;
@@ -12,20 +12,19 @@ export default function TransactionFilter({
   setSelectedFilter,
 }: TransactionFilterProps) {
   return (
-    <div className="row gap-10 text-lg font-medium">
+    <SegmentedControl
+      aria-label="거래 유형 선택"
+      className="w-fit"
+      onValueChange={(value) =>
+        setSelectedFilter(value as TransactionHistoryFilter)
+      }
+      value={selectedFilter}
+    >
       {TRANSACTION_HISTORY_FILTERS.map((filter) => (
-        <button
-          key={filter}
-          className={twMerge(
-            "cursor-pointer pb-1",
-            selectedFilter === filter && "border-b border-black",
-          )}
-          type="button"
-          onClick={() => setSelectedFilter(filter)}
-        >
+        <SegmentedControl.Item key={filter} value={filter}>
           {filter}
-        </button>
+        </SegmentedControl.Item>
       ))}
-    </div>
+    </SegmentedControl>
   );
 }

@@ -75,7 +75,6 @@ export default function PopoverSample() {
             leftAddon={<SearchIcon className="size-4" />}
             placeholder="검색어를 입력해주세요"
             variant="pill"
-            focusable={false}
           />
           <p className="mt-4 mb-2 text-sm font-semibold">최근 검색</p>
           <div className="flex flex-wrap gap-2">

@@ -67,7 +67,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="mx-10 py-8">
+    <main className="min-h-[calc(100dvh-74px)] bg-[#f8f8f9] py-8 md:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -75,12 +75,14 @@ export default async function Home() {
         }}
       />
 
-      <div className="flex items-center justify-center">
-        <EduProgress />
-        <IndexList initialIndices={initialIndices} />
-      </div>
+      <div className="cs-page-shell">
+        <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] lg:items-stretch">
+          <IndexList initialIndices={initialIndices} />
+          <EduProgress />
+        </div>
 
-      <StockList initialStocksPage={initialStocksPage} />
+        <StockList initialStocksPage={initialStocksPage} />
+      </div>
     </main>
   );
 }

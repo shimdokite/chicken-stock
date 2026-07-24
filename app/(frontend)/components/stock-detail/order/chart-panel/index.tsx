@@ -23,7 +23,7 @@ export default function ChartPanel({ stock }: StockOnlyProps) {
   } = useChartPanel({ stock });
 
   return (
-    <section className="flex h-130 min-w-0 flex-col rounded-3xl bg-white px-7 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
+    <section className="cs-data-panel flex h-130 min-w-0 flex-col px-5 py-5 md:px-7 md:py-6">
       <RangeToolbar
         selectedRange={selectedRange}
         onRangeChange={handleRangeChange}

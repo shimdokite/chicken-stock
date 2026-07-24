@@ -1,30 +1,60 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo } from "react";
+import Image from "next/image";
 import { useGetMyInfo } from "../../../apis/auth/queries";
 import { useEducationSummariesQuery } from "../../../apis/edu/queries";
+
+const LEVEL_THEMES: Record<
+  number,
+  {
+    background: string;
+    characterAlt: string;
+    characterImage: string;
+    progressGradient: string;
+    progressTrack: string;
+    text: string;
+  }
+> = {
+  1: {
+    background: "bg-[#EAEBCD]",
+    characterAlt: "알에서 성장 중인 레벨 1 학습 캐릭터",
+    characterImage: "/images/main/edu_progress_egg.png",
+    progressGradient: "from-[#FFB285] to-[#FF8F5B]",
+    progressTrack: "bg-[#FFD9C2]",
+    text: "text-[#555647]",
+  },
+  2: {
+    background: "bg-[#FDE0AF]",
+    characterAlt: "병아리로 성장한 레벨 2 학습 캐릭터",
+    characterImage: "/images/main/edu_progress_chick.png",
+    progressGradient: "from-[#F5D564] to-[#E9AE36]",
+    progressTrack: "bg-[#EDF098]",
+    text: "text-[#644B21]",
+  },
+  3: {
+    background: "bg-[#FDD3C5]",
+    characterAlt: "닭으로 성장한 레벨 3 학습 캐릭터",
+    characterImage: "/images/main/edu_progress_chicken.png",
+    progressGradient: "from-[#FFBE82] to-[#F08C62]",
+    progressTrack: "bg-[#FFFAC9]",
+    text: "text-[#672F1D]",
+  },
+};
 
 function clampProgressRate(progressRate: number) {
   return Math.min(100, Math.max(0, progressRate));
 }
 
-function getCharacterImages() {
-  return {
-    nest: "/images/main/nest.webp",
-    egg: "/images/main/egg.svg",
-  };
-}
-
 export default function EduProgress() {
-  const characterImages = getCharacterImages();
-  const { data: myInfo, isLoading: isMyInfoLoading } = useGetMyInfo();
+  const { data: myInfo } = useGetMyInfo();
   const isLoggedIn = myInfo?.isLoggedIn === true;
   const userId = isLoggedIn ? myInfo.user.id : null;
   const userLevel = isLoggedIn ? myInfo.user.currentLevel : null;
 
-  const { data: educationSummaries = [], isLoading: isEducationLoading } =
-    useEducationSummariesQuery(userId, { enabled: isLoggedIn });
+  const { data: educationSummaries = [] } = useEducationSummariesQuery(userId, {
+    enabled: isLoggedIn,
+  });
 
   const progressRate = useMemo(() => {
     const articles = educationSummaries.flatMap((summary) => summary.articles);
@@ -41,75 +71,56 @@ export default function EduProgress() {
     return Math.floor(totalProgressRate / articles.length);
   }, [educationSummaries]);
 
-  const guestBubbleText =
-    !isMyInfoLoading && !isLoggedIn && "가입하고 주식 공부를 시작해보세요!";
-
-  const progressBubbleText =
-    isLoggedIn && !isEducationLoading && `진행중 ${progressRate}%`;
-
-  const bubbleText = guestBubbleText || progressBubbleText || null;
+  const levelTheme = LEVEL_THEMES[userLevel ?? 1] ?? LEVEL_THEMES[1];
 
   return (
-    <section className="w-full">
-      <h2 className="mb-5 text-2xl font-semibold tracking-normal text-zinc-950">
-        학습 현황
-      </h2>
+    <section
+      className="flex min-w-0 flex-col rounded-2xl bg-white p-5 lg:h-full"
+      aria-label="학습 현황"
+    >
+      <header className="mb-4 flex items-end justify-between gap-4">
+        <h2 className="text-xl leading-tight font-bold tracking-[-0.02em] text-(--cs-text-strong)">
+          학습 현황
+        </h2>
+      </header>
 
-      <div className="relative aspect-[2.5] overflow-hidden rounded-2xl">
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-[-35%] h-[200%]"
-        >
+      <article
+        className={`relative flex h-28 w-full items-center overflow-hidden rounded-xl p-5 ${levelTheme.background}`}
+        aria-label={`레벨 ${userLevel} 학습 현황`}
+      >
+        <div className="flex h-full min-w-0 flex-1 flex-col justify-center gap-1">
+          <h3 className={`font-semibold ${levelTheme.text}`}>
+            레벨 {userLevel}
+          </h3>
+          <div
+            className={`h-2.5 w-full overflow-hidden rounded-full ${levelTheme.progressTrack}`}
+            role="progressbar"
+            aria-label={`레벨 ${userLevel} 학습 진행률`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progressRate}
+          >
+            <div
+              className={`h-full rounded-full bg-linear-to-r ${levelTheme.progressGradient}`}
+              style={{ width: `${progressRate}%` }}
+            />
+          </div>
+          <p className={`text-sm font-semibold ${levelTheme.text}`}>
+            {progressRate}%
+          </p>
+        </div>
+
+        <figure className="ml-auto shrink-0">
           <Image
-            src="/images/main/edu-progress.webp"
-            alt=""
-            fill
+            src={levelTheme.characterImage}
+            alt={levelTheme.characterAlt}
+            width={120}
+            height={120}
             priority
             fetchPriority="high"
-            sizes="(max-width: 768px) calc(100vw - 80px), 50vw"
-            className="object-fill brightness-95 saturate-115"
           />
-        </div>
-
-        <div className="absolute inset-x-0 bottom-8 flex justify-center md:bottom-12">
-          <div className="relative h-44 w-56 md:h-60 md:w-72">
-            <Image
-              src={characterImages.nest}
-              alt=""
-              width={172}
-              height={110}
-              className="absolute bottom-0 left-1/2 w-44 -translate-x-1/2 md:w-56"
-            />
-
-            <Image
-              src={characterImages.egg}
-              alt={userLevel ? `Level ${userLevel} 학습 캐릭터` : "학습 캐릭터"}
-              width={119}
-              height={145}
-              loading="eager"
-              className="absolute bottom-12 left-1/2 w-28 -translate-x-1/2 md:bottom-16 md:w-40"
-              unoptimized
-            />
-          </div>
-        </div>
-
-        {bubbleText && (
-          <div className="absolute top-[11%] left-[58%] h-20 w-20 md:h-28 md:w-32">
-            <Image
-              src="/images/main/rounded-speech-bubble.webp"
-              alt=""
-              fill
-              sizes="192px"
-              className="object-contain"
-              unoptimized
-            />
-
-            <p className="absolute top-[43%] left-[50%] w-[66%] -translate-x-1/2 -translate-y-1/2 text-center text-xs leading-snug font-semibold text-zinc-950 md:text-sm">
-              {bubbleText}
-            </p>
-          </div>
-        )}
-      </div>
+        </figure>
+      </article>
     </section>
   );
 }

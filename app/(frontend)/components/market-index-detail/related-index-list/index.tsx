@@ -12,7 +12,7 @@ type RelatedIndexListProps = {
 
 function RelatedIndexListFallback() {
   return (
-    <aside className="rounded-3xl bg-white px-6 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
+    <aside className="rounded-2xl bg-white p-5 md:p-6">
       <div className="h-5 w-20 rounded bg-zinc-100" />
 
       <div className="mt-4">
@@ -30,7 +30,7 @@ function RelatedIndexListFallback() {
         </div>
       </div>
 
-      <div className="mt-9">
+      <div className="mt-6">
         <div className="h-5 w-12 rounded bg-zinc-100" />
         <div className="mt-2 flex items-center gap-2 px-2 py-1.5">
           <div className="h-10 w-14 shrink-0 rounded bg-zinc-100" />
@@ -64,7 +64,7 @@ export default function RelatedIndexList({
   }
 
   return (
-    <aside className="rounded-3xl bg-white px-6 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
+    <aside className="rounded-2xl bg-white p-5 md:p-6">
       <h2 className="text-base leading-5 font-semibold text-zinc-950">
         지수/환율
       </h2>
@@ -86,7 +86,7 @@ export default function RelatedIndexList({
         </ul>
       </div>
 
-      <div className="mt-9">
+      <div className="mt-6">
         <h3 className="text-sm leading-5 font-medium text-zinc-950">환율</h3>
         <ul className="mt-2 space-y-1">
           {exchangeRates.map((marketIndex) => (

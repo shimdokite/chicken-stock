@@ -35,61 +35,75 @@ export default function ExchangeCheck({
   const targetText = `${targetAmount}${targetUnit}`;
 
   const handleExchange = () => {
-    exchangePortfolio({ ...exchangeData, quoteToken }, {
-      onError: (error) => {
-        if (
-          isAxiosError<{ code?: string }>(error) &&
-          (error.response?.data.code === "EXCHANGE_RATE_QUOTE_EXPIRED" ||
-            error.response?.data.code === "EXCHANGE_RATE_QUOTE_INVALID")
-        ) {
-          toast.error("환율이 갱신되었습니다. 금액을 다시 확인해주세요.");
-          onQuoteExpired();
-          return;
-        }
+    exchangePortfolio(
+      { ...exchangeData, quoteToken },
+      {
+        onError: (error) => {
+          if (
+            isAxiosError<{ code?: string }>(error) &&
+            (error.response?.data.code === "EXCHANGE_RATE_QUOTE_EXPIRED" ||
+              error.response?.data.code === "EXCHANGE_RATE_QUOTE_INVALID")
+          ) {
+            toast.error("환율이 갱신되었습니다. 금액을 다시 확인해주세요.");
+            onQuoteExpired();
+            return;
+          }
 
-        toast.error("환전에 실패했습니다. 잔액을 확인해주세요.");
+          toast.error("환전에 실패했습니다. 잔액을 확인해주세요.");
+        },
+        onSuccess: () => {
+          setExchangeData({
+            ...exchangeData,
+            value: 0,
+          });
+          onExchangeSuccess();
+        },
       },
-      onSuccess: () => {
-        setExchangeData({
-          ...exchangeData,
-          value: 0,
-        });
-        onExchangeSuccess();
-      },
-    });
+    );
   };
 
   return (
     <>
-      <h1 className="pt-20 text-center text-2xl">
-        {sourceText}을 {targetText}로 바꿀게요
-      </h1>
+      <div className="col gap-2 pt-4 text-center">
+        <p className="text-sm font-semibold text-zinc-500">환전 확인</p>
+        <h1 className="text-2xl font-bold">
+          {sourceText}을 {targetText}로 바꿀게요
+        </h1>
+        <p className="text-sm text-zinc-500">
+          아래 내용을 확인한 후 환전을 진행해 주세요.
+        </p>
+      </div>
 
-      <div className="col gap-10">
-        <div className="row justify-between text-xl">
+      <div className="col gap-4 rounded-2xl bg-(--cs-surface-base) p-5 md:p-6">
+        <div className="row justify-between gap-6">
           <p>내야할 금액</p>
-          <p>{sourceText}</p>
+          <p className="font-semibold">{sourceText}</p>
         </div>
 
-        <div className="row justify-between text-xl">
+        <div className="row justify-between gap-6">
           <p>적용 환율</p>
-          <p>{exchangeRate.toLocaleString()} 원</p>
+          <p className="font-semibold">{exchangeRate.toLocaleString()} 원</p>
         </div>
 
-        <div className="row justify-between text-xl">
+        <div className="row justify-between gap-6">
           <p>환전 수수료</p>
-          <p>0 원</p>
+          <p className="font-semibold">0 원</p>
         </div>
       </div>
 
-      <div className="row justify-end gap-2">
-        <Button variant="step-controls" onClick={() => setStep("form")}>
+      <div className="row justify-end gap-3">
+        <Button
+          className="min-h-11 min-w-24 rounded-lg border border-zinc-300 bg-white px-5 text-base text-zinc-900 hover:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:outline-none"
+          variant="custom"
+          onClick={() => setStep("form")}
+        >
           이전
         </Button>
 
         <Button
+          className="min-h-11 min-w-24 rounded-lg bg-zinc-900 px-5 text-base text-white hover:bg-black focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:outline-none"
           disabled={isExchangePending}
-          variant="step-controls"
+          variant="custom"
           onClick={handleExchange}
         >
           {isExchangePending && "처리 중"}

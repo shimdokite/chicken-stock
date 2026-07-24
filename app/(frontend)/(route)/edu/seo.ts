@@ -75,6 +75,10 @@ function getPlainArticleText(content: string) {
           return block.items;
         }
 
+        if (block.type === "table") {
+          return [...block.headers, ...block.rows.flat()];
+        }
+
         return block.text;
       })
       .join(" "),

@@ -3,7 +3,6 @@ import type {
   MarketIndexCandleData,
   MarketIndexViewData,
 } from "../../types/market-index";
-import MarketDataStatus from "../market-data-status";
 import {
   formatMarketIndexChange,
   formatMarketIndexPercent,
@@ -64,13 +63,15 @@ function MarketIndexSparkline({
     ? `${chartPoints} ${SPARKLINE_WIDTH},${SPARKLINE_HEIGHT} 0,${SPARKLINE_HEIGHT}`
     : "";
   const trend =
-    marketIndex.quote.status === "error" ? "flat" : marketIndex.quote.data.trend;
+    marketIndex.quote.status === "error"
+      ? "flat"
+      : marketIndex.quote.data.trend;
   const strokeColor = getMarketIndexTrendStrokeColor(trend);
 
   return (
     <div
       className={`shrink-0 overflow-hidden ${
-        size === "compact" ? "h-10 w-14" : "h-12 w-20"
+        size === "compact" ? "h-10 w-14" : "h-10 w-14"
       }`}
       aria-hidden="true"
     >
@@ -114,20 +115,24 @@ export default function MarketIndexListItem({
   );
   const titleClassName =
     size === "compact"
-      ? "truncate text-xs leading-4 tracking-normal text-zinc-950"
-      : "truncate text-xl tracking-normal text-zinc-950 md:text-xl";
+      ? "min-w-0 truncate text-xs leading-4 tracking-normal text-zinc-950"
+      : "min-w-0 truncate text-base tracking-normal text-zinc-950 md:text-lg";
   const valueClassName =
     size === "compact"
-      ? "mt-0.5 text-xs leading-4 tracking-normal whitespace-nowrap text-zinc-950"
-      : "mt-1 text-lg tracking-normal text-zinc-950 md:text-xl";
+      ? "shrink-0 text-xs leading-4 font-semibold tracking-normal whitespace-nowrap text-zinc-950"
+      : "shrink-0 text-sm font-semibold tracking-normal whitespace-nowrap text-zinc-950 md:text-base";
+  const changeClassName =
+    size === "compact"
+      ? "mt-0.5 truncate text-xs leading-4 tracking-normal"
+      : "mt-0.5 truncate text-sm tracking-normal md:text-base";
 
   return (
     <Link
       href={`/indices/${marketIndex.id}`}
       aria-label={`${marketIndex.name} 상세 보기`}
-      className={`flex items-center rounded-lg transition-colors ${
-        size === "compact" ? "gap-2 px-2 py-1.5" : "gap-3 px-1 py-1"
-      } ${isActive ? "bg-zinc-100" : "hover:bg-zinc-50"}`}
+      className={`flex h-full min-w-0 items-center overflow-hidden rounded-lg transition-colors ${
+        size === "compact" ? "gap-2 px-2 py-1.5" : "gap-3 px-2 py-2"
+      } ${isActive ? "bg-(--cs-brand-100)" : "hover:bg-(--cs-brand-50)"}`}
     >
       <MarketIndexSparkline
         candles={candles}
@@ -135,30 +140,24 @@ export default function MarketIndexListItem({
         size={size}
       />
 
-      <div className="min-w-0 flex-1">
-        <h3 className={titleClassName}>{marketIndex.name}</h3>
-
+      <div className="min-w-0 flex-1 overflow-hidden">
         {quote.status === "error" ? (
-          <p className={`${valueClassName} text-zinc-500`}>
-            정보를 불러오지 못했습니다.
-          </p>
+          <>
+            <h3 className={titleClassName}>{marketIndex.name}</h3>
+            <p className={`${changeClassName} text-zinc-500`}>-</p>
+          </>
         ) : (
           <>
-            <p className={valueClassName}>
-              {formatMarketIndexValue(quote.data.currentValue)}
-              <span className={`ml-2 ${trendTextColor}`}>
-                {formatMarketIndexChange(quote.data.changeAmount)}(
-                {formatMarketIndexPercent(quote.data.changeRate)})
-              </span>
+            <div className="flex min-w-0 items-baseline gap-2">
+              <h3 className={titleClassName}>{marketIndex.name}</h3>
+              <p className={valueClassName}>
+                {formatMarketIndexValue(quote.data.currentValue)}
+              </p>
+            </div>
+            <p className={`${changeClassName} ${trendTextColor}`}>
+              {formatMarketIndexChange(quote.data.changeAmount)} (
+              {formatMarketIndexPercent(quote.data.changeRate)})
             </p>
-            {size === "default" && quote.status === "fallback" && (
-              <MarketDataStatus result={quote} />
-            )}
-            {size === "default" &&
-              quote.status === "success" &&
-              marketIndex.chart.status !== "success" && (
-                <MarketDataStatus result={marketIndex.chart} />
-              )}
           </>
         )}
       </div>

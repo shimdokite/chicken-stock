@@ -32,5 +32,21 @@ export default function ToastProvider({ position }: ToastProviderProps) {
     };
   }, []);
 
-  return isReady ? <Toaster position={position} /> : null;
+  return isReady ? (
+    <Toaster
+      closeButton
+      position={position}
+      richColors
+      toastOptions={{
+        closeButtonAriaLabel: "알림 닫기",
+        classNames: {
+          toast:
+            "!rounded-xl !border-(--cs-border-strong) !bg-(--cs-surface-raised) !pr-12 !text-(--cs-text-strong) !shadow-(--cs-shadow-lg)",
+          description: "!text-(--cs-text-muted)",
+          closeButton:
+            "cs-toast-close !flex !size-7 !items-center !justify-center !rounded-lg !border-0 !bg-(--cs-surface-base) !text-(--cs-text-muted) hover:!bg-(--cs-brand-100) hover:!text-(--cs-text-strong)",
+        },
+      }}
+    />
+  ) : null;
 }

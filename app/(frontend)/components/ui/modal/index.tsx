@@ -63,16 +63,16 @@ export type ModalCloseProps = ButtonHTMLAttributes<HTMLButtonElement>;
 const ModalContext = createContext<ModalContextValue | null>(null);
 
 const defaultTriggerClassName =
-  "inline-flex min-h-10 cursor-pointer items-center justify-center rounded-md border-0 bg-zinc-900 px-4 font-[inherit] text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-300";
+  "inline-flex min-h-10 cursor-pointer items-center justify-center rounded-lg border-0 bg-(--cs-brand-700) px-4 font-[inherit] font-semibold text-white transition-colors hover:bg-(--cs-brand-800) disabled:cursor-not-allowed disabled:opacity-50";
 
 const defaultOverlayClassName =
-  "fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-6 transition-opacity motion-reduce:transition-none";
+  "fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-zinc-950/55 p-4 backdrop-blur-sm transition-opacity motion-reduce:transition-none md:p-6";
 
 const defaultContentClassName =
-  "relative max-h-[min(720px,calc(100dvh-48px))] w-[min(100%,480px)] transform-gpu overflow-auto rounded-lg bg-white p-10 text-zinc-950 shadow-[0_24px_80px_rgb(0_0_0/0.24),0_4px_16px_rgb(0_0_0/0.12)] outline-none transition-[opacity,transform] will-change-[opacity,transform] motion-reduce:transform-none motion-reduce:transition-none";
+  "relative max-h-[min(720px,calc(100dvh-32px))] w-[min(100%,480px)] transform-gpu overflow-auto rounded-2xl border border-(--cs-border-strong) bg-(--cs-surface-raised) p-6 text-(--cs-text-strong) shadow-(--cs-shadow-lg) outline-none transition-[opacity,transform] will-change-[opacity,transform] motion-reduce:transform-none motion-reduce:transition-none md:p-8";
 
 const defaultCloseButtonClassName =
-  "absolute right-3 top-3 inline-flex size-8 cursor-pointer items-center justify-center rounded border-0 bg-transparent font-[inherit] leading-none text-(--cs-color-gray-400) transition-colors hover:bg-zinc-100 hover:text-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 ";
+  "absolute top-3 right-3 inline-flex size-9 cursor-pointer items-center justify-center rounded-lg border-0 bg-(--cs-brand-50) font-[inherit] leading-none text-(--cs-brand-700) transition-colors hover:bg-(--cs-brand-100) hover:text-(--cs-brand-800) disabled:cursor-not-allowed disabled:opacity-50";
 
 const modalExitAnimationMs = 180;
 
@@ -460,7 +460,7 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
       children,
       className,
       closeButtonClassName,
-      closeButtonLabel = "Close modal",
+      closeButtonLabel = "모달 닫기",
       showCloseButton,
       ...props
     },

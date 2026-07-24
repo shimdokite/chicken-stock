@@ -66,7 +66,7 @@ export default function Button({
     <button
       type="button"
       className={twMerge(
-        "cursor-pointer disabled:cursor-not-allowed",
+        "cursor-pointer font-semibold transition-[background-color,border-color,color,box-shadow,transform] duration-150 hover:-translate-y-px active:translate-y-0 disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-50",
         buttonVariants[variant],
         className,
       )}

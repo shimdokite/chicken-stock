@@ -6,5 +6,9 @@ type MyLayoutProps = {
 };
 
 export default function MyLayout({ children }: MyLayoutProps) {
-  return <AuthGuard>{children}</AuthGuard>;
+  return (
+    <AuthGuard>
+      <div className="min-h-[calc(100dvh-72px)] bg-[#f8f8f9]">{children}</div>
+    </AuthGuard>
+  );
 }

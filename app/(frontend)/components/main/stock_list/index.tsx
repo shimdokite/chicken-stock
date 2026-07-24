@@ -20,11 +20,7 @@ export default function StockList({ initialStocksPage }: StockListProps) {
       ? initialStocksPage
       : undefined;
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useStocksInfiniteQuery(
-      selectedMarket,
-      selectedRanking,
-      queryInitialData,
-    );
+    useStocksInfiniteQuery(selectedMarket, selectedRanking, queryInitialData);
 
   const stocks = useMemo(
     () => data?.pages.flatMap((page) => page.stocks) ?? [],
@@ -57,9 +53,13 @@ export default function StockList({ initialStocksPage }: StockListProps) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <section className="w-full bg-white py-8 text-zinc-950">
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold tracking-normal">실시간 차트</h2>
+    <section className="mt-5 w-full rounded-2xl bg-white px-5 text-(--cs-text-strong) md:px-7">
+      <div className="flex flex-wrap items-end justify-between gap-5 py-5">
+        <div>
+          <h2 className="text-xl leading-tight font-bold tracking-[-0.02em] text-(--cs-text-strong)">
+            실시간 차트
+          </h2>
+        </div>
 
         <StockListControls
           selectedMarket={selectedMarket}
@@ -71,11 +71,13 @@ export default function StockList({ initialStocksPage }: StockListProps) {
         />
       </div>
 
-      <StockListTable
-        isLoading={isLoading}
-        selectedRanking={selectedRanking}
-        stocks={stocks}
-      />
+      <div className="overflow-x-auto pt-2">
+        <StockListTable
+          isLoading={isLoading}
+          selectedRanking={selectedRanking}
+          stocks={stocks}
+        />
+      </div>
 
       <div ref={loadMoreRef} className="h-10" aria-hidden="true" />
 

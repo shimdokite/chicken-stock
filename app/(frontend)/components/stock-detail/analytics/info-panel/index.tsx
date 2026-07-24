@@ -135,7 +135,7 @@ export default function InfoPanel({ stock }: StockOnlyProps) {
           ref={(element) => {
             sectionRefs.current.financial = element;
           }}
-          className="pb-20"
+          className="pb-12"
         >
           <FinancialSection stock={displayStock} />
         </section>
@@ -144,7 +144,7 @@ export default function InfoPanel({ stock }: StockOnlyProps) {
           ref={(element) => {
             sectionRefs.current.earnings = element;
           }}
-          className="pb-20"
+          className="pb-12"
         >
           <EarningsSection stock={displayStock} />
         </section>
@@ -161,14 +161,14 @@ export default function InfoPanel({ stock }: StockOnlyProps) {
   })();
 
   return (
-    <section className="grid h-130 grid-cols-[10rem_minmax(0,1fr)] rounded-3xl bg-white px-7 py-6 shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
+    <section className="cs-data-panel grid h-130 grid-cols-[8rem_minmax(0,1fr)] px-5 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] md:px-7 md:py-6">
       <aside>
-        <h2 className="mb-6 text-xl font-semibold tracking-normal">
+        <h2 className="mb-5 text-lg font-semibold tracking-normal">
           주요 정보
         </h2>
 
         <Tab.Root
-          className="gap-4 bg-transparent p-0 pr-10 text-2xl"
+          className="gap-3 bg-transparent p-0 pr-10 text-base"
           direction="col"
           type="underline"
           value={activeSection}

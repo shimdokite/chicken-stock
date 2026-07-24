@@ -24,7 +24,7 @@ export default function StockListTable({
 
   return (
     <>
-      <div className="grid grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 border-b border-zinc-100 pb-3 text-sm text-zinc-400">
+      <div className="grid min-w-230 grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 border-b border-(--cs-border-subtle) pb-3 text-sm text-(--cs-text-muted)">
         <span className="col-span-3 flex h-4 items-center text-left leading-none">
           순위/오늘 11:30 기준
         </span>
@@ -52,7 +52,7 @@ export default function StockListTable({
       )}
 
       {!isLoading && stocks.length > 0 && (
-        <ol>
+        <ol className="min-w-230">
           {stocks.map((stock) => (
             <StockListRow key={stock.id} stock={stock} />
           ))}

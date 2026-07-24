@@ -182,128 +182,134 @@ export default function StockDetail({ stock, activeTab }: StockDetailProps) {
   );
 
   return (
-    <main className="mx-auto w-full max-w-355 px-8 py-16 text-zinc-950">
-      <section className="mb-9 flex items-end justify-between gap-8">
-        <div className="flex items-center gap-3">
-          <StockLogo stock={liveStock} />
+    <main className="min-h-[calc(100dvh-72px)] bg-[#f8f8f9] py-8 md:py-12">
+      <div className="cs-page-shell text-(--cs-text-strong)">
+        <section className="mb-5 flex flex-col gap-6 rounded-2xl bg-white p-5 lg:flex-row lg:items-end lg:justify-between lg:p-7">
+          <div className="flex items-center gap-3">
+            <StockLogo stock={liveStock} />
 
-          <div>
-            <div className="mb-3 flex items-center gap-3">
-              <h1 className="text-2xl font-bold">{liveStock.name}</h1>
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <h1 className="text-2xl font-bold">{liveStock.name}</h1>
 
-              <span className="bg-zinc-200 px-2 py-1 text-lg">
-                {marketLabel}
-              </span>
-            </div>
+                <span className="rounded-md bg-(--cs-brand-100) px-2 py-1 text-base font-semibold text-(--cs-brand-800)">
+                  {marketLabel}
+                </span>
+              </div>
 
-            <p className="text-3xl font-medium">
-              {formatPrice(
-                displayStock.currentPrice,
-                displayStock.currencyCode,
-              )}
-
-              <span className={`ml-3 text-2xl ${changeClassName}`}>
-                어제보다{" "}
-                {formatChange(
-                  displayStock.changeAmount,
+              <p className="text-2xl font-medium">
+                {formatPrice(
+                  displayStock.currentPrice,
                   displayStock.currencyCode,
                 )}
-                ({formatPercent(displayStock.changeRate)})
-              </span>
-            </p>
+
+                <span className={`ml-2 text-base ${changeClassName}`}>
+                  어제보다{" "}
+                  {formatChange(
+                    displayStock.changeAmount,
+                    displayStock.currencyCode,
+                  )}
+                  ({formatPercent(displayStock.changeRate)})
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col items-end gap-3">
-          {displayStock.countryCode === "US" && (
-            <SegmentedControl
-              aria-label="통화 선택"
-              className="h-7 text-sm"
-              value={selectedCurrencyCode.toLowerCase()}
-              style="invertedPanel"
-              onValueChange={(value) =>
-                setSelectedCurrencyCode(
-                  value.toUpperCase() as StockCurrencyCode,
-                )
+          <div className="flex flex-col items-end gap-3">
+            {displayStock.countryCode === "US" && (
+              <SegmentedControl
+                aria-label="통화 선택"
+                className="h-8 text-sm"
+                value={selectedCurrencyCode.toLowerCase()}
+                style="invertedPanel"
+                onValueChange={(value) =>
+                  setSelectedCurrencyCode(
+                    value.toUpperCase() as StockCurrencyCode,
+                  )
+                }
+              >
+                <SegmentedControl.Item className="h-6 min-w-8 px-2" value="usd">
+                  달러
+                </SegmentedControl.Item>
+
+                <SegmentedControl.Item className="h-6 min-w-8 px-2" value="krw">
+                  원
+                </SegmentedControl.Item>
+              </SegmentedControl>
+            )}
+
+            <dl className="grid grid-cols-2 gap-5 text-right sm:grid-cols-4 lg:gap-8">
+              {rangeStats.map((item) => (
+                <div key={item.label}>
+                  <dt className="text-sm text-zinc-500">{item.label}</dt>
+                  <dd className="mt-1 text-base font-medium">
+                    {formatPlainPrice(item.value, displayStock.currencyCode)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        <Tab.Root
+          className="mb-5 w-full overflow-x-auto rounded-none bg-transparent p-0"
+          value={activeTab}
+          onValueChange={handleTabChange}
+        >
+          {sideTabs.map((tab) => (
+            <Tab.Item
+              activeClassName="bg-transparent text-[#df2b2e]"
+              className="shrink-0 rounded-none px-5 py-3 text-base font-semibold md:px-10 md:py-4 md:text-xl"
+              key={tab.value}
+              onFocus={
+                tab.value === "portfolio-info"
+                  ? prefetchAnalyticsPage
+                  : undefined
               }
+              onMouseEnter={
+                tab.value === "portfolio-info"
+                  ? prefetchAnalyticsPage
+                  : undefined
+              }
+              value={tab.value}
             >
-              <SegmentedControl.Item className="h-6 min-w-8 px-2" value="usd">
-                달러
-              </SegmentedControl.Item>
+              {tab.label}
+            </Tab.Item>
+          ))}
+        </Tab.Root>
 
-              <SegmentedControl.Item className="h-6 min-w-8 px-2" value="krw">
-                원
-              </SegmentedControl.Item>
-            </SegmentedControl>
-          )}
+        {activeTab === "chart-orderbook" && (
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_20rem_20rem]">
+            <ChartPanel stock={displayStock} />
+            <OrderBookPanel
+              initialOrderBookSnapshot={liveStock.orderBookSnapshot}
+              onPriceSelect={handleOrderBookPriceSelect}
+              selectedPrice={selectedDisplayPrice}
+              sourceCurrencyCode={liveStock.currencyCode}
+              stock={displayStock}
+            />
+            <OrderPanel
+              mainTab={orderPanelMainTab}
+              normalTab={orderPanelNormalTab}
+              selectedLimitPrice={selectedLimitPrice}
+              stock={liveStock}
+              onMainTabChange={setOrderPanelMainTab}
+              onNormalTabChange={setOrderPanelNormalTab}
+            />
+          </div>
+        )}
 
-          <dl className="grid grid-cols-4 gap-10 text-right">
-            {rangeStats.map((item) => (
-              <div key={item.label}>
-                <dt className="text-base">{item.label}</dt>
-                <dd className="text-2xl font-medium">
-                  {formatPlainPrice(item.value, displayStock.currencyCode)}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      <Tab.Root
-        className="mb-9 gap-0 bg-transparent p-0 text-2xl"
-        value={activeTab}
-        onValueChange={handleTabChange}
-      >
-        {sideTabs.map((tab) => (
-          <Tab.Item
-            key={tab.value}
-            value={tab.value}
-            className="rounded-none px-2 py-1"
-            activeClassName="bg-zinc-200"
-            onFocus={
-              tab.value === "portfolio-info" ? prefetchAnalyticsPage : undefined
-            }
-            onMouseEnter={
-              tab.value === "portfolio-info" ? prefetchAnalyticsPage : undefined
-            }
-          >
-            {tab.label}
-          </Tab.Item>
-        ))}
-      </Tab.Root>
-
-      {activeTab === "chart-orderbook" && (
-        <div className="grid grid-cols-[minmax(0,1fr)_20rem_20rem] gap-7">
-          <ChartPanel stock={displayStock} />
-          <OrderBookPanel
-            initialOrderBookSnapshot={liveStock.orderBookSnapshot}
-            onPriceSelect={handleOrderBookPriceSelect}
-            selectedPrice={selectedDisplayPrice}
-            sourceCurrencyCode={liveStock.currencyCode}
-            stock={displayStock}
-          />
-          <OrderPanel
-            mainTab={orderPanelMainTab}
-            normalTab={orderPanelNormalTab}
-            selectedLimitPrice={selectedLimitPrice}
-            stock={liveStock}
-            onMainTabChange={setOrderPanelMainTab}
-            onNormalTabChange={setOrderPanelNormalTab}
-          />
-        </div>
-      )}
-
-      {activeTab === "portfolio-info" && (
-        <div className="grid grid-cols-[minmax(0,1fr)_20rem_20rem] gap-7">
-          <InfoPanel stock={displayStock} />
-          <MyStockPanel stock={displayStock} />
-          <OrderHistoryPanel
-            sourceCurrencyCode={liveStock.currencyCode}
-            stock={displayStock}
-          />
-        </div>
-      )}
+        {activeTab === "portfolio-info" && (
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_20rem_20rem]">
+            <InfoPanel stock={displayStock} />
+            <MyStockPanel stock={displayStock} />
+            <OrderHistoryPanel
+              sourceCurrencyCode={liveStock.currencyCode}
+              stock={displayStock}
+            />
+          </div>
+        )}
+      </div>
     </main>
   );
 }

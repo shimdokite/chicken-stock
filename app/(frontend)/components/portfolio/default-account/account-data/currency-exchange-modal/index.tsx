@@ -37,14 +37,20 @@ export default function CurrencyExchangeModal() {
 
   return (
     <Modal.Root isOpen={isOpen} setIsOpen={handleOpenChange}>
-      <button onClick={() => handleOpenChange(true)} className="cursor-pointer">
+      <button
+        onClick={() => handleOpenChange(true)}
+        className="cursor-pointer rounded-lg bg-(--cs-brand-700) px-4 py-2.5 font-semibold text-white transition hover:bg-(--cs-brand-800) focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:outline-none"
+      >
         환전
       </button>
 
       <Modal.Overlay>
-        <Modal.Content className="col min-h-[565px] w-full max-w-[650px] justify-between">
+        <Modal.Content className="col min-h-[565px] w-full max-w-[650px] justify-between border-0 bg-white">
           {(isPending || isFetching) && (
-            <p className="m-auto text-center text-xl">최신 환율 확인 중...</p>
+            <div className="col center m-auto gap-3 text-center">
+              <span className="size-8 animate-pulse rounded-full bg-zinc-200" />
+              <p className="text-xl font-semibold">최신 환율 확인 중...</p>
+            </div>
           )}
           {!isFetching && isError && (
             <div className="col center m-auto gap-4 text-center">
@@ -52,7 +58,7 @@ export default function CurrencyExchangeModal() {
                 최신 환율을 확인할 수 없어 지금은 환전할 수 없습니다.
               </p>
               <button
-                className="cursor-pointer underline"
+                className="cursor-pointer rounded-lg bg-zinc-900 px-4 py-2.5 font-semibold text-white transition hover:bg-black focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:outline-none"
                 onClick={() => refetch()}
               >
                 다시 시도

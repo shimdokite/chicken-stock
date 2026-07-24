@@ -43,8 +43,9 @@ export default function QuizAnswerField({
       <label className="w-full max-w-xl">
         <span className="sr-only">주관식 답안</span>
         <Input
-          inputClassName="h-24 border-b-2 border-black text-center text-6xl font-black placeholder:text-black placeholder:opacity-100"
+          inputClassName="h-16 border-b-2 border-zinc-400 text-center text-2xl font-bold placeholder:text-zinc-400 placeholder:opacity-100 md:h-20 md:text-4xl"
           disabled={disabled}
+          placeholder="답안을 입력하세요"
           value={shortAnswer}
           variant="underline"
           onChange={(event) => onShortAnswerChange(event.target.value)}
@@ -57,7 +58,7 @@ export default function QuizAnswerField({
     const trueFalseOptions = getTrueFalseOptions(optionText);
 
     return (
-      <div className="grid w-full max-w-4xl grid-cols-2 gap-6">
+      <div className="grid w-full max-w-3xl grid-cols-2 gap-3 md:gap-4">
         {trueFalseOptions.map((option) => (
           <AnswerButton
             key={option}
@@ -74,7 +75,7 @@ export default function QuizAnswerField({
   }
 
   return (
-    <div className="flex w-full max-w-5xl flex-col items-start gap-3">
+    <div className="flex w-full max-w-3xl flex-col items-start gap-2.5">
       {optionText.map((option, index) => (
         <AnswerButton
           key={option}

@@ -40,7 +40,7 @@ export default function ValuationSection({ stock }: StockOnlyProps) {
   return (
     <section>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h3 className="text-2xl font-semibold tracking-normal">가치평가</h3>
+        <h3 className="text-xl font-semibold tracking-normal">가치평가</h3>
         <span className="text-sm text-zinc-500">{baseDateLabel} 기준</span>
       </div>
 

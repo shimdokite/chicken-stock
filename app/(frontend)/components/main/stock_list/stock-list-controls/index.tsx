@@ -39,7 +39,7 @@ export default function StockListControls({
   onPeriodChange,
 }: StockListControlsProps) {
   return (
-    <div className="flex flex-wrap items-center justify-end gap-8">
+    <div className="flex w-full min-w-0 flex-wrap items-center justify-end gap-3 md:w-auto md:gap-5">
       <SegmentedControl
         aria-label="시장 선택"
         onValueChange={onMarketChange}
@@ -66,11 +66,16 @@ export default function StockListControls({
 
       <SegmentedControl
         aria-label="기간 선택"
+        className="scrollbar-hide w-full max-w-full overflow-x-auto md:w-auto"
         onValueChange={onPeriodChange}
         value={selectedPeriod}
       >
         {periodOptions.map((option) => (
-          <SegmentedControl.Item key={option.value} value={option.value}>
+          <SegmentedControl.Item
+            key={option.value}
+            className="shrink-0 whitespace-nowrap"
+            value={option.value}
+          >
             {option.label}
           </SegmentedControl.Item>
         ))}

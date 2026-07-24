@@ -41,13 +41,13 @@ export default function QuizContent({
 
   return (
     <>
-      <h1 className="mb-8 text-3xl leading-snug">
-        <span className="mr-3">Q.</span>
+      <h1 className="mb-4 text-xl leading-snug font-bold md:mb-5 md:text-2xl">
+        <span className="mr-2 text-zinc-500">Q.</span>
         {quiz.question}
       </h1>
 
-      <div className="border-[1.5px] border-black px-8 py-12">
-        <p className="mx-auto max-w-3xl text-2xl leading-relaxed">
+      <div className="rounded-xl bg-zinc-50 px-4 py-5 md:px-6 md:py-6">
+        <p className="mx-auto max-w-3xl text-base leading-7 md:text-lg md:leading-8">
           {descriptionLines.map((line, index) => (
             <span key={`${line}-${index}`}>
               {line}
@@ -57,7 +57,7 @@ export default function QuizContent({
         </p>
       </div>
 
-      <div className="mt-8 mb-3 flex w-full justify-center">
+      <div className="mt-5 flex w-full justify-center md:mt-6">
         <QuizAnswerField
           optionText={quiz.optionText}
           quizType={quiz.quizType}

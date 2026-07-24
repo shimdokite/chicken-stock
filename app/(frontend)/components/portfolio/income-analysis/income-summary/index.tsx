@@ -7,7 +7,7 @@ interface IncomeSummaryProps {
 
 export default function IncomeSummary({ summary }: IncomeSummaryProps) {
   return (
-    <section className="col gap-3">
+    <section className="col gap-3 rounded-2xl bg-white p-6 md:p-8">
       <p className="text-sm font-medium">총 실현수익</p>
 
       <div className="row flex-wrap items-end gap-x-12 gap-y-3">

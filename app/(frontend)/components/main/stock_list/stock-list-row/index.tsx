@@ -37,7 +37,7 @@ export default function StockListRow({ stock }: StockListRowProps) {
       <Link
         href={`/stock/${stock.id}/order`}
         prefetch={false}
-        className="grid grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 py-3 text-lg transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+        className="grid grid-cols-[2.5rem_3.25rem_minmax(16rem,1fr)_12rem_minmax(8rem,1fr)_10rem_12rem] items-center gap-4 border-b border-(--cs-border-subtle) py-3 text-lg transition-colors last:border-b-0 hover:bg-(--cs-brand-50)"
       >
         <span className="text-left text-base">{stock.rank}</span>
 

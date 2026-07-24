@@ -1,7 +1,7 @@
-import { TransactionCurrency } from "@/app/(frontend)/types/portfolio";
-import { formatUsd, formatWon } from "../utils";
+import SegmentedControl from "@/app/(frontend)/components/ui/segmented-control";
 import { TRANSACTION_CURRENCIES } from "@/app/(frontend)/constants/portfolio";
-import { twMerge } from "tailwind-merge";
+import type { TransactionCurrency } from "@/app/(frontend)/types/portfolio";
+import { formatUsd, formatWon } from "../utils";
 
 interface CurrencyFilterProps {
   krwBalance: number;
@@ -17,22 +17,21 @@ export default function CurrencyFilter({
   usdBalance,
 }: CurrencyFilterProps) {
   return (
-    <section className="col gap-4 text-xl">
-      <div className="row items-center gap-4">
+    <section className="col gap-4 rounded-2xl bg-white p-6 text-lg md:p-8">
+      <SegmentedControl
+        aria-label="통화 선택"
+        className="w-fit"
+        onValueChange={(value) =>
+          setSelectedCurrency(value as TransactionCurrency)
+        }
+        value={selectedCurrency}
+      >
         {TRANSACTION_CURRENCIES.map((currency) => (
-          <button
-            key={currency}
-            className={twMerge(
-              "cursor-pointer pb-1",
-              selectedCurrency === currency && "border-b border-black",
-            )}
-            type="button"
-            onClick={() => setSelectedCurrency(currency)}
-          >
+          <SegmentedControl.Item key={currency} value={currency}>
             {currency}
-          </button>
+          </SegmentedControl.Item>
         ))}
-      </div>
+      </SegmentedControl>
 
       <p>
         주문 가능 {selectedCurrency}{" "}

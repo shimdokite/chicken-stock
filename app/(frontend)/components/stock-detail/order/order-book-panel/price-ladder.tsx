@@ -43,7 +43,7 @@ function PriceLadderRow({
       <button
         className={`flex h-[calc(100%-0.25rem)] w-[calc(100%-0.5rem)] min-w-0 cursor-pointer flex-col items-center justify-center gap-0.5 transition-colors hover:bg-zinc-50 ${
           isSelected
-            ? "rounded-lg border-2 border-zinc-800 bg-white"
+            ? "rounded-lg border-2 border-(--cs-brand-700) bg-(--cs-brand-50)"
             : "border-2 border-transparent"
         }`}
         type="button"

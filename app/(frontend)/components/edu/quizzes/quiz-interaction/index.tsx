@@ -170,7 +170,7 @@ export default function QuizInteraction({
 
   return (
     <>
-      <section className="mx-auto flex w-full max-w-6xl flex-col rounded-3xl bg-white px-16 py-6 text-black shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <section className="flex w-full flex-col text-black">
         <QuizContent
           quiz={quiz}
           selectedAnswer={selectedAnswer}
@@ -181,10 +181,10 @@ export default function QuizInteraction({
         />
       </section>
 
-      <div className="mt-8 flex w-full flex-col items-end gap-4 px-14 text-2xl">
+      <div className="mt-5 flex w-full flex-col items-end gap-3 md:mt-6">
         <button
           type="button"
-          className="text-zinc-500 transition hover:text-black disabled:cursor-not-allowed disabled:text-zinc-300"
+          className="min-h-11 min-w-24 rounded-lg bg-zinc-900 px-6 text-base font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-400"
           disabled={!canSubmit || submitAnswer.isPending}
           onClick={handleSubmit}
         >
@@ -203,29 +203,29 @@ export default function QuizInteraction({
       </div>
 
       <Modal.Root isOpen={isResultModalOpen} setIsOpen={setIsResultModalOpen}>
-        <Modal.Overlay className="p-0">
+        <Modal.Overlay>
           <Modal.Content
-            closeButtonClassName="right-5 top-5 size-9 text-zinc-300 hover:bg-transparent hover:text-zinc-400"
-            className="h-88 w-162.5 max-w-[calc(100vw-32px)] rounded-lg p-10 shadow-none"
+            closeButtonClassName="top-4 right-4 size-9 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600"
+            className="w-full max-w-lg rounded-2xl p-6 md:p-8"
           >
             {submissionResult && (
-              <div className="flex h-full flex-col gap-4">
-                <h2 className="text-3xl leading-tight font-bold text-black">
+              <div className="flex flex-col gap-4">
+                <h2 className="pr-10 text-2xl leading-tight font-bold text-black">
                   {submissionResult.isCorrect &&
                     `정답 : ${submissionResult.answer}`}
 
                   {!submissionResult.isCorrect && "오답"}
                 </h2>
 
-                <div className="min-h-0 flex-1 rounded-lg border-2 border-sky-500 px-2 py-2">
-                  <p className="text-xl leading-9 whitespace-pre-line text-black">
+                <div className="rounded-xl bg-zinc-50 p-4 md:p-5">
+                  <p className="text-base leading-7 whitespace-pre-line text-black md:text-lg md:leading-8">
                     {submissionResult.explanation}
                   </p>
 
                   {submissionResult.isCorrect &&
                     submissionResult.isRewardPaid &&
                     submissionResult.rewardAmountKrw !== undefined && (
-                      <p className="mt-4 text-xl leading-9 font-bold text-sky-700">
+                      <p className="mt-4 text-base leading-7 font-bold text-sky-700 md:text-lg md:leading-8">
                         보상으로{" "}
                         {formatRewardAmount(submissionResult.rewardAmountKrw)}
                         원이 지급되었어요.

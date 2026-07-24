@@ -283,7 +283,7 @@ export default function Select({
         aria-expanded={currentOpen}
         aria-haspopup="listbox"
         className={twMerge(
-          "inline-flex h-10 w-full min-w-0 cursor-pointer items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white px-3 text-left text-base text-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)] transition outline-none hover:border-zinc-300 focus-visible:border-sky-300 focus-visible:ring-2 focus-visible:ring-sky-100 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400",
+          "inline-flex h-10 w-full min-w-0 cursor-pointer items-center justify-between gap-3 rounded-lg border border-(--cs-border-subtle) bg-(--cs-surface-raised) px-3 text-left text-base text-(--cs-text-strong) shadow-(--cs-shadow-sm) transition outline-none hover:border-(--cs-border-strong) focus-visible:border-(--cs-border-subtle) focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-(--cs-surface-base) disabled:text-(--cs-text-muted)",
           triggerClassName,
         )}
         data-state={currentOpen ? "open" : "closed"}
@@ -297,7 +297,7 @@ export default function Select({
         <span
           className={twMerge(
             "min-w-0 truncate",
-            selectedOption ? undefined : "text-zinc-400",
+            selectedOption ? undefined : "text-(--cs-text-muted)",
           )}
         >
           {selectedOption?.label ?? placeholder}
@@ -306,7 +306,7 @@ export default function Select({
         <IconChevronDown
           aria-hidden="true"
           className={twMerge(
-            "size-5 shrink-0 text-zinc-400 transition-transform",
+            "size-5 shrink-0 text-(--cs-text-muted) transition-transform",
             currentOpen ? "rotate-180" : undefined,
           )}
           stroke={2}
@@ -317,7 +317,7 @@ export default function Select({
         <div
           aria-labelledby={triggerId}
           className={twMerge(
-            "absolute left-0 z-20 max-h-60 w-full overflow-auto rounded-md border border-zinc-200 bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
+            "absolute left-0 z-20 max-h-60 w-full overflow-auto rounded-xl border border-(--cs-border-subtle) bg-(--cs-surface-raised) py-1 shadow-(--cs-shadow-lg)",
             contentPlacementClassName[resolvedPlacement],
             contentClassName,
           )}
@@ -332,8 +332,10 @@ export default function Select({
               <button
                 aria-selected={selected}
                 className={twMerge(
-                  "flex min-h-9 w-full cursor-pointer items-center justify-between gap-2 px-3 py-2 text-left text-sm text-zinc-950 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:text-zinc-400",
-                  selected ? "bg-zinc-100 font-semibold" : undefined,
+                  "flex min-h-9 w-full cursor-pointer items-center justify-between gap-2 px-3 py-2 text-left text-sm text-(--cs-text-strong) transition hover:bg-(--cs-brand-50) disabled:cursor-not-allowed disabled:text-(--cs-text-muted)",
+                  selected
+                    ? "bg-(--cs-brand-100) font-semibold text-(--cs-brand-800)"
+                    : undefined,
                   optionClassName,
                 )}
                 disabled={option.disabled}
@@ -346,7 +348,7 @@ export default function Select({
                 {selected ? (
                   <IconCheck
                     aria-hidden="true"
-                    className="size-4 shrink-0 text-zinc-500"
+                    className="size-4 shrink-0 text-(--cs-brand-700)"
                     stroke={2}
                   />
                 ) : null}

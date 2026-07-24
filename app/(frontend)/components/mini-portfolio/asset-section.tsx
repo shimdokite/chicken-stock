@@ -47,7 +47,7 @@ export default function AssetSection({
           className="row cursor-pointer items-center gap-1"
           onClick={() => onToggle(assetType)}
         >
-          <span className="typography-medium-12 leading-4">
+          <span className="typography-medium-13 leading-4">
             {ASSET_LABELS[assetType]}
           </span>
 
@@ -72,7 +72,7 @@ export default function AssetSection({
             <button
               type="button"
               className={twMerge(
-                "typography-medium-12 cursor-pointer leading-4 text-(--cs-color-gray-700)",
+                "typography-medium-13 cursor-pointer leading-4 text-(--cs-color-gray-700)",
                 foreignStockCurrency === "KRW" && "text-black underline",
               )}
               onClick={() => onForeignStockCurrencyChange("KRW")}
@@ -82,7 +82,7 @@ export default function AssetSection({
             <button
               type="button"
               className={twMerge(
-                "typography-medium-12 cursor-pointer leading-4 text-(--cs-color-gray-700)",
+                "typography-medium-13 cursor-pointer leading-4 text-(--cs-color-gray-700)",
                 foreignStockCurrency === "USD" && "text-black underline",
               )}
               onClick={() => onForeignStockCurrencyChange("USD")}
@@ -94,7 +94,7 @@ export default function AssetSection({
       </div>
 
       {shouldShowAssetItems && (
-        <ul className="col gap-4">
+        <ul className="col gap-3">
           {items.map((item) => (
             <StockRow
               key={`${item.portfolioId}-${item.stockId}`}
@@ -107,7 +107,7 @@ export default function AssetSection({
       )}
 
       {shouldShowEmptyAssetMessage && (
-        <p className="py-1 text-[12px] leading-4 text-(--cs-color-gray-600)">
+        <p className="py-1 text-xs leading-4 text-(--cs-color-gray-600)">
           보유 중인 종목이 없습니다.
         </p>
       )}

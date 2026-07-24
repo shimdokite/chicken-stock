@@ -66,9 +66,9 @@ export default function MiniPortfolioPanel() {
   return (
     <aside
       className={twMerge(
-        "fixed right-6 z-40 w-[300px] overflow-hidden border border-[rgba(123,120,120,0.35)] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.18)] transition-all duration-300 ease-out",
+        "fixed right-4 z-40 w-[min(300px,calc(100vw-32px))] overflow-hidden border border-(--cs-border-strong) bg-(--cs-surface-raised) text-(--cs-text-strong) shadow-(--cs-shadow-lg) transition-all duration-300 ease-out md:right-6",
         isOpen &&
-          "col bottom-3 h-[min(450px,calc(100dvh-24px))] gap-5 rounded-(--cs-radius-lg) py-5",
+          "col bottom-3 h-[min(450px,calc(100dvh-24px))] rounded-(--cs-radius-lg) py-5",
         !isOpen && "bottom-0 h-[30px] rounded-t-(--cs-radius-lg)",
       )}
     >
@@ -76,7 +76,7 @@ export default function MiniPortfolioPanel() {
         type="button"
         aria-expanded={isOpen}
         aria-label={togglePortfolioAriaLabel}
-        className="row h-[30px] w-full cursor-pointer items-center justify-between px-5 text-left"
+        className="row h-[30px] w-full shrink-0 cursor-pointer items-center justify-between px-5 text-left"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span
@@ -107,25 +107,28 @@ export default function MiniPortfolioPanel() {
 
       <div
         aria-hidden={!isOpen}
-        className="h-[calc(100%-30px)] overflow-y-auto px-5"
+        className="min-h-0 flex-1 [scrollbar-width:none] overflow-y-auto px-5 pt-5 [&::-webkit-scrollbar]:hidden"
       >
-        <Link href="/portfolio" className="grid grid-cols-2 gap-4">
+        <Link
+          href="/portfolio"
+          className="grid grid-cols-2 gap-4 border-b border-zinc-200 pb-5"
+        >
           <div className="col gap-1">
             <p className="typography-medium-12 leading-4">원화</p>
-            <p className="truncate typography-medium-18 leading-6">
+            <p className="typography-medium-18 truncate leading-6">
               {formatWon(data.krwBalance)}
             </p>
           </div>
 
           <div className="col gap-1">
             <p className="typography-medium-12 leading-4">달러</p>
-            <p className="truncate typography-medium-18 leading-6">
+            <p className="typography-medium-18 truncate leading-6">
               {formatDollar(data.usdBalance)}
             </p>
           </div>
         </Link>
 
-        <section className="col mt-7 gap-1">
+        <section className="col mt-5 gap-1">
           <p className="typography-medium-13 leading-4">내 투자</p>
           <p className="typography-bold-24 leading-7 tracking-normal">
             {formatWon(data.totalInvestmentAmount)}
@@ -140,9 +143,9 @@ export default function MiniPortfolioPanel() {
           </p>
         </section>
 
-        <div className="row mt-7 items-center justify-between gap-3 typography-medium-12 leading-4">
+        <div className="row typography-medium-13 mt-6 items-center justify-between gap-3 leading-4">
           <div className="row relative w-fit shrink-0 items-center gap-1">
-            <span className="typography-medium-12 leading-4">
+            <span className="typography-medium-13 leading-4">
               {selectedSortOptionLabel}
             </span>
             <IconChevronDown
@@ -171,7 +174,7 @@ export default function MiniPortfolioPanel() {
             <button
               type="button"
               className={twMerge(
-                "cursor-pointer typography-medium-12 leading-4 text-(--cs-color-gray-700)",
+                "typography-medium-13 cursor-pointer leading-4 text-(--cs-color-gray-700)",
                 amountView === "currentPrice" && "text-black underline",
               )}
               onClick={() => setAmountView("currentPrice")}
@@ -181,7 +184,7 @@ export default function MiniPortfolioPanel() {
             <button
               type="button"
               className={twMerge(
-                "cursor-pointer typography-medium-12 leading-4 text-(--cs-color-gray-700)",
+                "typography-medium-13 cursor-pointer leading-4 text-(--cs-color-gray-700)",
                 amountView === "evaluationAmount" && "text-black underline",
               )}
               onClick={() => setAmountView("evaluationAmount")}

@@ -42,12 +42,12 @@ export default function HeaderNavigation() {
   };
 
   return (
-    <div className="flex gap-2">
+    <nav aria-label="주요 메뉴" className="hidden gap-1 md:flex">
       {NAVIGATION.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className="flex h-12.5 w-32.5 items-center justify-center text-xl duration-200 hover:font-semibold"
+          className="flex h-10 items-center justify-center rounded-lg px-4 text-base font-medium text-(--cs-text-default) duration-200 hover:bg-(--cs-brand-50) hover:text-(--cs-brand-800) lg:px-6 lg:text-lg"
           onClick={
             item.href === "/portfolio" ? handlePortfolioClick : undefined
           }
@@ -55,6 +55,6 @@ export default function HeaderNavigation() {
           {item.label}
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }

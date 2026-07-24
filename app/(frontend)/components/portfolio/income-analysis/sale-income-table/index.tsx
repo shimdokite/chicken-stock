@@ -61,7 +61,7 @@ const saleIncomeColumns: ColumnDef<SaleIncomeRow>[] = [
 ];
 
 const gridClassName =
-  "grid min-w-[66.5rem] grid-cols-[6.5rem_7.5rem_7rem_8.5rem_6rem_8.5rem_8.5rem_7rem_7rem]";
+  "grid min-w-[66.5rem] grid-cols-[6.5rem_7.5rem_7rem_8.5rem_6rem_8.5rem_8.5rem_7rem_7rem] justify-between";
 
 interface SaleIncomeTableProps {
   rows: SaleIncomeRow[];
@@ -77,10 +77,10 @@ export default function SaleIncomeTable({ rows }: SaleIncomeTableProps) {
   });
 
   return (
-    <div className="-mx-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-2">
-      <div className="min-w-[70.5rem] py-1" role="table" aria-label="판매수익">
+    <div className="overflow-x-auto pt-2 pb-4">
+      <div className="min-w-[66.5rem]" role="table" aria-label="판매수익">
         <div
-          className="px-8 pb-4 text-sm font-medium text-(--cs-color-gray-700)"
+          className="border-b border-(--cs-border-subtle) pb-3 text-sm font-medium text-(--cs-text-muted)"
           role="rowgroup"
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -98,12 +98,12 @@ export default function SaleIncomeTable({ rows }: SaleIncomeTableProps) {
           ))}
         </div>
 
-        <div
-          className="min-h-[380px] rounded-lg px-8 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]"
-          role="rowgroup"
-        >
+        <div className="min-h-[380px] py-6 md:py-9" role="rowgroup">
           {rows.length === 0 && (
-            <div className="row center h-60 text-lg text-(--cs-color-gray-700)" role="row">
+            <div
+              className="row center h-60 text-lg text-(--cs-color-gray-700)"
+              role="row"
+            >
               <span role="cell" aria-colspan={saleIncomeColumns.length}>
                 판매수익이 없습니다.
               </span>

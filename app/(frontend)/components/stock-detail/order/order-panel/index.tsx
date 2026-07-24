@@ -13,6 +13,7 @@ import PendingOrders from "./pending-orders";
 import QuickOrder from "./quick-order";
 import { getApiErrorMessage } from "./utils";
 import OrderPanelState from "./order-panel-state";
+import { useIsHydrated } from "../../../../hooks/use-is-hydrated";
 
 export type MainOrderTab = "normal" | "quick";
 export type NormalOrderTab = "buy" | "sell" | "pending";
@@ -38,6 +39,7 @@ export default function OrderPanel({
   selectedLimitPrice,
   stock,
 }: OrderPanelProps) {
+  const isHydrated = useIsHydrated();
   const {
     data: myInfo,
     error: myInfoError,
@@ -57,7 +59,7 @@ export default function OrderPanel({
   );
 
   const renderPanelContent = () => {
-    if (isMyInfoPending) {
+    if (!isHydrated || isMyInfoPending) {
       return <OrderPanelState message="주문 정보를 불러오는 중입니다." />;
     }
 
@@ -135,8 +137,8 @@ export default function OrderPanel({
   };
 
   return (
-    <section className="flex h-130 flex-col overflow-hidden rounded-3xl bg-white text-sm leading-tight text-zinc-950 tabular-nums shadow-[0_10px_18px_rgba(0,0,0,0.22)]">
-      <div className="shrink-0 px-4 pt-3">
+    <section className="cs-data-panel flex h-130 flex-col overflow-hidden text-sm leading-tight text-(--cs-text-strong) tabular-nums">
+      <div className="shrink-0 px-4 pt-4">
         <Tab.Root
           className="gap-3 bg-transparent p-0 text-lg"
           type="underline"

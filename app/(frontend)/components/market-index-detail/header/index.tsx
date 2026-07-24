@@ -42,26 +42,36 @@ export default function MarketIndexHeader({
   const countryText = getMarketIndexCountryLabel(marketIndex.countryCode);
 
   return (
-    <header className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+    <header className="flex flex-col gap-6 rounded-2xl bg-white p-5 lg:flex-row lg:items-start lg:justify-between lg:p-7">
       <div className="min-w-0">
         <h1 className="text-2xl leading-8 tracking-normal text-zinc-950">
           {marketIndex.name}{" "}
           {quote.status === "error"
-            ? "정보를 불러오지 못했습니다."
+            ? "-"
             : formatMarketIndexValue(quote.data.currentValue)}
         </h1>
 
-        {quote.status !== "error" && <p className="mt-3 text-base leading-5 text-zinc-950">
-          전일 대비{" "}
-          <span className={trendTextColor}>
-            {formatMarketIndexChange(quote.data.changeAmount)}(
-            {formatMarketIndexPercent(quote.data.changeRate)})
-          </span>
-          <span className="ml-3 text-zinc-500">
-            {realtimeText} | {countryText}
-          </span>
-        </p>}
-        <MarketDataStatus result={quote} />
+        <div className="flow-root h-8">
+          {quote.status !== "error" && (
+            <p className="mt-3 text-base leading-5 text-zinc-950">
+              전일 대비{" "}
+              <span className={trendTextColor}>
+                {formatMarketIndexChange(quote.data.changeAmount)}(
+                {formatMarketIndexPercent(quote.data.changeRate)})
+              </span>
+              <span className="ml-3 text-zinc-500">
+                {realtimeText} | {countryText}
+              </span>
+            </p>
+          )}
+        </div>
+        <div className="flow-root h-12">
+          {quote.status === "success" ? (
+            <MarketDataStatus result={marketIndex.chart} />
+          ) : (
+            <MarketDataStatus result={quote} />
+          )}
+        </div>
       </div>
 
       <dl className="grid grid-cols-3 gap-x-8 gap-y-5 md:grid-cols-6">

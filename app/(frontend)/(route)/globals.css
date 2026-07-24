@@ -4,6 +4,29 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --cs-surface-canvas: #ffffff;
+  --cs-surface-base: #fafafa;
+  --cs-surface-raised: #ffffff;
+  --cs-surface-tint: #f7f7f7;
+  --cs-surface-strong: #eeeeee;
+  --cs-text-strong: #18181b;
+  --cs-text-default: #3f3f46;
+  --cs-text-muted: #71717a;
+  --cs-border-subtle: #e4e4e7;
+  --cs-border-strong: #d4d4d8;
+  --cs-brand-50: #fafafa;
+  --cs-brand-100: #f4f4f5;
+  --cs-brand-300: #d4d4d8;
+  --cs-brand-500: #52525b;
+  --cs-brand-600: #3f3f46;
+  --cs-brand-700: #27272a;
+  --cs-brand-800: #18181b;
+  --cs-focus: #27272a;
+  --cs-shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.05);
+  --cs-shadow-md: 0 8px 24px rgba(24, 24, 27, 0.08);
+  --cs-shadow-lg: 0 18px 48px rgba(24, 24, 27, 0.12);
+  --cs-content-max: 1440px;
+  --cs-page-gutter: clamp(20px, 4vw, 56px);
   --cs-color-blue-100: #c6d2ff;
   --cs-color-blue-200: #9bcbde;
   --cs-color-blue-300: #2b9dd1;
@@ -88,6 +111,85 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-atoz), Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  word-break: keep-all;
+}
+
+::selection {
+  background: var(--cs-brand-300);
+  color: var(--cs-text-strong);
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--cs-focus);
+  outline-offset: 3px;
+}
+
+:where(input, select, textarea):focus,
+:where(input, select, textarea):focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.cs-toast-close {
+  top: 50% !important;
+  right: 12px !important;
+  bottom: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  border: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+.cs-page-shell {
+  width: min(100%, var(--cs-content-max));
+  margin-inline: auto;
+  padding-inline: var(--cs-page-gutter);
+}
+
+.cs-surface-card {
+  border: 1px solid var(--cs-border-subtle);
+  border-radius: var(--cs-radius-2xl);
+  background: var(--cs-surface-raised);
+  box-shadow: var(--cs-shadow-md);
+}
+
+.cs-data-panel {
+  border-radius: var(--cs-radius-2xl);
+  background: var(--cs-surface-raised);
+}
+
+.cs-section-label {
+  color: var(--cs-brand-700);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cs-section-title {
+  color: var(--cs-text-strong);
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.cs-muted {
+  color: var(--cs-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 @utility row {
@@ -159,8 +261,8 @@ body {
 .income-month-calendar.react-datepicker {
   width: fit-content;
   border: 0;
-  background: #ffffff;
-  color: #18181b;
+  background: var(--cs-surface-raised);
+  color: var(--cs-text-strong);
   font-family: var(--font-atoz), Arial, Helvetica, sans-serif;
 }
 
@@ -203,7 +305,7 @@ body {
   justify-content: center;
   margin: 0;
   border-radius: var(--cs-radius-md);
-  color: #18181b;
+  color: var(--cs-text-strong);
   font-size: var(--cs-typography-medium-14-font-size);
   font-weight: var(--cs-typography-medium-font-weight);
   line-height: 1;
@@ -214,7 +316,7 @@ body {
 
 .income-month-calendar
   .react-datepicker__month-text:not([aria-disabled="true"]):hover {
-  background: #f4f4f5;
+  background: var(--cs-brand-50);
 }
 
 .income-month-calendar .react-datepicker__month-text--today {
@@ -222,14 +324,14 @@ body {
 }
 
 .income-month-calendar .react-datepicker__month-text--keyboard-selected {
-  background: #f4f4f5;
-  color: #18181b;
+  background: var(--cs-brand-100);
+  color: var(--cs-brand-800);
 }
 
 .income-month-calendar .react-datepicker__month-text--selected,
 .income-month-calendar
   .react-datepicker__month-text--selected:not([aria-disabled="true"]):hover {
-  background: #18181b;
+  background: var(--cs-brand-700);
   color: #ffffff;
 }
 

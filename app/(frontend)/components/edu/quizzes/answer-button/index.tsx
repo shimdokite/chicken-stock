@@ -14,10 +14,10 @@ type AnswerButtonProps = {
 
 const answerButtonVariants: Record<AnswerButtonVariant, string> = {
   default:
-    "w-fit justify-start rounded-md border-2 border-transparent bg-white px-1.5 py-0.5 text-left text-3xl leading-tight font-medium",
-  true: "h-44 w-full justify-center rounded-xl border-8 border-(--cs-color-blue-800) bg-white px-6 text-8xl font-black text-(--cs-color-blue-800)",
+    "w-full justify-start rounded-lg border border-transparent bg-zinc-50 px-4 py-3 text-left text-base leading-6 font-medium break-words hover:bg-zinc-100 md:px-5 md:text-lg md:leading-7",
+  true: "h-24 w-full justify-center rounded-xl border-2 border-(--cs-color-blue-800) bg-white px-4 text-(--cs-color-blue-800) hover:bg-blue-50 md:h-28 md:px-6",
   false:
-    "h-44 w-full justify-center rounded-2xl border-8 border-[#FF5A60] bg-white px-6 text-8xl font-black text-[#FF5A60]",
+    "h-24 w-full justify-center rounded-xl border-2 border-[#FF5A60] bg-white px-4 text-[#FF5A60] hover:bg-red-50 md:h-28 md:px-6",
 };
 
 const selectedAnswerButtonVariants: Record<AnswerButtonVariant, string> = {
@@ -81,6 +81,7 @@ export default function AnswerButton({
           <Image
             alt=""
             aria-hidden="true"
+            className="h-12 w-auto md:h-16"
             height={trueFalseIcon.height}
             src={trueFalseIcon.src}
             width={trueFalseIcon.width}

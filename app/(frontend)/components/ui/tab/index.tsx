@@ -51,7 +51,7 @@ const rootDirectionClassName: Record<TabDirection, string> = {
 };
 
 const rootTypeClassName: Record<TabType, string> = {
-  fill: "rounded-md bg-white p-1",
+  fill: "rounded-lg bg-(--cs-surface-raised) p-1",
   underline: "",
 };
 

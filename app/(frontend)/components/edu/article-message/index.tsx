@@ -10,8 +10,8 @@ export default function ArticleMessage({
   message,
 }: ArticleMessageProps) {
   return (
-    <main className="min-h-[calc(100dvh-74px)] bg-white px-5 py-12">
-      <section className="mx-auto flex min-h-[calc(100dvh-170px)] max-w-3xl flex-col items-center justify-center text-center">
+    <main className="min-h-[calc(100dvh-74px)] bg-[#f8f8f9] px-5 py-8 md:px-8 md:py-12">
+      <section className="mx-auto flex min-h-[calc(100dvh-170px)] max-w-3xl flex-col items-center justify-center rounded-2xl bg-white p-6 text-center md:p-8">
         <h1 className="text-3xl font-bold tracking-normal text-zinc-950">
           {title}
         </h1>

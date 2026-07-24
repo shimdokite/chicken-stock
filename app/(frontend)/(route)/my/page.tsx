@@ -4,10 +4,14 @@ import DeleteAccount from "../../components/my/delete-account";
 
 export default function MyPage() {
   return (
-    <div className="col mx-auto min-h-[calc(100dvh-72px)] w-full max-w-[1000px] gap-9 bg-white px-5 py-30">
-      <MyInfo />
-      <FeesBenefits />
-      <DeleteAccount />
-    </div>
+    <main className="py-8 md:py-12">
+      <div className="cs-page-shell">
+        <div className="col mx-auto w-full max-w-[1000px] gap-5">
+          <MyInfo />
+          <FeesBenefits />
+          <DeleteAccount />
+        </div>
+      </div>
+    </main>
   );
 }

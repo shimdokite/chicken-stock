@@ -43,7 +43,7 @@ export default function TransactionHistory() {
       : itemByStockId.get(selectedTransaction.stockId);
 
   return (
-    <div className="col min-h-0 flex-1 gap-10 overflow-hidden pt-8">
+    <div className="col min-h-0 flex-1 gap-5 overflow-hidden">
       <CurrencyFilter
         krwBalance={data.krwBalance}
         selectedCurrency={selectedCurrency}
@@ -51,8 +51,8 @@ export default function TransactionHistory() {
         usdBalance={data.usdBalance}
       />
 
-      <section className="grid min-h-0 flex-1 grid-cols-1 grid-rows-2 gap-6 overflow-hidden p-4 xl:grid-cols-2 xl:grid-rows-1">
-        <div className="col min-h-0 overflow-hidden rounded-lg px-8 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]">
+      <section className="grid min-h-0 flex-1 grid-cols-1 grid-rows-2 gap-5 overflow-hidden xl:grid-cols-2 xl:grid-rows-1">
+        <div className="col min-h-0 overflow-hidden rounded-2xl bg-white p-6 md:p-8">
           <TransactionFilter
             selectedFilter={selectedFilter}
             setSelectedFilter={(filter) => {
@@ -61,7 +61,7 @@ export default function TransactionHistory() {
             }}
           />
 
-          <div className="min-h-0 flex-1 overflow-y-auto pr-2">
+          <div className="min-h-0 flex-1 [scrollbar-width:none] overflow-y-auto [&::-webkit-scrollbar]:hidden">
             <TransactionList
               selectedTransactionId={selectedTransaction?.id ?? null}
               setSelectedTransactionId={setSelectedTransactionId}
@@ -70,7 +70,7 @@ export default function TransactionHistory() {
           </div>
         </div>
 
-        <div className="min-h-0 overflow-y-auto rounded-lg px-10 py-9 shadow-[3px_6px_10px_rgba(0,0,0,0.25)]">
+        <div className="min-h-0 [scrollbar-width:none] overflow-y-auto rounded-2xl bg-white p-6 md:p-8 [&::-webkit-scrollbar]:hidden">
           {selectedTransaction && (
             <TransactionDetail
               item={selectedItem}

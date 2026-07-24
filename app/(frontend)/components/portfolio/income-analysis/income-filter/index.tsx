@@ -1,10 +1,13 @@
-import { twMerge } from "tailwind-merge";
+import SegmentedControl from "@/app/(frontend)/components/ui/segmented-control";
 import type { IncomeAnalysisView } from "@/app/(frontend)/types/portfolio/income-analysis";
 
-const incomeAnalysisViews: IncomeAnalysisView[] = [
-  "전체",
-  "국내주식",
-  "해외주식",
+const incomeAnalysisViews: Array<{
+  label: string;
+  value: IncomeAnalysisView;
+}> = [
+  { label: "전체", value: "전체" },
+  { label: "국내", value: "국내주식" },
+  { label: "해외", value: "해외주식" },
 ];
 
 interface IncomeFilterProps {
@@ -17,22 +20,22 @@ export default function IncomeFilter({
   setSelectedView,
 }: IncomeFilterProps) {
   return (
-    <div className="row gap-10 text-sm font-medium">
-      <span className="pb-1">판매수익</span>
+    <div className="flex flex-wrap items-end justify-between gap-5 py-5">
+      <h2 className="text-xl leading-tight font-bold tracking-[-0.02em]">
+        판매수익
+      </h2>
 
-      {incomeAnalysisViews.map((view) => (
-        <button
-          key={view}
-          className={twMerge(
-            "cursor-pointer",
-            selectedView === view && "border-b border-black",
-          )}
-          type="button"
-          onClick={() => setSelectedView(view)}
-        >
-          {view}
-        </button>
-      ))}
+      <SegmentedControl
+        aria-label="종목 시장 선택"
+        onValueChange={(value) => setSelectedView(value as IncomeAnalysisView)}
+        value={selectedView}
+      >
+        {incomeAnalysisViews.map((view) => (
+          <SegmentedControl.Item key={view.value} value={view.value}>
+            {view.label}
+          </SegmentedControl.Item>
+        ))}
+      </SegmentedControl>
     </div>
   );
 }

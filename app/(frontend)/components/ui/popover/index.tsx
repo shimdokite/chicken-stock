@@ -266,7 +266,7 @@ function PopoverContent({
       ref={ref}
       role="dialog"
       className={twMerge(
-        "absolute top-full z-10 mt-2 rounded-md border border-zinc-300 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)]",
+        "absolute top-full z-10 mt-2 rounded-xl border border-(--cs-border-subtle) bg-(--cs-surface-raised) shadow-(--cs-shadow-lg)",
         popoverContentAlignClassName[align],
         !open ? "hidden" : undefined,
         className,

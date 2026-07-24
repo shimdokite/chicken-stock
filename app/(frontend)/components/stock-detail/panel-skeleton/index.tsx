@@ -14,7 +14,7 @@ export default function StockDetailPanelSkeleton({
   return (
     <section
       className={twMerge(
-        "grid h-130 place-items-center rounded-3xl bg-white px-7 py-6 text-sm text-zinc-500 shadow-[0_10px_18px_rgba(0,0,0,0.22)]",
+        "cs-data-panel grid h-130 place-items-center px-7 py-6 text-sm text-(--cs-text-muted)",
         className,
       )}
     >

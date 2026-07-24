@@ -53,7 +53,7 @@ export default function RootLayout({
       lang="ko"
       className={`${atoz.className} ${atoz.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col overflow-x-hidden text-(--cs-text-default)">
         <QueryProvider>
           <RealtimeBridge />
           {/* <ReactQueryDevtools initialIsOpen={false} /> */}

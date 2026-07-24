@@ -38,8 +38,6 @@ export default function MonthSelector({
 
   return (
     <section className="row items-center gap-10 text-sm font-medium">
-      <span>월</span>
-
       <div className="row items-center gap-8">
         <button
           className="cursor-pointer px-1"
@@ -52,7 +50,7 @@ export default function MonthSelector({
 
         <Popover open={monthPickerOpen} onOpenChange={setMonthPickerOpen}>
           <Popover.Trigger
-            className="cursor-pointer rounded-md px-2 py-1 transition hover:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:outline-none"
+            className="cursor-pointer rounded-lg px-2 py-1 transition hover:bg-(--cs-brand-50)"
             aria-label="월 선택"
           >
             <span>{formatMonthLabel(selectedMonth)}</span>
@@ -74,7 +72,7 @@ export default function MonthSelector({
                 <div className="row items-center justify-between pb-3">
                   <button
                     aria-label="이전 연도"
-                    className="row center size-8 cursor-pointer rounded-md text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 disabled:cursor-not-allowed disabled:text-zinc-300"
+                    className="row center size-8 cursor-pointer rounded-lg text-(--cs-text-muted) transition hover:bg-(--cs-brand-50) hover:text-(--cs-brand-800) disabled:cursor-not-allowed disabled:opacity-40"
                     disabled={prevYearButtonDisabled}
                     type="button"
                     onClick={decreaseYear}
@@ -82,13 +80,13 @@ export default function MonthSelector({
                     <IconChevronLeft aria-hidden="true" className="size-5" />
                   </button>
 
-                  <span className="text-sm font-semibold text-zinc-950">
+                  <span className="text-sm font-semibold text-(--cs-text-strong)">
                     {date.getFullYear()}년
                   </span>
 
                   <button
                     aria-label="다음 연도"
-                    className="row center size-8 cursor-pointer rounded-md text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 disabled:cursor-not-allowed disabled:text-zinc-300"
+                    className="row center size-8 cursor-pointer rounded-lg text-(--cs-text-muted) transition hover:bg-(--cs-brand-50) hover:text-(--cs-brand-800) disabled:cursor-not-allowed disabled:opacity-40"
                     disabled={nextYearButtonDisabled}
                     type="button"
                     onClick={increaseYear}

@@ -90,7 +90,7 @@ export function ChartOverlayLabels({
       {priceAxisTickLabels.map((label) => (
         <span
           key={`${label.text}-${label.top}`}
-          className="pointer-events-none absolute right-0 z-10 bg-white px-1 text-sm font-normal text-zinc-500"
+          className="pointer-events-none absolute right-0 z-10 bg-(--cs-surface-raised) px-1 text-sm font-normal text-(--cs-text-muted)"
           style={{
             top: label.top,
           }}
@@ -102,7 +102,7 @@ export function ChartOverlayLabels({
       {axisTickLabels.map((label) => (
         <span
           key={`${label.text}-${label.left}`}
-          className={`pointer-events-none absolute bottom-0 z-10 bg-white px-1 text-sm text-zinc-500 ${
+          className={`pointer-events-none absolute bottom-0 z-10 bg-(--cs-surface-raised) px-1 text-sm text-(--cs-text-muted) ${
             label.isMonth ? "font-semibold" : "font-normal"
           }`}
           style={{
