@@ -52,3 +52,5 @@ next-env.d.ts
 .python_packages/
 __pycache__/
 *.pyc
+
+/Users/doyeon/Downloads/chicken-stock/docs
